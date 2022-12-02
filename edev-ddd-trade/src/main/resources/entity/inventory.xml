@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dobjs>
+    <do class="com.edev.trade.inventory.entity.Inventory" tableName="t_inventory">
+        <property name="id" column="id" isPrimaryKey="true"/>
+        <property name="quantity" column="quantity"/>
+        <property name="updateTime" column="update_time"/>
+        <join name="product" joinType="oneToOne"
+              class="com.edev.trade.inventory.entity.Product"/>
+    </do>
+    <do class="com.edev.trade.inventory.entity.Product" tableName="t_product">
+        <property name="id" column="id" isPrimaryKey="true"/>
+        <property name="name" column="name"/>
+        <property name="price" column="price"/>
+        <property name="unit" column="unit"/>
+        <property name="classify" column="classify"/>
+        <property name="supplierId" column="supplier_id"/>
+        <property name="image" column="image"/>
+        <property name="originalPrice" column="original_price"/>
+        <property name="tip" column="tip"/>
+    </do>
+</dobjs>

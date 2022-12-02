@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"   
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.edev.support.dao.impl.mybatis.GenericDao">
+ 	<insert id="insert">
+ 		INSERT INTO `${param1}`
+		<foreach collection="param2" item="item" index="index" open="(" separator="," close=")">
+		`${item.key}`
+		</foreach>
+		VALUES<foreach collection="param2" item="item" index="index" open="(" separator="," close=")">
+		#{item.value}
+	</foreach>
+ 	</insert>
+	<insert id="insertGenerateKeys" useGeneratedKeys="true" keyProperty="entity.id">
+		INSERT INTO `${param1}`
+		<foreach collection="param2" item="item" index="index" open="(" separator="," close=")">
+		`${item.key}`
+		</foreach>
+		VALUES<foreach collection="param2" item="item" index="index" open="(" separator="," close=")">
+		#{item.value}
+		</foreach>
+	</insert>
+ 	<update id="update">
+ 		UPDATE `${param1}`
+ 		SET 
+ 		<foreach collection="param2" item="item" index="index"  separator=",">
+			`${item.key}` = #{item.value}
+		</foreach> 
+ 		WHERE 
+ 		<foreach collection="param3" item="item" index="index"  separator=",">
+			`${item.key}` = #{item.value}
+		</foreach>
+ 	</update>
+ 	<delete id="delete" >
+ 		DELETE FROM `${param1}`
+ 		<foreach collection="param2" item="item" index="index" open="WHERE" separator="AND">
+			`${item.key}` = #{item.value}
+		</foreach>
+ 	</delete>
+ 	<delete id="deleteForList" >
+ 		DELETE FROM `${param1}` 
+ 		<foreach collection="param2" item="item" index="index" open="WHERE" separator="AND">
+			`${item.key}` IN 
+			<foreach collection="item.value" item="id" index="index" open="(" separator="," close=")">
+				#{id}
+			</foreach>
+		</foreach>
+ 	</delete>
+	<!--query by its primary key-->
+ 	<select id="load" resultType="java.util.Map">
+ 		SELECT * FROM `${param1}` 
+ 		<foreach collection="param2" item="item" index="index" open="WHERE" separator="AND">
+			`${item.key}` IN 
+			<foreach collection="item.value" item="id" index="index" open="(" separator="," close=")">
+				#{id}
+			</foreach>
+		</foreach>
+ 	</select>
+	<!--query by conditions which come from a map-->
+ 	<select id="find" resultType="java.util.Map">
+ 		SELECT * FROM `${param1}` 
+ 		<foreach collection="param2" item="item" index="index" open="WHERE" separator="AND">
+			`${item.key}` = #{item.value}
+		</foreach>
+ 	</select>
+</mapper>

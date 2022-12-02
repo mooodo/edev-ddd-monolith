@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"   
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.edev.analysis.query.dao.MonthlySalesMapper">
+	<sql id="select">
+		SELECT DW_DIM_DATE."YEAR", DW_DIM_DATE."MONTH",
+		SUM(DW_FACT_ORDER_HIT.AMOUNT) AMOUNT, COUNT(*) NUM_OF_ORDERS
+		FROM DW_FACT_ORDER_HIT
+		JOIN DW_DIM_DATE ON DW_FACT_ORDER_HIT.DATE_KEY = DW_DIM_DATE.DATE_KEY
+		WHERE 1=1
+	</sql>
+	
+	<sql id="groupBy">
+		GROUP BY DW_DIM_DATE."YEAR", DW_DIM_DATE."MONTH"
+	</sql>
+	
+	<sql id="conditions">
+		<if test="start_of_date != '' and start_of_date != null">
+			and DW_DIM_DATE.DATE_KEY >= #{start_of_date}
+		</if>
+		<if test="end_of_date != '' and end_of_date != null">
+			<![CDATA[ and DW_DIM_DATE.DATE_KEY <= #{end_of_date} ]]>
+		</if>
+	</sql>
+	
+	<sql id="isPage">
+		<if test="size != null  and size !=''">
+			limit ${size} offset ${firstRow} 
+		</if>
+	</sql>
+	
+	<select id="query" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+   	 	<include refid="select"/>
+		<include refid="conditions"/>
+		<include refid="groupBy"/>
+		<include refid="isPage"/>
+	</select>
+	
+	<select id="count" parameterType="java.util.HashMap" resultType="java.lang.Long">
+		select count(*) from (
+			<include refid="select"/>
+			<include refid="conditions"/>
+			<include refid="groupBy"/>
+		)
+	</select>
+	
+	<select id="aggregate" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+		select ${aggregation} from (
+			<include refid="select"/>
+			<include refid="conditions"/>
+			<include refid="groupBy"/>
+		)
+	</select>
+</mapper>

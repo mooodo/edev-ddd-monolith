@@ -1,0 +1,60 @@
+spring:
+  application:
+    name: service-analysis
+  profiles:
+    active: dev
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+mybatis:
+  mapperLocations: classpath*:mapper/*Mapper.xml
+logging:
+  level:
+    com.edev.analysis: INFO
+    com.edev.support: INFO
+    com.edev.analysis.query.dao: DEBUG
+    com.edev.support.dao: DEBUG
+---
+spring:
+  profiles: dev
+  datasource:
+    url: jdbc:kylin://master:31070/demo
+    username: ADMIN
+    password: KYLIN
+    driver-class-name: org.apache.kylin.jdbc.Driver
+    type: com.alibaba.druid.pool.DruidDataSource
+  redis:
+    database: 0
+    host: master
+    port: 31379
+    password:
+    pool:
+      maxActive: 200
+      maxWait: -1
+      maxIdel: 10
+      minIdel: 0
+    timeout: 1000
+server:
+  port: 8801
+---
+spring:
+  profiles: docker
+  datasource:
+    url: jdbc:kylin://hadoop-master:7070/demo
+    username: ADMIN
+    password: KYLIN
+    driver-class-name: org.apache.kylin.jdbc.Driver
+    type: com.alibaba.druid.pool.DruidDataSource
+  redis:
+    database: 0
+    host: master
+    port: 6379
+    password:
+    pool:
+      maxActive: 200
+      maxWait: -1
+      maxIdel: 10
+      minIdel: 0
+    timeout: 1000
+server:
+  port: ${SERVICE_PORT:8801}

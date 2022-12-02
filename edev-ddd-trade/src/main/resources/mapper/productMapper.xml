@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"   
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.edev.trade.query.dao.ProductMapper">
+	<sql id="select">
+		SELECT * FROM t_product WHERE 1 = 1
+	</sql>
+	
+	<sql id="conditions">
+		<if test="id != '' and id != null">
+			and id = #{id}
+		</if>
+		<if test="name != '' and name != null">
+			and name like '%${name}%'
+		</if>
+	</sql>
+	
+	<sql id="isPage">
+		<if test="size != null  and size !=''">
+			limit #{size} offset #{firstRow} 
+		</if>
+	</sql>
+	
+	<select id="query" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+   	 	<include refid="select"/>
+		<include refid="conditions"/>
+		<include refid="isPage"/>
+	</select>
+	
+	<select id="count" parameterType="java.util.HashMap" resultType="java.lang.Long">
+		select count(*) from (
+			<include refid="select"/>
+			<include refid="conditions"/>
+		) count
+	</select>
+	
+	<select id="aggregate" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+		select ${aggregation} from (
+			<include refid="select"/>
+			<include refid="conditions"/>
+		) aggregation
+	</select>
+</mapper>

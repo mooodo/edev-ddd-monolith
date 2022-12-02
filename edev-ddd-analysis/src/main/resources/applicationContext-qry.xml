@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+	<description>The application context for query</description>
+	<bean id="monthlySalesQry" class="com.edev.support.query.impl.QueryServiceImpl">
+		<property name="queryDao">
+			<bean class="com.edev.support.dao.impl.QueryDaoMybatisImpl">
+				<property name="sqlMapper" value="com.edev.analysis.query.dao.MonthlySalesMapper"/>
+			</bean>
+		</property>
+	</bean>
+	<bean id="monthlySalesOfCustomerQry" class="com.edev.support.query.impl.QueryServiceImpl">
+		<property name="queryDao">
+			<bean class="com.edev.support.dao.impl.QueryDaoMybatisImpl">
+				<property name="sqlMapper" value="com.edev.analysis.query.dao.MonthlySalesOfCustomerMapper"/>
+			</bean>
+		</property>
+	</bean>
+	<bean id="monthlySalesOfCityQry" class="com.edev.support.query.impl.QueryServiceImpl">
+		<property name="queryDao">
+			<bean class="com.edev.support.dao.impl.QueryDaoMybatisImpl">
+				<property name="sqlMapper" value="com.edev.analysis.query.dao.MonthlySalesOfCityMapper"/>
+			</bean>
+		</property>
+	</bean>
+	<bean id="monthlySalesOfCustomerAndCityQry" class="com.edev.support.query.impl.QueryServiceImpl">
+		<property name="queryDao">
+			<bean class="com.edev.support.dao.impl.QueryDaoMybatisImpl">
+				<property name="sqlMapper" value="com.edev.analysis.query.dao.MonthlySalesOfCustomerAndCityMapper"/>
+			</bean>
+		</property>
+	</bean>
+</beans>

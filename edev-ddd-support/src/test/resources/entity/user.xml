@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dobjs>
+    <do class="com.edev.trade.authority.entity.User" tableName="User" subclassType="joined">
+        <property name="id" column="id" isPrimaryKey="true"/>
+        <property name="name" column="name"/>
+        <property name="password" column="password"/>
+        <property name="userType" column="user_type" isDiscriminator="true"/>
+        <subclass class="com.edev.trade.customer.entity.Customer" value="customer"/>
+        <subclass class="com.edev.trade.product.entity.Supplier" value="supplier"/>
+    </do>
+    <do class="com.edev.trade.authority.entity.Role" tableName="Role">
+        <property name="id" column="id" isPrimaryKey="true"/>
+        <property name="name" column="name"/>
+        <property name="comment" column="comment"/>
+    </do>
+    <do class="com.edev.trade.authority.entity.UserRole" tableName="User_Role">
+        <property name="id" column="id" isPrimaryKey="true"/>
+        <property name="available" column="available"/>
+        <property name="userId" column="user_id"/>
+        <property name="roleId" column="role_id"/>
+        <join name="user" joinKey="user_id" joinType="manyToOne" class="com.edev.trade.authority.entity.User"/>
+        <join name="role" joinKey="role_id" joinType="manyToOne" class="com.edev.trade.authority.entity.Role"/>
+    </do>
+    <do class="com.edev.trade.authority.entity.Authority" tableName="Authority">
+        <property name="id" column="id" isPrimaryKey="true"/>
+        <property name="name" column="name"/>
+        <property name="available" column="available"/>
+    </do>
+    <do class="com.edev.trade.authority.entity.UserGrantedAuthority" tableName="UserGrantedAuthority">
+        <property name="id" column="id" isPrimaryKey="true"/>
+        <property name="available" column="available"/>
+        <property name="userId" column="user_id"/>
+        <property name="authorityId" column="authority_id"/>
+        <join name="user" joinKey="user_id" joinType="manyToOne" class="com.edev.trade.authority.entity.User"/>
+        <join name="authority" joinKey="authority_id" joinType="manyToOne" class="com.edev.trade.authority.entity.Authority"/>
+    </do>
+    <do class="com.edev.trade.authority.entity.RoleGrantedAuthority" tableName="RoleGrantedAuthority">
+        <property name="id" column="id" isPrimaryKey="true"/>
+        <property name="available" column="available"/>
+        <property name="roleId" column="role_id"/>
+        <property name="authorityId" column="authority_id"/>
+        <join name="role" joinKey="role_id" joinType="manyToOne" class="com.edev.trade.authority.entity.Role"/>
+        <join name="authority" joinKey="authority_id" joinType="manyToOne" class="com.edev.trade.authority.entity.Authority"/>
+    </do>
+</dobjs>

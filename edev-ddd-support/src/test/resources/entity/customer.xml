@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dobjs>
+  <do class="com.edev.trade.customer.entity.Customer" tableName="Customer">
+    <property name="id" column="id" isPrimaryKey="true"/>
+    <property name="name" column="name"/>
+    <property name="gender" column="gender"/>
+    <property name="birthdate" column="birthdate"/>
+    <property name="identification" column="identification"/>
+    <property name="phoneNumber" column="phone_number"/>
+    <join name="addresses" joinKey="customer_id" joinType="oneToMany"
+          isAggregation="true" class="com.edev.trade.customer.entity.Address"/>
+  </do>
+  <do class="com.edev.trade.customer.entity.Address" tableName="Address">
+  	<property name="id" column="id" isPrimaryKey="true"/>
+  	<property name="customerId" column="customer_id"/>
+  	<property name="country" column="country"/>
+  	<property name="province" column="province"/>
+  	<property name="city" column="city"/>
+  	<property name="zone" column="zone"/>
+  	<property name="address" column="address"/>
+  	<property name="phoneNumber" column="phone_number"/>
+  </do>
+  <do class="com.edev.trade.customer.entity.Vip" tableName="Vip" subclassType="simple">
+    <property name="id" column="id" isPrimaryKey="true"/>
+    <property name="customerId" column="customer_id"/>
+    <property name="createTime" column="create_time"/>
+    <property name="updateTime" column="update_time"/>
+    <property name="available" column="available"/>
+    <property name="coin" column="coin"/>
+    <join name="customer" joinKey="customer_id" joinType="manyToOne"
+          class="com.edev.trade.customer.entity.Customer"/>
+    <property name="vipType" column="vip_type" isDiscriminator="true"/>
+    <subclass class="com.edev.trade.customer.entity.GoldenVip" value="golden"/>
+    <subclass class="com.edev.trade.customer.entity.SilverVip" value="silver"/>
+  </do>
+</dobjs>

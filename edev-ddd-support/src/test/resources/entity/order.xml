@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dobjs>
+  <do class="com.edev.trade.order.entity.Order" tableName="Order">
+  	<property name="id" column="id" isPrimaryKey="true"/>
+  	<property name="customer_id" column="customer_id"/>
+  	<property name="address_id" column="address_id"/>
+  	<property name="amount" column="amount"/>
+  	<property name="order_time" column="order_time"/>
+  	<property name="flag" column="flag"/>
+  	<join name="customer" joinKey="customer_id" joinType="manyToOne"
+          class="com.edev.trade.customer.entity.Customer"/>
+  	<join name="address" joinKey="address_id" joinType="manyToOne"
+          class="com.edev.trade.customer.entity.Address"/>
+  	<join name="orderItems" joinKey="order_id" joinType="oneToMany"
+          isAggregation="true" class="com.edev.trade.order.entity.OrderItem"/>
+  </do>
+  <do class="com.edev.trade.order.entity.OrderItem" tableName="OrderItem">
+  	<property name="id" column="id" isPrimaryKey="true"/>
+  	<property name="order_id" column="order_id"/>
+  	<property name="product_id" column="product_id"/>
+  	<property name="quantity" column="quantity"/>
+  	<property name="price" column="price"/>
+  	<property name="amount" column="amount"/>
+  	<join name="product" joinKey="product_id" joinType="manyToOne"
+          class="com.edev.trade.product.entity.Product"/>
+  </do>
+</dobjs>

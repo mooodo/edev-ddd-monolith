@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dobjs>
+    <do class="com.edev.trade.customer.entity.Customer" tableName="t_customer">
+        <property name="id" column="id" isPrimaryKey="true"/>
+        <property name="name" column="name"/>
+        <property name="gender" column="gender"/>
+        <property name="birthdate" column="birthdate"/>
+        <property name="identification" column="identification"/>
+        <property name="phoneNumber" column="phone_number"/>
+        <join name="addresses" joinKey="customerId" joinType="oneToMany"
+              isAggregation="true" class="com.edev.trade.customer.entity.Address"/>
+    </do>
+    <do class="com.edev.trade.customer.entity.Address" tableName="t_address">
+        <property name="id" column="id" isPrimaryKey="true"/>
+        <property name="customerId" column="customer_id"/>
+        <property name="country" column="country"/>
+        <property name="province" column="province"/>
+        <property name="city" column="city"/>
+        <property name="zone" column="zone"/>
+        <property name="address" column="address"/>
+        <property name="phoneNumber" column="phone_number"/>
+    </do>
+    <do class="com.edev.trade.customer.entity.Vip" tableName="t_vip" subclassType="simple">
+        <property name="id" column="id" isPrimaryKey="true"/>
+        <property name="createTime" column="create_time"/>
+        <property name="updateTime" column="update_time"/>
+        <property name="available" column="available"/>
+        <property name="coin" column="coin"/>
+        <join name="customer" joinType="oneToOne"
+              class="com.edev.trade.customer.entity.Customer"/>
+        <property name="vipType" column="vip_type" isDiscriminator="true"/>
+        <subclass class="com.edev.trade.customer.entity.GoldenVip" value="golden">
+            <property name="cashback" column="cashback"/>
+        </subclass>
+        <subclass class="com.edev.trade.customer.entity.SilverVip" value="silver"/>
+    </do>
+    <do class="com.edev.trade.customer.entity.Account" tableName="t_account">
+        <property name="id" column="id" isPrimaryKey="true"/>
+        <property name="balance" column="balance"/>
+        <property name="createTime" column="create_time"/>
+        <property name="updateTime" column="update_time"/>
+        <join name="customer" joinKey="customerId" joinType="manyToOne"
+              class="com.edev.trade.customer.entity.Customer"/>
+    </do>
+    <do class="com.edev.trade.customer.entity.JournalAccount" tableName="t_journal_account">
+        <property name="id" column="id" isPrimaryKey="true"/>
+        <property name="accountId" column="account_id"/>
+        <property name="amount" column="amount"/>
+        <property name="operation" column="operation"/>
+        <property name="operateTime" column="operate_time"/>
+    </do>
+</dobjs>

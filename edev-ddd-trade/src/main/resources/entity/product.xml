@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dobjs>
+  <do class="com.edev.trade.product.entity.Product" tableName="t_product">
+    <property name="id" column="id" isPrimaryKey="true"/>
+    <property name="name" column="name"/>
+    <property name="price" column="price"/>
+    <property name="unit" column="unit"/>
+    <property name="classify" column="classify"/>
+    <property name="supplierId" column="supplier_id"/>
+    <property name="image" column="image"/>
+    <property name="originalPrice" column="original_price"/>
+    <property name="tip" column="tip"/>
+  </do>
+  <do class="com.edev.trade.product.entity.Supplier" subclassType="union">
+    <property name="id" column="id" isPrimaryKey="true"/>
+    <property name="name" column="name"/>
+    <property name="supplierType" column="supplier_type" isDiscriminator="true"/>
+    <subclass class="com.edev.trade.product.entity.Distributor" value="distributor"/>
+    <subclass class="com.edev.trade.product.entity.Vendor" value="vendor"/>
+  </do>
+  <do class="com.edev.trade.product.entity.Distributor" tableName="t_distributor">
+    <property name="id" column="id" isPrimaryKey="true"/>
+    <property name="name" column="name"/>
+    <property name="supplierType" column="supplier_type" isDiscriminator="true"/>
+  </do>
+  <do class="com.edev.trade.product.entity.Vendor" tableName="t_vendor">
+    <property name="id" column="id" isPrimaryKey="true"/>
+    <property name="name" column="name"/>
+    <property name="supplierType" column="supplier_type" isDiscriminator="true"/>
+    <property name="distributorId" column="distributor_id"/>
+    <join name="distributor" joinKey="distributorId" joinType="manyToOne"
+          class="com.edev.trade.product.entity.Distributor"/>
+  </do>
+</dobjs>
