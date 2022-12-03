@@ -77,19 +77,19 @@ public class OrderMvcTest {
     @Test
     public void testSaveAndDeleteWithItem() throws Exception {
         Long id = 1L;
-        Order order = new Order(id,10001L,1000100L,4437D);
+        Order order = new Order(id,10001L,1000100L,null);
         Customer customer = new Customer(10001L,"李秋水","女",
                 "510110197910012312","13388990123");
         order.setCustomer(customer);
         Address address = new Address(1000100L,10001L,"中国","湖北",
                 "武汉","洪山区","珞瑜路726号","13300224466");
         order.setAddress(address);
-        OrderItem orderItem0 = new OrderItem(1L,id,30001L,1L,4000D,3000D);
+        OrderItem orderItem0 = new OrderItem(1L,id,30001L,1L,4000D,null);
         Product product0 = new Product(30001L,"Apple iPhone X 256GB 深空灰色 移动联通电信4G手机",4000D,
                 "台",20004L,"手机");
         orderItem0.setProduct(product0);
         order.addOrderItem(orderItem0);
-        OrderItem orderItem1 = new OrderItem(2L,id,30004L,2L,958D,1437D);
+        OrderItem orderItem1 = new OrderItem(2L,id,30004L,2L,958D,null);
         Product product1 = new Product(30004L,"Kindle Paperwhite电纸书阅读器 电子书墨水屏 6英寸wifi 黑色",958D,
                 "个",20002L,"电子书");
         orderItem1.setProduct(product1);
@@ -116,7 +116,7 @@ public class OrderMvcTest {
     @Test
     public void testSaveAndDeleteWithItemAndPayment() throws Exception {
         Long id = 1L;
-        Order order = new Order(id,10001L,1000100L,4437D);
+        Order order = new Order(id,10001L,1000100L,null);
         Customer customer = new Customer(10001L,"李秋水","女",
                 "510110197910012312","13388990123");
         order.setCustomer(customer);
@@ -126,12 +126,12 @@ public class OrderMvcTest {
         Long accountId = 1000901L;
         Payment payment = new Payment(order.getId(), accountId);
         order.setPayment(payment);
-        OrderItem orderItem0 = new OrderItem(1L,id,30001L,1L,4000D,3000D);
+        OrderItem orderItem0 = new OrderItem(1L,id,30001L,1L,4000D,null);
         Product product0 = new Product(30001L,"Apple iPhone X 256GB 深空灰色 移动联通电信4G手机",4000D,
                 "台",20004L,"手机");
         orderItem0.setProduct(product0);
         order.addOrderItem(orderItem0);
-        OrderItem orderItem1 = new OrderItem(2L,id,30004L,2L,958D,1437D);
+        OrderItem orderItem1 = new OrderItem(2L,id,30004L,2L,958D,null);
         Product product1 = new Product(30004L,"Kindle Paperwhite电纸书阅读器 电子书墨水屏 6英寸wifi 黑色",958D,
                 "个",20002L,"电子书");
         orderItem1.setProduct(product1);
@@ -159,7 +159,7 @@ public class OrderMvcTest {
     @Test
     public void testSaveAndDeleteForList() throws Exception {
         Long id0 = 1L;
-        Order order0 = new Order(id0,10001L,1000100L,5000D);
+        Order order0 = new Order(id0,10001L,1000100L,null);
         Customer customer0 = new Customer(10001L,"李秋水","女",
                 "510110197910012312","13388990123");
         order0.setCustomer(customer0);
@@ -168,19 +168,19 @@ public class OrderMvcTest {
         order0.setAddress(address0);
 
         Long id1 = 2L;
-        Order order1 = new Order(id1,10001L,1000100L,4437D);
+        Order order1 = new Order(id1,10001L,1000100L,null);
         Customer customer1 = new Customer(10001L,"李秋水","女",
                 "510110197910012312","13388990123");
         order0.setCustomer(customer1);
         Address address1 = new Address(1000100L,10001L,"中国","湖北",
                 "武汉","洪山区","珞瑜路726号","13300224466");
         order0.setAddress(address1);
-        OrderItem orderItem0 = new OrderItem(1L,id1,30001L,1L,4000D,3000D);
+        OrderItem orderItem0 = new OrderItem(1L,id1,30001L,1L,4000D,null);
         Product product0 = new Product(30001L,"Apple iPhone X 256GB 深空灰色 移动联通电信4G手机",4000D,
                 "台",20004L,"手机");
         orderItem0.setProduct(product0);
         order1.addOrderItem(orderItem0);
-        OrderItem orderItem1 = new OrderItem(2L,id1,30004L,2L,958D,1437D);
+        OrderItem orderItem1 = new OrderItem(2L,id1,30004L,2L,958D,null);
         Product product1 = new Product(30004L,"Kindle Paperwhite电纸书阅读器 电子书墨水屏 6英寸wifi 黑色",958D,
                 "个",20002L,"电子书");
         orderItem1.setProduct(product1);
@@ -217,7 +217,7 @@ public class OrderMvcTest {
     @Test
     public void testSaveAndDeleteForJsonList() throws Exception {
         Long id0 = 1L;
-        Order order0 = new Order(id0,10001L,1000100L,5000D);
+        Order order0 = new Order(id0,10001L,1000100L,null);
         Customer customer0 = new Customer(10001L,"李秋水","女",
                 "510110197910012312","13388990123");
         order0.setCustomer(customer0);
@@ -226,7 +226,7 @@ public class OrderMvcTest {
         order0.setAddress(address0);
 
         Long id1 = 2L;
-        Order order1 = new Order(id1,10001L,1000100L,4437D,
+        Order order1 = new Order(id1,10001L,1000100L,null,
                 DateUtils.getDate("2020-04-20","yyyy-MM-dd"),"create");
         Customer customer1 = new Customer(10001L,"李秋水","女",
                 "510110197910012312","13388990123");
@@ -234,12 +234,12 @@ public class OrderMvcTest {
         Address address1 = new Address(1000100L,10001L,"中国","湖北",
                 "武汉","洪山区","珞瑜路726号","13300224466");
         order0.setAddress(address1);
-        OrderItem orderItem0 = new OrderItem(1L,id1,30001L,1L,4000D,3000D);
+        OrderItem orderItem0 = new OrderItem(1L,id1,30001L,1L,4000D,null);
         Product product0 = new Product(30001L,"Apple iPhone X 256GB 深空灰色 移动联通电信4G手机",4000D,
                 "台",20004L,"手机");
         orderItem0.setProduct(product0);
         order1.addOrderItem(orderItem0);
-        OrderItem orderItem1 = new OrderItem(2L,id1,30004L,2L,958D,1437D);
+        OrderItem orderItem1 = new OrderItem(2L,id1,30004L,2L,958D,null);
         Product product1 = new Product(30004L,"Kindle Paperwhite电纸书阅读器 电子书墨水屏 6英寸wifi 黑色",958D,
                 "个",20002L,"电子书");
         orderItem1.setProduct(product1);

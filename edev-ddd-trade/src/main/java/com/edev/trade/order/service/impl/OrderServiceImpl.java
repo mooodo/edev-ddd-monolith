@@ -87,6 +87,7 @@ public class OrderServiceImpl implements OrderService {
         orders.forEach(order -> {
             validOrder(order);
             sumOfAmount(order);
+            payoff(order);
         });
         dao.insertOrUpdateForList(orders);
     }

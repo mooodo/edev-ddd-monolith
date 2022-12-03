@@ -6,6 +6,7 @@
 		<property name="addressId" column="address_id"/>
 		<property name="amount" column="amount"/>
 		<property name="orderTime" column="order_time"/>
+		<property name="modifyTime" column="modify_time"/>
 		<property name="flag" column="flag"/>
 		<join name="customer" joinKey="customerId" joinType="manyToOne"
 			  class="com.edev.trade.order.entity.Customer"/>

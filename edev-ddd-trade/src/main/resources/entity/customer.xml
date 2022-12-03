@@ -36,6 +36,7 @@
     </do>
     <do class="com.edev.trade.customer.entity.Account" tableName="t_account">
         <property name="id" column="id" isPrimaryKey="true"/>
+        <property name="customerId" column="customer_id"/>
         <property name="balance" column="balance"/>
         <property name="createTime" column="create_time"/>
         <property name="updateTime" column="update_time"/>

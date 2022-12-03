@@ -19,6 +19,7 @@ public class Order extends Entity<Long> {
 	private Long addressId;
 	private Double amount;
 	private Date orderTime;
+	private Date modifyTime;
 	private String flag;
 	private Customer customer;
 	private Address address;
@@ -80,6 +81,14 @@ public class Order extends Entity<Long> {
 
 	public void setOrderTime(Date orderTime) {
 		this.orderTime = (orderTime==null) ? DateUtils.getNow() : orderTime;
+	}
+
+	public Date getModifyTime() {
+		return modifyTime;
+	}
+
+	public void setModifyTime(Date modifyTime) {
+		this.modifyTime = modifyTime;
 	}
 
 	public String getFlag() {
