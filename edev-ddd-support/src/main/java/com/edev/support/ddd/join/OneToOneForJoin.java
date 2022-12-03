@@ -28,7 +28,7 @@ public class OneToOneForJoin<E extends Entity<S>, S extends Serializable> extend
         String name = join.getName();
         Entity<?> value = (Entity<?>) entity.getValue(name);
         if(value==null) deleteValue(entity);
-        dao.insertOrUpdate(value);
+        else dao.insertOrUpdate(value);
     }
 
     @Override
