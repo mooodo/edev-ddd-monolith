@@ -1,6 +1,5 @@
 package com.edev.trade.order.web;
 
-import com.edev.support.web.OrmController;
 import com.edev.trade.order.entity.Order;
 import com.edev.trade.order.service.TradeService;
 import org.springframework.beans.factory.annotation.Autowired;
