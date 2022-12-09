@@ -1,0 +1,28 @@
+node {
+    def parent = 'edev-ddd-monolith'
+    def app = 'edev-ddd-support'
+    stage('拉取代码') {
+        git "https://gitee.com/mooodo/${parent}.git"
+    }
+    stage('编译测试') {
+        sh """
+        cd ${app}
+        mvn clean test install -Dmaven.test.failure.ignore=true
+        """
+    }
+    stage('报告生成') {
+        allure(includeProperties: false,
+            jdk: '',
+            properties: [],
+            results: [[path: "${app}/target/surefire-reports/"]])
+    }
+    stage('代码检查') {
+        sh """
+        cd ${app}
+        mvn sonar:sonar \
+        -Dsonar.projectKey=edev-ddd-support \
+        -Dsonar.host.url=http://master:9000 \
+        -Dsonar.login=807af98f93a810394312069eeb84c28768f4a978
+        """
+    }
+}
