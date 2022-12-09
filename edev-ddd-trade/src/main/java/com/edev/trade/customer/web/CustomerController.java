@@ -2,6 +2,7 @@ package com.edev.trade.customer.web;
 
 import com.edev.support.web.OrmController;
 import com.edev.support.web.QueryController;
+import com.edev.trade.customer.service.AccountAggService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,6 +31,7 @@ public class CustomerController {
     public Object load(HttpServletRequest request) {
         return ormController.doGet(BEAN,"load",request);
     }
+
     @Autowired
     private QueryController queryController;
     private static final String QRY_BEAN = "customerQry";
@@ -40,5 +42,20 @@ public class CustomerController {
     @GetMapping("query")
     public Object query(HttpServletRequest request) {
         return queryController.queryByGet(QRY_BEAN, request);
+    }
+
+    @Autowired
+    private AccountAggService service;
+    @GetMapping("topUp")
+    public Double topUp(Long id, Double amount) {
+        return service.topUp(id, amount);
+    }
+    @GetMapping("payoff")
+    public Double payoff(Long id, Double amount) {
+        return service.payoff(id, amount);
+    }
+    @GetMapping("refund")
+    public Double refund(Long id, Double amount) {
+        return service.refund(id, amount);
     }
 }

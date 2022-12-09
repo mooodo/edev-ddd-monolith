@@ -2,6 +2,8 @@ package com.edev.trade.order.web;
 
 import com.edev.support.web.OrmController;
 import com.edev.support.web.QueryController;
+import com.edev.trade.order.entity.Order;
+import com.edev.trade.order.service.OrderAggService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,6 +32,7 @@ public class OrderController {
     public Object load(HttpServletRequest request) {
         return ormController.doGet(BEAN, "load", request);
     }
+
     @Autowired
     private QueryController queryController;
     private static final String QRY_BEAN = "productQry";
@@ -40,5 +43,16 @@ public class OrderController {
     @GetMapping("query")
     public Object query(HttpServletRequest request) {
         return queryController.queryByGet(QRY_BEAN, request);
+    }
+
+    @Autowired
+    private OrderAggService service;
+    @PostMapping("placeOrder")
+    public Long placeOrder(@RequestBody Order order) {
+        return service.placeOrder(order);
+    }
+    @GetMapping("returnGoods")
+    public void returnGoods(Long orderId) {
+        service.returnGoods(orderId);
     }
 }

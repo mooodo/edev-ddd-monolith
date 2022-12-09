@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.edev</groupId>
     <artifactId>edev-ddd-analysis</artifactId>
-    <version>1.0.0-${maven.build.timestamp}</version>
+    <version>1.1.0-${maven.build.timestamp}</version>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -24,26 +24,20 @@
     </properties>
 
     <dependencies>
-        <!-- enabled web -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
-
-        <!-- kylin -->
         <dependency>
             <groupId>org.apache.kylin</groupId>
             <artifactId>kylin-jdbc</artifactId>
             <version>3.1.1</version>
         </dependency>
-
         <dependency>
             <groupId>com.edev</groupId>
             <artifactId>edev-ddd-support</artifactId>
-            <version>1.0.0</version>
+            <version>1.1.0</version>
         </dependency>
-
-        <!-- spring boot test-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>

@@ -2,24 +2,24 @@ package com.edev.trade.order.service.impl;
 
 import com.edev.support.ddd.NullEntityException;
 import com.edev.support.exception.ValidException;
-import com.edev.trade.customer.service.PaymentService;
+import com.edev.trade.customer.service.AccountAggService;
 import com.edev.trade.inventory.service.InventoryService;
 import com.edev.trade.order.entity.Order;
 import com.edev.trade.order.service.OrderService;
-import com.edev.trade.order.service.TradeService;
+import com.edev.trade.order.service.OrderAggService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-@Service("trade")
-public class TradeServiceImpl implements TradeService {
-    private final static Log log = LogFactory.getLog(TradeServiceImpl.class);
+@Service
+public class OrderAggServiceImpl implements OrderAggService {
+    private final static Log log = LogFactory.getLog(OrderAggServiceImpl.class);
     @Autowired
     private OrderService orderService;
     @Autowired
-    private PaymentService paymentService;
+    private AccountAggService paymentService;
     @Autowired
     private InventoryService inventoryService;
     @Override

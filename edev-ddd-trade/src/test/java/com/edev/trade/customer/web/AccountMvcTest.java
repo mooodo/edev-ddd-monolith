@@ -24,8 +24,7 @@ public class AccountMvcTest {
     @Test
     public void testSaveAndDelete() throws Exception {
         Long id = 1L;
-        Account account = new Account(id,10001L,10000D,
-                DateUtils.getDate("2020-01-01","yyyy-MM-dd"),null);
+        Account account = new Account(id,10001L,10000D,null,null);
         String json = JSONObject.toJSONStringWithDateFormat(account, "yyyy-MM-dd HH:mm:ss");
 
         mvc.perform(get("/orm/account/remove")
@@ -38,7 +37,7 @@ public class AccountMvcTest {
                 .param("id", id.toString())
         ).andExpect(status().isOk()).andExpect(content().json(json));
 
-        mvc.perform(get("/payment/topUp")
+        mvc.perform(get("/account/topUp")
                 .param("id", id.toString()).param("amount", "1000")
         ).andExpect(status().isOk()).andExpect(content().string("11000.0"));
         account.setBalance(11000D);
@@ -47,7 +46,7 @@ public class AccountMvcTest {
                 .param("id", id.toString())
         ).andExpect(status().isOk()).andExpect(content().json(json1));
 
-        mvc.perform(get("/payment/payoff")
+        mvc.perform(get("/account/payoff")
                 .param("id", id.toString()).param("amount", "1000")
         ).andExpect(status().isOk()).andExpect(content().string("10000.0"));
         mvc.perform(get("/orm/account/get")

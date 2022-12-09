@@ -5,13 +5,13 @@ import com.edev.trade.customer.entity.Account;
 import com.edev.trade.customer.entity.JournalAccount;
 import com.edev.trade.customer.service.AccountService;
 import com.edev.trade.customer.service.JournalAccountService;
-import com.edev.trade.customer.service.PaymentService;
+import com.edev.trade.customer.service.AccountAggService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-public class PaymentServiceImpl implements PaymentService {
+public class AccountAggServiceImpl implements AccountAggService {
     @Autowired
     private AccountService accountService;
     @Autowired
