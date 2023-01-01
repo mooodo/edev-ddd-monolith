@@ -181,21 +181,22 @@ edev-consul-trade   采用低代码平台编写的微服务系统 for consul
 就能通过DSL获得它对应的表，以及该表的字段、每个字段的值。最后将这些数据形成SQL语句，执行SQL语句，完成数据库的操作。
 
 ```xml
-<do class="com.edev.trade.order.entity.Order" tableName="t_order">
-   <property name="id" column="id" isPrimaryKey="true"/>
-   <property name="customerId" column="customer_id"/>
-   <property name="addressId" column="address_id"/>
-   <property name="amount" column="amount"/>
-   <property name="orderTime" column="order_time"/>
-   <property name="modifyTime" column="modify_time"/>
-   <property name="flag" column="flag"/>
-   ...
-   <join name="payment" joinType="oneToOne" isAggregation="true"
-        class="com.edev.trade.order.entity.Payment"/>
-   <join name="orderItems" joinKey="orderId" joinType="oneToMany"
-        isAggregation="true" 
-        class="com.edev.trade.order.entity.OrderItem"/>
-</do>
+<dobjs>
+    <do class="com.edev.trade.order.entity.Order" tableName="t_order">
+        <property name="id" column="id" isPrimaryKey="true"/>
+        <property name="customerId" column="customer_id"/>
+        <property name="addressId" column="address_id"/>
+        <property name="amount" column="amount"/>
+        <property name="orderTime" column="order_time"/>
+        <property name="modifyTime" column="modify_time"/>
+        <property name="flag" column="flag"/>
+        ...
+        <join name="payment" joinType="oneToOne" isAggregation="true"
+              class="com.edev.trade.order.entity.Payment"/>
+        <join name="orderItems" joinKey="orderId" joinType="oneToMany"
+              isAggregation="true" class="com.edev.trade.order.entity.OrderItem"/>
+    </do>
+</dobjs>
 ```
 与此同时，在DSL通过join标签来表示领域对象间的关系，并且通过isAggregation=”true”来表示该关系是聚合关系，
 如上例中payment, orderItem与order的关系。这样，当保存订单时，底层的仓库就能同时存储订单表、订单明细表与支付表，
@@ -257,24 +258,25 @@ public class Order extends Entity<Long> {
 还是多对一关系呢？这里的order对应了一个orderItem集合，这个关系到底是一对多关系还是多对多关系呢？用什么字段关联？
 是否还有聚合与继承关系呢？因此，为了更加准确地描述领域模型，低代码平台通过增加DSL予以描述：
 ```xml
-<do class="com.edev.trade.order.entity.Order" tableName="t_order">
-   <property name="id" column="id" isPrimaryKey="true"/>
-   <property name="customerId" column="customer_id"/>
-   <property name="addressId" column="address_id"/>
-   <property name="amount" column="amount"/>
-   <property name="orderTime" column="order_time"/>
-   <property name="modifyTime" column="modify_time"/>
-   <property name="flag" column="flag"/>
-   <join name="customer" joinKey="customerId" joinType="manyToOne"
-        class="com.edev.trade.order.entity.Customer"/>
-   <join name="address" joinKey="addressId" joinType="manyToOne"
-        class="com.edev.trade.order.entity.Address"/>
-   <join name="payment" joinType="oneToOne" isAggregation="true"
-        class="com.edev.trade.order.entity.Payment"/>
-   <join name="orderItems" joinKey="orderId" joinType="oneToMany"
-        isAggregation="true"
-        class="com.edev.trade.order.entity.OrderItem"/>
-</do>
+<dobjs>
+    <do class="com.edev.trade.order.entity.Order" tableName="t_order">
+        <property name="id" column="id" isPrimaryKey="true"/>
+        <property name="customerId" column="customer_id"/>
+        <property name="addressId" column="address_id"/>
+        <property name="amount" column="amount"/>
+        <property name="orderTime" column="order_time"/>
+        <property name="modifyTime" column="modify_time"/>
+        <property name="flag" column="flag"/>
+        <join name="customer" joinKey="customerId" joinType="manyToOne"
+              class="com.edev.trade.order.entity.Customer"/>
+        <join name="address" joinKey="addressId" joinType="manyToOne"
+              class="com.edev.trade.order.entity.Address"/>
+        <join name="payment" joinType="oneToOne" isAggregation="true"
+              class="com.edev.trade.order.entity.Payment"/>
+        <join name="orderItems" joinKey="orderId" joinType="oneToMany"
+              isAggregation="true" class="com.edev.trade.order.entity.OrderItem"/>
+    </do>
+</dobjs>
 ```
 这样，通过join标签描述了领域对象间的关联关系，包括它的关联字段（joinKey）、关联类型（joinType）、是否是聚合
 （isAggregation），以及要关联的领域对象（class）。有了这些信息，低代码平台的通用仓库会根据是否是聚合，决定到底
@@ -283,53 +285,56 @@ public class Order extends Entity<Long> {
 采用join标签，不管是写数据库还是读数据库，都是在自己本地的数据库中进行。但如果通过微服务的拆分，某些数据不在自己本地，
 需要通过远程接口调用，该如何是好？这时改join标签为ref标签：
 ```xml
-<do class="com.edev.trade.order.entity.Order" tableName="t_order">
-   <property name="id" column="id" isPrimaryKey="true"/>
-   <property name="customerId" column="customer_id"/>
-   <property name="addressId" column="address_id"/>
-   <property name="amount" column="amount"/>
-   <property name="orderTime" column="order_time"/>
-   <property name="modifyTime" column="modify_time"/>
-   <property name="flag" column="flag"/>
-   <ref name="customer" refKey="customerId" refType="manyToOne"
-        bean="com.edev.trade.order.service.CustomerService"
-        method="load" listMethod="loadAll"/>
-   <ref name="address" refKey="addressId" refType="manyToOne"
-        bean="com.edev.trade.order.service.CustomerService"
-        method="loadAddress" listMethod="loadAddresses"/>
-   <join name="payment" joinType="oneToOne" isAggregation="true"
-        class="com.edev.trade.order.entity.Payment"/>
-   <join name="orderItems" joinKey="orderId" joinType="oneToMany"
-        isAggregation="true" 
-        class="com.edev.trade.order.entity.OrderItem"/>
-</do>
+<dobjs>
+    <do class="com.edev.trade.order.entity.Order" tableName="t_order">
+        <property name="id" column="id" isPrimaryKey="true"/>
+        <property name="customerId" column="customer_id"/>
+        <property name="addressId" column="address_id"/>
+        <property name="amount" column="amount"/>
+        <property name="orderTime" column="order_time"/>
+        <property name="modifyTime" column="modify_time"/>
+        <property name="flag" column="flag"/>
+        <ref name="customer" refKey="customerId" refType="manyToOne"
+             bean="com.edev.trade.order.service.CustomerService"
+             method="load" listMethod="loadAll"/>
+        <ref name="address" refKey="addressId" refType="manyToOne"
+             bean="com.edev.trade.order.service.CustomerService"
+             method="loadAddress" listMethod="loadAddresses"/>
+        <join name="payment" joinType="oneToOne" isAggregation="true"
+              class="com.edev.trade.order.entity.Payment"/>
+        <join name="orderItems" joinKey="orderId" joinType="oneToMany"
+              isAggregation="true" class="com.edev.trade.order.entity.OrderItem"/>
+    </do>
+</dobjs>
 ```
 在该DSL中，customer, address需要调用远程接口来获取数据。这时，将标签改为ref标签，bean是远程调用在自己本地的
 Feign接口，method是查询一条记录时的调用方法，listMethod是查询多条记录时的调用方法。
+
 ### 用DSL表示领域对象的聚合关系
 聚合关系是DDD独创的一个设计，它将真实世界中那些整体与部分的关系，整体来封装部分。这样，当订单与订单明细定义为聚合
 关系时，以往DDD的设计需要单独为订单增加一个仓库，详细编码实现如何在保存订单表的同时，保存订单明细表，并将其设计在
 一个事务中。如果在整个系统中的每个聚合关系都需要这样设计，无疑会增大开发工作量，让DDD落地的设计开发非常繁琐。因此，
 低代码平台通过DSL将聚合关系进行了封装。开发人员只需要在DSL中将某个关系定义为聚合关系，剩下的工作都交给低代码平台去完成。
 ```xml
-<do class="com.edev.trade.order.entity.Order" tableName="t_order">
-   <property name="id" column="id" isPrimaryKey="true"/>
-   <property name="customerId" column="customer_id"/>
-   <property name="addressId" column="address_id"/>
-   <property name="amount" column="amount"/>
-   <property name="orderTime" column="order_time"/>
-   <property name="modifyTime" column="modify_time"/>
-   <property name="flag" column="flag"/>
-   <join name="customer" joinKey="customerId" joinType="manyToOne"
-        class="com.edev.trade.order.entity.Customer"/>
-   <join name="address" joinKey="addressId" joinType="manyToOne"
-        class="com.edev.trade.order.entity.Address"/>
-   <join name="payment" joinType="oneToOne" isAggregation="true"
-        class="com.edev.trade.order.entity.Payment"/>
-   <join name="orderItems" joinKey="orderId" joinType="oneToMany"
-        isAggregation="true"
-        class="com.edev.trade.order.entity.OrderItem"/>
-</do>
+<dobjs>
+    <do class="com.edev.trade.order.entity.Order" tableName="t_order">
+        <property name="id" column="id" isPrimaryKey="true"/>
+        <property name="customerId" column="customer_id"/>
+        <property name="addressId" column="address_id"/>
+        <property name="amount" column="amount"/>
+        <property name="orderTime" column="order_time"/>
+        <property name="modifyTime" column="modify_time"/>
+        <property name="flag" column="flag"/>
+        <join name="customer" joinKey="customerId" joinType="manyToOne"
+              class="com.edev.trade.order.entity.Customer"/>
+        <join name="address" joinKey="addressId" joinType="manyToOne"
+              class="com.edev.trade.order.entity.Address"/>
+        <join name="payment" joinType="oneToOne" isAggregation="true"
+              class="com.edev.trade.order.entity.Payment"/>
+        <join name="orderItems" joinKey="orderId" joinType="oneToMany"
+              isAggregation="true" class="com.edev.trade.order.entity.OrderItem"/>
+    </do>
+</dobjs>
 ```
 在以上DSL的配置中，通过isAggregation=”true”定义了order与payment, orderItem是聚合关系。这样，orderService
 只需要注入repository通用仓库，就可以将order作为一个整体去完成持久化，而不需要单独去操作payment与orderItem。
@@ -497,26 +502,27 @@ public class QryConfig {
 这里通过DSL描述领域对象间的关系时，使用join标签就是从本地数据库中进行查询，完成补填；使用ref标签则是调用微服务的
 远程接口查询数据，最终完成补填，如以下配置：
 ```xml
-<do class="com.edev.trade.order.entity.Order" tableName="t_order">
-   <property name="id" column="id" isPrimaryKey="true"/>
-   <property name="customerId" column="customer_id"/>
-   <property name="addressId" column="address_id"/>
-   <property name="amount" column="amount"/>
-   <property name="orderTime" column="order_time"/>
-   <property name="modifyTime" column="modify_time"/>
-   <property name="flag" column="flag"/>
-   <ref name="customer" refKey="customerId" refType="manyToOne"
-        bean="com.edev.trade.order.service.CustomerService"
-        method="load" listMethod="loadAll"/>
-   <ref name="address" refKey="addressId" refType="manyToOne"
-        bean="com.edev.trade.order.service.CustomerService"
-        method="loadAddress" listMethod="loadAddresses"/>
-   <join name="payment" joinType="oneToOne" isAggregation="true"
-        class="com.edev.trade.order.entity.Payment"/>
-   <join name="orderItems" joinKey="orderId" joinType="oneToMany"
-        isAggregation="true" 
-        class="com.edev.trade.order.entity.OrderItem"/>
-</do>
+<dobjs>
+    <do class="com.edev.trade.order.entity.Order" tableName="t_order">
+        <property name="id" column="id" isPrimaryKey="true"/>
+        <property name="customerId" column="customer_id"/>
+        <property name="addressId" column="address_id"/>
+        <property name="amount" column="amount"/>
+        <property name="orderTime" column="order_time"/>
+        <property name="modifyTime" column="modify_time"/>
+        <property name="flag" column="flag"/>
+        <ref name="customer" refKey="customerId" refType="manyToOne"
+             bean="com.edev.trade.order.service.CustomerService"
+             method="load" listMethod="loadAll"/>
+        <ref name="address" refKey="addressId" refType="manyToOne"
+             bean="com.edev.trade.order.service.CustomerService"
+             method="loadAddress" listMethod="loadAddresses"/>
+        <join name="payment" joinType="oneToOne" isAggregation="true"
+              class="com.edev.trade.order.entity.Payment"/>
+        <join name="orderItems" joinKey="orderId" joinType="oneToMany"
+              isAggregation="true" class="com.edev.trade.order.entity.OrderItem"/>
+    </do>
+</dobjs>
 ```
 在以上DSL配置中，customer与address使用的是ref标签，因此它们是通过调用feign接口调用另一个微服务，实现数据补填；
 payment与orderItems使用的是join标签，因此它们是通过查询本地数据库完成数据补填。
@@ -555,20 +561,22 @@ public class SilverVip extends Vip {
 ```
 接着，在DSL中按照这种方式描述这个继承关系：
 ```xml
-<do class="com.edev.trade.customer.entity.Vip" tableName="t_vip" subclassType="simple">
-    <property name="id" column="id" isPrimaryKey="true"/>
-    <property name="createTime" column="create_time"/>
-    <property name="updateTime" column="update_time"/>
-    <property name="available" column="available"/>
-    <property name="coin" column="coin"/>
-    <join name="customer" joinType="oneToOne"
-          class="com.edev.trade.customer.entity.Customer"/>
-    <property name="vipType" column="vip_type" isDiscriminator="true"/>
-    <subclass class="com.edev.trade.customer.entity.GoldenVip" value="golden">
-        <property name="cashback" column="cashback"/>
-    </subclass>
-    <subclass class="com.edev.trade.customer.entity.SilverVip" value="silver"/>
-</do>
+<dobjs>
+    <do class="com.edev.trade.customer.entity.Vip" tableName="t_vip" subclassType="simple">
+        <property name="id" column="id" isPrimaryKey="true"/>
+        <property name="createTime" column="create_time"/>
+        <property name="updateTime" column="update_time"/>
+        <property name="available" column="available"/>
+        <property name="coin" column="coin"/>
+        <join name="customer" joinType="oneToOne"
+              class="com.edev.trade.customer.entity.Customer"/>
+        <property name="vipType" column="vip_type" isDiscriminator="true"/>
+        <subclass class="com.edev.trade.customer.entity.GoldenVip" value="golden">
+            <property name="cashback" column="cashback"/>
+        </subclass>
+        <subclass class="com.edev.trade.customer.entity.SilverVip" value="silver"/>
+    </do>
+</dobjs>
 ```
 在以上DSL中，subclassType=”simple”。在所有的属性中，必须有一个标识字段来标识每一条记录是哪个子类。譬如
 vipType用isDiscriminator=”true”定义它是标识字段。这样，用subclass标签依次罗列出所有的子类。
