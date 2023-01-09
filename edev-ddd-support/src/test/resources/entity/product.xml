@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dobjs>
-  <do class="com.edev.trade.product.entity.Product" tableName="Product">
+  <do class="com.edev.trade.product.entity.Product" tableName="t_product">
     <property name="id" column="id" isPrimaryKey="true"/>
     <property name="name" column="name"/>
     <property name="price" column="price"/>
@@ -10,26 +10,27 @@
     <property name="image" column="image"/>
     <property name="originalPrice" column="original_price"/>
     <property name="tip" column="tip"/>
-    <ref name="supplier" refKey="supplier_id" refType="manyToOne"
-         bean="com.edev.product.service.SupplierService"
-         method="loadSupplier" listMethod="loadSuppliers"/>
   </do>
-  <do class="com.edev.trade.product.entity.Supplier" subclassType="union">
+  <do class="com.edev.trade.product.entity.Supplier" tableName="t_supplier" subclassType="joined">
+    <property name="id" column="id" isPrimaryKey="true"/>
+    <property name="name" column="name"/>
     <property name="supplierType" column="supplier_type" isDiscriminator="true"/>
     <subclass class="com.edev.trade.product.entity.Distributor" value="distributor"/>
     <subclass class="com.edev.trade.product.entity.Vendor" value="vendor"/>
   </do>
-  <do class="com.edev.trade.product.entity.Distributor" tableName="Distributor">
+  <do class="com.edev.trade.product.entity.Distributor" tableName="t_distributor">
     <property name="id" column="id" isPrimaryKey="true"/>
     <property name="name" column="name"/>
-    <property name="supplierType" column="supplier_type" isDiscriminator="true"/>
+    <property name="introduce" column="introduce"/>
+    <property name="address" column="address"/>
+    <property name="range" column="range"/>
+    <join name="distributor" joinKey="distributorId" joinType="oneToMany"
+          class="com.edev.trade.product.entity.Vendor"/>
   </do>
-  <do class="com.edev.trade.product.entity.Vendor" tableName="Vendor">
+  <do class="com.edev.trade.product.entity.Vendor" tableName="t_vendor">
     <property name="id" column="id" isPrimaryKey="true"/>
     <property name="name" column="name"/>
-    <property name="supplierType" column="supplier_type" isDiscriminator="true"/>
+    <property name="position" column="position"/>
     <property name="distributorId" column="distributor_id"/>
-    <join name="distributor" joinKey="distributor_id" joinType="manyToOne"
-          class="com.edev.trade.product.entity.Distributor"/>
   </do>
 </dobjs>

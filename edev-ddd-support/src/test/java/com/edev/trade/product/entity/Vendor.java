@@ -1,22 +1,34 @@
 package com.edev.trade.product.entity;
 
 public class Vendor extends Supplier {
-    private Long distributor_id;
-    private Distributor distributor;
+    private Long distributorId;
+    private String position;
+
+    public Vendor() {
+        super();
+    }
+
+    public Vendor(Long id, String name, Long distributorId, String position) {
+        this.setId(id);
+        this.setName(name);
+        this.setSupplierType("vendor");
+        this.distributorId = distributorId;
+        this.position = position;
+    }
 
     public Long getDistributorId() {
-        return distributor_id;
+        return distributorId;
     }
 
-    public void setDistributorId(Long distributor_id) {
-        this.distributor_id = distributor_id;
+    public void setDistributorId(Long distributorId) {
+        this.distributorId = distributorId;
     }
 
-    public Distributor getDistributor() {
-        return distributor;
+    public String getPosition() {
+        return position;
     }
 
-    public void setDistributor(Distributor distributor) {
-        this.distributor = distributor;
+    public void setPosition(String position) {
+        this.position = position;
     }
 }

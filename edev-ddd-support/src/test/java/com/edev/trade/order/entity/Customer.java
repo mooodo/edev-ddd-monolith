@@ -1,36 +1,66 @@
 /* 
  * Created by 2018年9月9日
  */
-package com.edev.trade.authority.entity;
+package com.edev.trade.order.entity;
 
+import com.edev.support.entity.Entity;
 import com.edev.support.utils.DateUtils;
-import com.edev.trade.customer.entity.Address;
 
 import java.util.Date;
-import java.util.List;
 
 /**
  * The customer entity
  * @author fangang
  */
-public class Customer extends User {
+public class Customer extends Entity<Long> {
+	private Long id;
+	private String name;
 	private String gender;
 	private Date birthdate;
 	private String identification;
 	private String phoneNumber;
-	private List<Address> addresses;
-
 	public Customer() {
+		super();
 	}
-
-	public Customer(Long id, String name, String password, String userType, String gender, String identification, String phoneNumber) {
-		super(id, name, password, userType);
+	
+	public Customer(Long id, String name, String gender,
+                    String identification, String phoneNumber) {
+		this.id = id;
+		this.name = name;
 		this.gender = gender;
 		this.identification = identification;
 		setBirthdateByIdentification();
 		this.phoneNumber = phoneNumber;
 	}
 
+	/**
+	 * @param id the id to set
+	 */
+	@Override
+	public void setId(Long id) {
+		this.id = id;
+	}
+	
+	/**
+	 * @return the id
+	 */
+	@Override
+	public Long getId() {
+		return id;
+	}
+
+	/**
+	 * @return the name
+	 */
+	public String getName() {
+		return name;
+	}
+	/**
+	 * @param name the name to set
+	 */
+	public void setName(String name) {
+		this.name = name;
+	}
 	/**
 	 * @return the gender
 	 */
@@ -83,22 +113,13 @@ public class Customer extends User {
 		this.phoneNumber = phoneNumber;
 	}
 
-	/**
-	 * @return the addresses
-	 */
-	public List<Address> getAddresses() {
-		return addresses;
-	}
-
-	/**
-	 * @param addresses the addresses to set
-	 */
-	public void setAddresses(List<Address> addresses) {
-		this.addresses = addresses;
-	}
-
 	protected void setBirthdateByIdentification() {
 		String birthdateStr = identification.substring(6,14);
 		this.birthdate = DateUtils.getDate(birthdateStr, "yyyyMMdd");
+	}
+
+	@Override
+	protected String[] exclude() {
+		return new String[]{"birthdate"};
 	}
 }

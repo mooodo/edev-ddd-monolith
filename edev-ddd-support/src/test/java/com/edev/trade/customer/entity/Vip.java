@@ -1,57 +1,67 @@
 package com.edev.trade.customer.entity;
 
 import com.edev.support.entity.Entity;
+import com.edev.support.utils.DateUtils;
 
 import java.util.Date;
 
 public class Vip extends Entity<Long> {
-    private Long id;
-    private Long customer_id;
-    private Date create_time;
-    private Date update_time;
-    private Boolean available;
-    private Long coin;
-    private String vip_type;
-    private Customer customer;
+    protected Long id;
+    protected Date createTime;
+    protected Date updateTime;
+    protected String available;
+    protected Long coin;
+    protected String vipType;
+    protected Customer customer;
 
+    public Vip() {}
+
+    public Vip(Long id, Boolean available, Long coin, String vipType) {
+        this(id, null, null, available, coin, vipType);
+    }
+
+    public Vip(Long id, Date createTime, Date updateTime, Boolean available, Long coin, String vipType) {
+        setId(id);
+        setCreateTime(createTime);
+        setUpdateTime(updateTime);
+        setAvailable(available);
+        setCoin(coin);
+        setVipType(vipType);
+    }
+
+    @Override
     public Long getId() {
         return id;
     }
 
+    @Override
     public void setId(Long id) {
         this.id = id;
     }
 
-    public Long getCustomer_id() {
-        return customer_id;
+    public Date getCreateTime() {
+        return createTime;
     }
 
-    public void setCustomer_id(Long customer_id) {
-        this.customer_id = customer_id;
+    public void setCreateTime(Date createTime) {
+        if(createTime == null) createTime = DateUtils.getNow();
+        this.createTime = createTime;
     }
 
-    public Date getCreate_time() {
-        return create_time;
+    public Date getUpdateTime() {
+        return updateTime;
     }
 
-    public void setCreate_time(Date create_time) {
-        this.create_time = create_time;
+    public void setUpdateTime(Date updateTime) {
+        this.updateTime = updateTime;
     }
 
-    public Date getUpdate_time() {
-        return update_time;
-    }
-
-    public void setUpdate_time(Date update_time) {
-        this.update_time = update_time;
-    }
-
-    public Boolean getAvailable() {
-        return available;
+    public Boolean isAvailable() {
+        return "1".equals(available);
     }
 
     public void setAvailable(Boolean available) {
-        this.available = available;
+        this.available = available ? "1" : "0";
     }
 
     public Long getCoin() {
@@ -62,12 +72,12 @@ public class Vip extends Entity<Long> {
         this.coin = coin;
     }
 
-    public String getVip_type() {
-        return vip_type;
+    public String getVipType() {
+        return vipType;
     }
 
-    public void setVip_type(String vip_type) {
-        this.vip_type = vip_type;
+    public void setVipType(String vipType) {
+        this.vipType = vipType;
     }
 
     public Customer getCustomer() {
@@ -77,4 +87,10 @@ public class Vip extends Entity<Long> {
     public void setCustomer(Customer customer) {
         this.customer = customer;
     }
+
+    @Override
+    protected String[] exclude() {
+        return new String[]{"createTime","updateTime"};
+    }
+
 }

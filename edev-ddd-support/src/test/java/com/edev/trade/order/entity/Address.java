@@ -1,7 +1,7 @@
 /*
  * created by 2019年7月22日 下午3:24:47
  */
-package com.edev.trade.customer.entity;
+package com.edev.trade.order.entity;
 
 import com.edev.support.entity.Entity;
 
@@ -34,14 +34,12 @@ public class Address extends Entity<Long> {
 	/**
 	 * @return the id
 	 */
-	@Override
 	public Long getId() {
 		return id;
 	}
 	/**
 	 * @param id the id to set
 	 */
-	@Override
 	public void setId(Long id) {
 		this.id = (Long)id;
 	}

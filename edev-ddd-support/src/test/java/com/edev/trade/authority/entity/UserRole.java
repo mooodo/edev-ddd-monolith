@@ -4,11 +4,9 @@ import com.edev.support.entity.Entity;
 
 public class UserRole extends Entity<Long> {
     private Long id;
-    private boolean available;
+    private String available;
     private Long userId;
     private Long roleId;
-    private User user;
-    private Authority authority;
 
     @Override
     public Long getId() {
@@ -21,11 +19,11 @@ public class UserRole extends Entity<Long> {
     }
 
     public boolean isAvailable() {
-        return available;
+        return "T".equals(available);
     }
 
     public void setAvailable(boolean available) {
-        this.available = available;
+        this.available = available?"T":"F";
     }
 
     public Long getUserId() {
@@ -42,21 +40,5 @@ public class UserRole extends Entity<Long> {
 
     public void setRoleId(Long roleId) {
         this.roleId = roleId;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public Authority getAuthority() {
-        return authority;
-    }
-
-    public void setAuthority(Authority authority) {
-        this.authority = authority;
     }
 }

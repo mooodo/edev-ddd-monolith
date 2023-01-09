@@ -10,15 +10,19 @@ import com.edev.support.entity.Entity;
  * @author fangang
  */
 public class Supplier extends Entity<Long> {
-	private static final long serialVersionUID = 1486267798991452251L;
 	private Long id;
 	private String name;
-	
-	public Supplier() { super(); }
-	public Supplier(Long id, String name) {
+	private String supplierType;
+
+	public Supplier() {
+	}
+
+	public Supplier(Long id, String name, String supplierType) {
 		this.id = id;
 		this.name = name;
+		this.supplierType = supplierType;
 	}
+
 	/**
 	 * @return the id
 	 */
@@ -45,5 +49,12 @@ public class Supplier extends Entity<Long> {
 	public void setName(String name) {
 		this.name = name;
 	}
-	
+
+	public String getSupplierType() {
+		return supplierType;
+	}
+
+	public void setSupplierType(String supplierType) {
+		this.supplierType = supplierType;
+	}
 }

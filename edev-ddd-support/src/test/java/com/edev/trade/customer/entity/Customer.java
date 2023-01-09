@@ -4,6 +4,7 @@
 package com.edev.trade.customer.entity;
 
 import com.edev.support.entity.Entity;
+import com.edev.support.utils.DateUtils;
 
 import java.util.Date;
 import java.util.List;
@@ -13,10 +14,9 @@ import java.util.List;
  * @author fangang
  */
 public class Customer extends Entity<Long> {
-	private static final long serialVersionUID = 5704896146658318508L;
 	private Long id;
 	private String name;
-	private String sex;
+	private String gender;
 	private Date birthdate;
 	private String identification;
 	private String phoneNumber;
@@ -24,15 +24,20 @@ public class Customer extends Entity<Long> {
 	public Customer() {
 		super();
 	}
-	
-	public Customer(Long id, String name, String sex, Date birthdate,
+
+	public Customer(Long id, String name, String gender, Date birthdate,
+					String identification, String phoneNumber) {
+		setId(id);
+		setName(name);
+		setGender(gender);
+		setIdentification(identification);
+		setBirthdate(birthdate);
+		setPhoneNumber(phoneNumber);
+	}
+
+	public Customer(Long id, String name, String gender,
 			String identification, String phoneNumber) {
-		this.id = id;
-		this.name = name;
-		this.sex = sex;
-		this.birthdate = birthdate;
-		this.identification = identification;
-		this.phoneNumber = phoneNumber;
+		this(id, name, gender, null, identification, phoneNumber);
 	}
 
 	/**
@@ -64,16 +69,16 @@ public class Customer extends Entity<Long> {
 		this.name = name;
 	}
 	/**
-	 * @return the sex
+	 * @return the gender
 	 */
-	public String getSex() {
-		return sex;
+	public String getGender() {
+		return gender;
 	}
 	/**
-	 * @param sex the sex to set
+	 * @param gender the gender to gender
 	 */
-	public void setSex(String sex) {
-		this.sex = sex;
+	public void setGender(String gender) {
+		this.gender = gender;
 	}
 	/**
 	 * @return the birthdate
@@ -86,7 +91,8 @@ public class Customer extends Entity<Long> {
 	 * @param birthdate the birthdate to set
 	 */
 	public void setBirthdate(Date birthdate) {
-		this.birthdate = birthdate;
+		if(birthdate != null) this.birthdate = birthdate;
+		else setBirthdateByIdentification();
 	}
 
 	/**
@@ -126,5 +132,11 @@ public class Customer extends Entity<Long> {
 	 */
 	public void setAddresses(List<Address> addresses) {
 		this.addresses = addresses;
+	}
+
+	protected void setBirthdateByIdentification() {
+		if(identification==null) return;
+		String birthdateStr = identification.substring(6,14);
+		this.birthdate = DateUtils.getDate(birthdateStr, "yyyyMMdd");
 	}
 }

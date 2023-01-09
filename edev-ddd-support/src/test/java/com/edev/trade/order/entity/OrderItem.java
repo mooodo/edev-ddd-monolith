@@ -4,113 +4,85 @@
 package com.edev.trade.order.entity;
 
 import com.edev.support.entity.Entity;
-import com.edev.trade.product.entity.Product;
 
 /**
  * @author fangang
  */
 public class OrderItem extends Entity<Long> {
-	private static final long serialVersionUID = 7010469293079068192L;
 	private Long id;
-	private Long order_id;
-	private Long product_id;
-	private Double quantity;
+	private Long orderId;
+	private Long productId;
+	private Long quantity;
 	private Double price;
 	private Double amount;
 	private Product product;
-	
+
+	public OrderItem() {}
+
+	public OrderItem(Long id, Long orderId, Long productId, Long quantity, Double price, Double amount) {
+		this.id = id;
+		this.orderId = orderId;
+		this.productId = productId;
+		this.quantity = quantity;
+		this.price = price;
+		setAmount(amount);
+	}
+
 	@Override
 	public Long getId() {
-		return this.id;
+		return id;
 	}
 
 	@Override
 	public void setId(Long id) {
-		this.id = (Long) id;
+		this.id = id;
 	}
 
-	/**
-	 * @return the order_id
-	 */
 	public Long getOrderId() {
-		return order_id;
+		return orderId;
 	}
 
-	/**
-	 * @param orderId the order_id to set
-	 */
 	public void setOrderId(Long orderId) {
-		this.order_id = orderId;
+		this.orderId = orderId;
 	}
 
-	/**
-	 * @return the product_id
-	 */
 	public Long getProductId() {
-		return product_id;
+		return productId;
 	}
 
-	/**
-	 * @param productId the product_id to set
-	 */
 	public void setProductId(Long productId) {
-		this.product_id = productId;
+		this.productId = productId;
 	}
 
-	/**
-	 * @return the quantity
-	 */
-	public Double getQuantity() {
+	public Long getQuantity() {
 		return quantity;
 	}
 
-	/**
-	 * @param quantity the quantity to set
-	 */
-	public void setQuantity(Double quantity) {
+	public void setQuantity(Long quantity) {
 		this.quantity = quantity;
 	}
 
-	/**
-	 * @return the price
-	 */
 	public Double getPrice() {
 		return price;
 	}
 
-	/**
-	 * @param price the price to set
-	 */
 	public void setPrice(Double price) {
 		this.price = price;
 	}
 
-	/**
-	 * @return the amount
-	 */
 	public Double getAmount() {
 		return amount;
 	}
 
-	/**
-	 * @param amount the amount to set
-	 */
 	public void setAmount(Double amount) {
-		this.amount = amount;
+		this.amount = (amount==null) ? 0D : amount;
 	}
 
-	/**
-	 * @return the product
-	 */
 	public Product getProduct() {
 		return product;
 	}
 
-	/**
-	 * @param product the product to set
-	 */
 	public void setProduct(Product product) {
 		this.product = product;
 	}
-
 }

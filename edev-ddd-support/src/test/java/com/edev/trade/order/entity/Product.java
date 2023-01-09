@@ -1,7 +1,7 @@
 /* 
  * Created by 2018年9月9日
  */
-package com.edev.trade.product.entity;
+package com.edev.trade.order.entity;
 
 import com.edev.support.entity.Entity;
 
@@ -10,6 +10,7 @@ import com.edev.support.entity.Entity;
  * @author fangang
  */
 public class Product extends Entity<Long> {
+	private static final long serialVersionUID = 7149822235159719740L;
 	private Long id;
 	private String name;
 	private Double price;
@@ -19,12 +20,10 @@ public class Product extends Entity<Long> {
 	private String image;
 	private Double originalPrice;
 	private String tip;
-	private Supplier supplier;
 	
 	public Product() { super(); }
-
 	public Product(Long id, String name, Double price, String unit, Long supplierId,
-			String classify) {
+                   String classify) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -34,7 +33,7 @@ public class Product extends Entity<Long> {
 		this.classify = classify;
 	}
 
-	public Product(Long id, String name, Double price, String unit, Long supplierId, String classify, String image, Double originalPrice, String tip, Supplier supplier) {
+	public Product(Long id, String name, Double price, String unit, Long supplierId, String classify, String image, Double originalPrice, String tip) {
 		this.id = id;
 		this.name = name;
 		this.price = price;
@@ -44,9 +43,7 @@ public class Product extends Entity<Long> {
 		this.image = image;
 		this.originalPrice = originalPrice;
 		this.tip = tip;
-		this.supplier = supplier;
 	}
-
 	/**
 	 * @return the id
 	 */
@@ -156,18 +153,6 @@ public class Product extends Entity<Long> {
 	 */
 	public void setTip(String tip) {
 		this.tip = tip;
-	}
-	/**
-	 * @return the supplier
-	 */
-	public Supplier getSupplier() {
-		return supplier;
-	}
-	/**
-	 * @param supplier the supplier to set
-	 */
-	public void setSupplier(Supplier supplier) {
-		this.supplier = supplier;
 	}
 	
 }
