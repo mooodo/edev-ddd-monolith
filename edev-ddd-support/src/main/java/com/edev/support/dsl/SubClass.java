@@ -3,7 +3,7 @@ package com.edev.support.dsl;
 import java.util.Objects;
 
 public class SubClass extends DomainObject {
-    private String value;
+    private String value = "";
     public SubClass() {
         super();
     }

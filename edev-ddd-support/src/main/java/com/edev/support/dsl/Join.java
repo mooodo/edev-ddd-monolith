@@ -3,12 +3,13 @@ package com.edev.support.dsl;
 import java.util.Objects;
 
 public class Join {
-    private String name;
-    private String joinKey;
-    private String joinType;
-    private String joinClass;
-    private boolean isAggregation;
-    private String clazz;
+    private String name = "";
+    private String joinKey = "";
+    private String joinType = "";
+    private String joinClassKey = "";
+    private String joinClass = "";
+    private boolean isAggregation = false;
+    private String clazz = "";
 
     public Join() {}
 
@@ -16,6 +17,16 @@ public class Join {
         this.name = name;
         this.joinKey = joinKey;
         this.joinType = joinType;
+        this.isAggregation = isAggregation;
+        this.clazz = clazz;
+    }
+
+    public Join(String name, String joinKey, String joinType, String joinClassKey, String joinClass, boolean isAggregation, String clazz) {
+        this.name = name;
+        this.joinKey = joinKey;
+        this.joinType = joinType;
+        this.joinClassKey = joinClassKey;
+        this.joinClass = joinClass;
         this.isAggregation = isAggregation;
         this.clazz = clazz;
     }
@@ -42,6 +53,14 @@ public class Join {
 
     public void setJoinType(String joinType) {
         this.joinType = joinType;
+    }
+
+    public String getJoinClassKey() {
+        return joinClassKey;
+    }
+
+    public void setJoinClassKey(String joinClassKey) {
+        this.joinClassKey = joinClassKey;
     }
 
     public String getJoinClass() {
@@ -73,12 +92,12 @@ public class Join {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Join join = (Join) o;
-        return isAggregation == join.isAggregation && name.equals(join.name) && joinKey.equals(join.joinKey) && joinType.equals(join.joinType)  && clazz.equals(join.clazz);
+        return isAggregation == join.isAggregation && name.equals(join.name) && joinKey.equals(join.joinKey) && joinType.equals(join.joinType) && Objects.equals(joinClassKey, join.joinClassKey) && Objects.equals(joinClass, join.joinClass) && clazz.equals(join.clazz);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, joinKey, joinType, isAggregation, clazz);
+        return Objects.hash(name, joinKey, joinType, joinClassKey, joinClass, isAggregation, clazz);
     }
 
     @Override
@@ -87,6 +106,7 @@ public class Join {
                 "name='" + name + '\'' +
                 ", joinKey='" + joinKey + '\'' +
                 ", joinType='" + joinType + '\'' +
+                ", joinClassKey='" + joinClassKey + '\'' +
                 ", joinClass='" + joinClass + '\'' +
                 ", isAggregation=" + isAggregation +
                 ", clazz='" + clazz + '\'' +

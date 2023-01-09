@@ -5,9 +5,9 @@ import java.util.List;
 import java.util.Objects;
 
 public class DomainObject {
-    private String clazz;
-    private String table;
-    private String subClassType;
+    private String clazz = "";
+    private String table = "";
+    private String subClassType = "";
     private List<Property> properties = new ArrayList<>();
     private List<Join> joins = new ArrayList<>();
     private List<Ref> refs = new ArrayList<>();
@@ -91,7 +91,7 @@ public class DomainObject {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         DomainObject that = (DomainObject) o;
-        return clazz.equals(that.clazz) && Objects.equals(table, that.table) && Objects.equals(subClassType, that.subClassType) && Objects.equals(properties, that.properties) && Objects.equals(joins, that.joins) && Objects.equals(refs, that.refs) && Objects.equals(subClasses, that.subClasses);
+        return Objects.equals(clazz, that.clazz) && Objects.equals(table, that.table) && Objects.equals(subClassType, that.subClassType) && Objects.equals(properties, that.properties) && Objects.equals(joins, that.joins) && Objects.equals(refs, that.refs) && Objects.equals(subClasses, that.subClasses);
     }
 
     @Override
@@ -108,6 +108,7 @@ public class DomainObject {
                 ", properties=" + properties +
                 ", joins=" + joins +
                 ", refs=" + refs +
+                ", subClasses=" + subClasses +
                 '}';
     }
 }

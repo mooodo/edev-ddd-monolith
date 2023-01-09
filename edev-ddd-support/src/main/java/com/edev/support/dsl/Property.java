@@ -3,10 +3,10 @@ package com.edev.support.dsl;
 import java.util.Objects;
 
 public class Property {
-    private String name;
-    private String column;
-    private boolean isPrimaryKey;
-    private boolean isDiscriminator;
+    private String name = "";
+    private String column = "";
+    private boolean isPrimaryKey = false;
+    private boolean isDiscriminator = false;
 
     public Property() {}
     public Property(String name, String column, boolean isPrimaryKey, boolean isDiscriminator) {
@@ -53,12 +53,12 @@ public class Property {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Property property = (Property) o;
-        return name.equals(property.name);
+        return isPrimaryKey == property.isPrimaryKey && isDiscriminator == property.isDiscriminator && name.equals(property.name) && column.equals(property.column);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name);
+        return Objects.hash(name, column, isPrimaryKey, isDiscriminator);
     }
 
     @Override

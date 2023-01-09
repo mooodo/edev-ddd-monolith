@@ -17,7 +17,6 @@ public class DomainObjectFactory extends XmlBuildFactoryTemplate {
     @Value("ddd.domainObjectFile")
     private String paths = "classpath:entity/*.xml";
     public DomainObjectFactory() {
-        if(paths==null||paths.equals("")) return;
         if(map.isEmpty()) initFactory(this.paths);
     }
     public DomainObjectFactory(String paths) {
@@ -68,6 +67,7 @@ public class DomainObjectFactory extends XmlBuildFactoryTemplate {
         join.setJoinKey(element.getAttribute("joinKey"));
         join.setJoinType(element.getAttribute("joinType"));
         join.setJoinClass(element.getAttribute("joinClass"));
+        join.setJoinClassKey(element.getAttribute("joinClassKey"));
         join.setAggregation(element.getAttribute("isAggregation").equals("true"));
         join.setClazz(element.getAttribute("class"));
         domainObject.addJoin(join);

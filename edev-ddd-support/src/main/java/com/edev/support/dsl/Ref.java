@@ -3,12 +3,12 @@ package com.edev.support.dsl;
 import java.util.Objects;
 
 public class Ref {
-    private String name;
-    private String refKey;
-    private String refType;
-    private String bean;
-    private String method;
-    private String listMethod;
+    private String name = "";
+    private String refKey = "";
+    private String refType = "";
+    private String bean = "";
+    private String method = "";
+    private String listMethod = "";
 
     public Ref() {}
 
