@@ -8,13 +8,14 @@ import com.edev.support.entity.Entity;
 import java.io.Serializable;
 import java.util.*;
 
-public class OneToOneForJoin<E extends Entity<S>, S extends Serializable> extends AbstractAssembler<E,S> implements Assembler<E,S> {
+public class OneToOneForJoin<E extends Entity<S>, S extends Serializable> extends AbstractRelation<E,S> implements Relation<E,S> {
     public OneToOneForJoin(Join join, BasicDao dao) {
         super(join, dao);
     }
 
     @Override
     public void insertValue(E entity) {
+        if(!join.isAggregation()) return;
         if(entity==null) throw new NullEntityException();
         String name = join.getName();
         Entity<?> value = (Entity<?>) entity.getValue(name);
@@ -24,6 +25,7 @@ public class OneToOneForJoin<E extends Entity<S>, S extends Serializable> extend
 
     @Override
     public void updateValue(E entity) {
+        if(!join.isAggregation()) return;
         if(entity==null) throw new NullEntityException();
         String name = join.getName();
         Entity<?> value = (Entity<?>) entity.getValue(name);
@@ -33,6 +35,7 @@ public class OneToOneForJoin<E extends Entity<S>, S extends Serializable> extend
 
     @Override
     public void deleteValue(E entity) {
+        if(!join.isAggregation()) return;
         if(entity==null) throw new NullEntityException();
         S id = entity.getId();
         dao.delete(id, getClazz());

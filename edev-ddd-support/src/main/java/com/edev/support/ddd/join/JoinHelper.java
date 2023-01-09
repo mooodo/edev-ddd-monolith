@@ -28,7 +28,7 @@ public class JoinHelper<E extends Entity<S>, S extends Serializable> {
         void apply(Join join);
     }
 
-    private Assembler<E,S> getAssembler(Join join) {
+    private Relation<E,S> getRelation(Join join) {
         String joinType = join.getJoinType();
         switch (joinType) {
             case "oneToOne":
@@ -38,8 +38,7 @@ public class JoinHelper<E extends Entity<S>, S extends Serializable> {
             case "oneToMany":
                 return new OneToManyForJoin<>(join, dao);
             case "manyToMany":
-                throw new DddException("Don't support the many to many relation now! " +
-                        "You can transform the many-to-many relation to two many-to-one relations.");
+                return new ManyToManyForJoin<>(join, dao);
             default:
                 throw new DddException("Unknown the join type: %s", joinType);
         }
@@ -51,9 +50,8 @@ public class JoinHelper<E extends Entity<S>, S extends Serializable> {
      */
     public void insertJoins(E entity) {
         doWithJoins(entity, join -> {
-            if(!join.isAggregation()) return;
-            Assembler<E,S> assembler = getAssembler(join);
-            assembler.insertValue(entity);
+            Relation<E,S> relation = getRelation(join);
+            relation.insertValue(entity);
         });
     }
 
@@ -63,9 +61,8 @@ public class JoinHelper<E extends Entity<S>, S extends Serializable> {
      */
     public void updateJoins(E entity) {
         doWithJoins(entity, join -> {
-            if(!join.isAggregation()) return;
-            Assembler<E,S> assembler = getAssembler(join);
-            assembler.updateValue(entity);
+            Relation<E,S> relation = getRelation(join);
+            relation.updateValue(entity);
         });
     }
 
@@ -75,9 +72,8 @@ public class JoinHelper<E extends Entity<S>, S extends Serializable> {
      */
     public void deleteJoins(E entity) {
         doWithJoins(entity, join -> {
-            if(!join.isAggregation()) return;
-            Assembler<E,S> assembler = getAssembler(join);
-            assembler.deleteValue(entity);
+            Relation<E,S> relation = getRelation(join);
+            relation.deleteValue(entity);
         });
     }
 
@@ -87,8 +83,8 @@ public class JoinHelper<E extends Entity<S>, S extends Serializable> {
      */
     public void setJoins(E entity) {
         doWithJoins(entity, join -> {
-            Assembler<E,S> assembler = getAssembler(join);
-            assembler.setValue(entity);
+            Relation<E,S> relation = getRelation(join);
+            relation.setValue(entity);
         });
     }
 
@@ -100,7 +96,8 @@ public class JoinHelper<E extends Entity<S>, S extends Serializable> {
     public boolean hasJoinAndAggregation(Class<E> clazz) {
         if(clazz==null) throw new NullEntityException();
         DomainObject dObj = DomainObjectFactory.getDomainObject(clazz);
-        for(Join join : dObj.getJoins()) if(join.isAggregation()) return true;
+        for(Join join : dObj.getJoins())
+            if(join.isAggregation()||join.getJoinType().equals("manyToMany")) return true;
         return false;
     }
 
@@ -128,8 +125,8 @@ public class JoinHelper<E extends Entity<S>, S extends Serializable> {
     public void setJoinForList(Collection<E> list) {
         if(list==null||list.isEmpty()) return;
         doWithJoinsForList(list, join -> {
-            Assembler<E,S> assembler = getAssembler(join);
-            assembler.setValueForList(list);
+            Relation<E,S> relation = getRelation(join);
+            relation.setValueForList(list);
         });
     }
 }

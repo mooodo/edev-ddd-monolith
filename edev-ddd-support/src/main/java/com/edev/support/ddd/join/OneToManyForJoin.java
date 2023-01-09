@@ -1,46 +1,58 @@
 package com.edev.support.ddd.join;
 
 import com.edev.support.dao.BasicDao;
+import com.edev.support.dao.impl.utils.DaoEntityBuilder;
 import com.edev.support.ddd.NullEntityException;
 import com.edev.support.ddd.utils.EntityUtils;
+import com.edev.support.dsl.DomainObject;
+import com.edev.support.dsl.DomainObjectFactory;
 import com.edev.support.dsl.Join;
 import com.edev.support.entity.Entity;
 import com.edev.support.utils.NameUtils;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.Serializable;
 import java.util.*;
 
-public class OneToManyForJoin<E extends Entity<S>, S extends Serializable> extends AbstractAssembler<E,S> implements Assembler<E,S> {
+public class OneToManyForJoin<E extends Entity<S>, S extends Serializable> extends AbstractRelation<E,S> implements Relation<E,S> {
     public OneToManyForJoin(Join join, BasicDao dao) {
         super(join, dao);
     }
 
-    private void validJoinKey(Collection<Entity<S>> collection, S id) {
+    /**
+     * set the join key's value for each member of the collection
+     * @param collection the collection of entities
+     * @param value the join key's value
+     */
+    private void setJoinKeyForEach(Collection<Entity<S>> collection, S value) {
         String joinKey = join.getJoinKey();
         collection.forEach(entity -> {
-            Object value = entity.getValue(joinKey);
-            if(value==null) entity.setValue(joinKey, id);
+            if(entity.getValue(joinKey)==null) entity.setValue(joinKey, value);
         });
     }
     @Override
+    @Transactional
     public void insertValue(E entity) {
+        if(!join.isAggregation()) return;
         if(entity==null) throw new NullEntityException();
         S id = entity.getId();
         String name = join.getName();
         Collection<Entity<S>> collection = (Collection<Entity<S>>)entity.getValue(name);
         if(collection==null||collection.isEmpty()) return;
-        validJoinKey(collection, id);
-        dao.insertOrUpdateForList(collection);
+        setJoinKeyForEach(collection, id);
+        collection.forEach(dao::insert);
     }
 
     @Override
+    @Transactional
     public void updateValue(E entity) {
+        if(!join.isAggregation()) return;
         if(entity==null) throw new NullEntityException();
         S id = entity.getId();
         String name = join.getName();
         Collection<Entity<S>> collection = (Collection<Entity<S>>)entity.getValue(name);
         if(collection==null||collection.isEmpty()) return;
-        validJoinKey(collection, id);
+        setJoinKeyForEach(collection, id);
 
         String joinKey = join.getJoinKey();
         Entity<S> template = getTemplate();
@@ -57,6 +69,7 @@ public class OneToManyForJoin<E extends Entity<S>, S extends Serializable> exten
 
     @Override
     public void deleteValue(E entity) {
+        if(!join.isAggregation()) return;
         if(entity==null) throw new NullEntityException();
         S id = entity.getId();
         String joinKey = join.getJoinKey();
@@ -85,12 +98,10 @@ public class OneToManyForJoin<E extends Entity<S>, S extends Serializable> exten
         for(Entity<S> entity : list) ids.add(entity.getId());
 
         Map<Object, Object> map = new HashMap<>();
-        map.put("key", NameUtils.convertToUnderline(joinKey));
-        map.put("value", ids);
-        map.put("opt", "IN");
+        map.put(DaoEntityBuilder.KEY, NameUtils.convertToUnderline(joinKey));
+        map.put(DaoEntityBuilder.VALUE, ids);
         List<Map<Object, Object>> colMap = new ArrayList<>();
         colMap.add(map);
-
         Collection<Entity<S>> valueList = dao.loadAll(colMap, getClazz());
         if(valueList==null||valueList.isEmpty()) return;
         Map<S, List<Entity<S>>> sortedEntities = sortEntitiesByJoinKey(valueList);

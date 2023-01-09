@@ -21,6 +21,18 @@ public abstract class Entity<T extends Serializable> implements Serializable, Cl
         this.id = id;
     }
 
+    private int level = 0;
+
+    public int getLevel() {
+        return level;
+    }
+
+    public void setLevel(int level) {
+        this.level = level;
+    }
+
+    public static final int MAX_LEVEL = 2;
+
     /**
      * get all fields, include the entity and its parents private, protected and public fields
      * @param clazz the class of the entity
@@ -60,6 +72,19 @@ public abstract class Entity<T extends Serializable> implements Serializable, Cl
                 return getField(superClass, fieldName);
             else
                 throw new OrmException("No such field[%s] in the class[%s]",fieldName,clazz);
+        }
+    }
+
+    protected <R> boolean hasField(Class<R> clazz, String fieldName) {
+        try {
+            clazz.getDeclaredField(fieldName);
+            return true;
+        } catch (NoSuchFieldException e) {
+            Class<?> superClass = clazz.getSuperclass();
+            if(superClass!=null&&Entity.class.isAssignableFrom(superClass)&&!superClass.equals(Entity.class))
+                return hasField(superClass, fieldName);
+            else
+                return false;
         }
     }
 
@@ -267,6 +292,7 @@ public abstract class Entity<T extends Serializable> implements Serializable, Cl
         Field[] fields = this.getFields(getClass());
         for(Field field : fields) {
             String fieldName = field.getName();
+            if(!entity.hasField(entity.getClass(), fieldName)) continue;
             Object value = entity.getValue(fieldName);
             if(value==null) continue;
             this.setValue(fieldName, value);

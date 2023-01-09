@@ -8,12 +8,13 @@ import com.edev.support.entity.Entity;
 import com.edev.support.utils.BeanUtils;
 
 import java.io.Serializable;
+import java.util.Collection;
 
-public abstract class AbstractAssembler<E extends Entity<S>, S extends Serializable> implements Assembler<E,S> {
+public abstract class AbstractRelation<E extends Entity<S>, S extends Serializable> implements Relation<E,S> {
     protected Join join;
     protected BasicDao dao;
 
-    protected AbstractAssembler(Join join, BasicDao dao) {
+    protected AbstractRelation(Join join, BasicDao dao) {
         if(join==null||dao==null) throw new DddException("The parameters is null");
         this.join = join;
         this.dao = dao;
