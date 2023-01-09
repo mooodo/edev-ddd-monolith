@@ -5,7 +5,10 @@ package com.edev.support.cache;
 
 import com.edev.support.dao.impl.DaoException;
 import com.edev.support.dao.impl.utils.DaoEntity;
+import com.edev.support.dao.impl.utils.DaoEntityBuilder;
+import com.edev.support.ddd.utils.EntityUtils;
 import com.edev.support.entity.Entity;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,9 +22,9 @@ import java.util.*;
  * The cache implement for redis.
  * @author fangang
  */
+@Slf4j
 @Component("redisCache")
 public class RedisCache implements BasicCache {
-	private static final Log log = LogFactory.getLog(RedisCache.class);
 	private static final String SPLITTER = "#";
 	@Autowired
 	private RedisTemplate<String, Object> redisTemplate;
@@ -29,7 +32,7 @@ public class RedisCache implements BasicCache {
 	@Override
 	public <E extends Entity<S>, S extends Serializable> void set(E entity) {
 		if(entity==null) return;
-		String key = generateKey(entity.getId(), entity.getClass());
+		String key = generateKey(entity.getId(), EntityUtils.getClass(entity));
 		log.debug("set a value object to cache: {key: "+key+", value: "+entity+"}");
 		redisTemplate.opsForValue().set(key, entity);
 	}
@@ -57,7 +60,7 @@ public class RedisCache implements BasicCache {
 		if(entities==null||entities.isEmpty()) return;
 		Map<String, Entity<S>> map = new HashMap<>();
 		entities.forEach(entity->{
-			String key = generateKey(entity.getId(), entity.getClass());
+			String key = generateKey(entity.getId(), EntityUtils.getClass(entity));
 			map.put(key, entity);
 		});
 		log.debug("set a list of value objects to cache: {values: "+entities+"}");
@@ -152,7 +155,7 @@ public class RedisCache implements BasicCache {
 	 */
 	private <E extends Entity<S>, S extends Serializable> String generateKey(E entity) {
 		String clazz = entity.getClass().getName();
-		DaoEntity daoEntity = DaoEntity.readDataFromEntity(entity);
+		DaoEntity daoEntity = DaoEntityBuilder.build(entity);
 		StringBuilder buffer = new StringBuilder(clazz);
 		daoEntity.getColMap().forEach(map -> buffer.append(SPLITTER).append(map.get("value")));
 		return buffer.toString();

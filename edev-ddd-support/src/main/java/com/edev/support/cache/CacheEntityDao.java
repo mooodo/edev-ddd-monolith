@@ -6,6 +6,7 @@ package com.edev.support.cache;
 import com.edev.support.dao.BasicDao;
 import com.edev.support.dao.impl.DecoratorDao;
 import com.edev.support.ddd.utils.EntityBuilder;
+import com.edev.support.ddd.utils.EntityUtils;
 import com.edev.support.dsl.DomainObject;
 import com.edev.support.dsl.DomainObjectFactory;
 import com.edev.support.entity.Entity;
@@ -43,7 +44,7 @@ public class CacheEntityDao extends DecoratorDao implements BasicDao {
 	 * @param entity the entity
 	 */
 	private <E extends Entity<S>, S extends Serializable> void deleteCache(E entity) {
-		cache.delete(entity.getId(), entity.getClass());
+		cache.delete(entity.getId(), EntityUtils.getClass(entity));
 	}
 	
 	private <E extends Entity<S>, S extends Serializable> void deleteCacheOfJoin(E entity) {
@@ -59,10 +60,10 @@ public class CacheEntityDao extends DecoratorDao implements BasicDao {
 				cache.deleteList(template);
 			} else if(join.getJoinType().equals("oneToOne")) {
 				S id = entity.getId();
-				cache.delete(id, template.getClass());
+				cache.delete(id, EntityUtils.getClass(template));
 			} else {
 				S id = (S)entity.getValue(joinKey);
-				cache.delete(id, template.getClass());
+				cache.delete(id, EntityUtils.getClass(template));
 			}
 		});
 	}
@@ -92,7 +93,7 @@ public class CacheEntityDao extends DecoratorDao implements BasicDao {
 		List<S> ids = new ArrayList<>();
 		list.forEach(entity->ids.add(entity.getId()));
 		T template = list.iterator().next();
-		cache.deleteForList(ids, template.getClass());
+		cache.deleteForList(ids, EntityUtils.getClass(template));
 	}
 	
 	/**
