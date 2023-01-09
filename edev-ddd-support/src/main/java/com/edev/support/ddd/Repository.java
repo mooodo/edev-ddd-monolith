@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
@@ -26,7 +27,7 @@ public class Repository extends DecoratorDao implements BasicDao {
     }
     @Override
     @Transactional
-    public <E extends Entity<S>, S extends Serializable> S insert(E entity) {
+    public <E extends Entity<S>, S extends Serializable> S insert(@NotNull E entity) {
         S id = super.insert(entity);
         JoinHelper<E,S> joinHelper = new JoinHelper<>(getDao());
         if(joinHelper.hasJoinAndAggregation(entity))
@@ -34,7 +35,7 @@ public class Repository extends DecoratorDao implements BasicDao {
         return id;
     }
 
-    private <E extends Entity<S>, S extends Serializable> void updateWithJoin(E entity) {
+    private <E extends Entity<S>, S extends Serializable> void updateWithJoin(@NotNull E entity) {
         JoinHelper<E,S> joinHelper = new JoinHelper<>(getDao());
         if(joinHelper.hasJoinAndAggregation(entity))
             joinHelper.updateJoins(entity);
@@ -42,20 +43,20 @@ public class Repository extends DecoratorDao implements BasicDao {
 
     @Override
     @Transactional
-    public <E extends Entity<S>, S extends Serializable> void update(E entity) {
+    public <E extends Entity<S>, S extends Serializable> void update(@NotNull E entity) {
         super.update(entity);
         updateWithJoin(entity);
     }
 
     @Override
     @Transactional
-    public <E extends Entity<S>, S extends Serializable> S insertOrUpdate(E entity) {
+    public <E extends Entity<S>, S extends Serializable> S insertOrUpdate(@NotNull E entity) {
         S id = super.insertOrUpdate(entity);
         updateWithJoin(entity);
         return id;
     }
 
-    private <E extends Entity<S>, S extends Serializable> void deleteWithJoin(E entity) {
+    private <E extends Entity<S>, S extends Serializable> void deleteWithJoin(@NotNull E entity) {
         JoinHelper<E,S> joinHelper = new JoinHelper<>(getDao());
         if(joinHelper.hasJoinAndAggregation(entity))
             joinHelper.deleteJoins(entity);
@@ -63,32 +64,36 @@ public class Repository extends DecoratorDao implements BasicDao {
 
     @Override
     @Transactional
-    public <E extends Entity<S>, S extends Serializable> void delete(E entity) {
+    public <E extends Entity<S>, S extends Serializable> void delete(@NotNull E entity) {
         super.delete(entity);
         deleteWithJoin(entity);
     }
 
     @Override
     @Transactional
-    public <E extends Entity<S>, S extends Serializable, C extends Collection<E>> void insertOrUpdateForList(C list) {
+    public <E extends Entity<S>, S extends Serializable, C extends Collection<E>>
+            void insertOrUpdateForList(@NotNull C list) {
         list.forEach(this::insertOrUpdate);
     }
 
     @Override
     @Transactional
-    public <E extends Entity<S>, S extends Serializable, C extends Collection<E>> void deleteForList(C list) {
+    public <E extends Entity<S>, S extends Serializable, C extends Collection<E>>
+        void deleteForList(@NotNull C list) {
         list.forEach(this::delete);
     }
 
     @Override
     @Transactional
-    public <E extends Entity<S>, S extends Serializable> void deleteForList(Collection<S> ids, Class<E> clazz) {
+    public <E extends Entity<S>, S extends Serializable>
+        void deleteForList(@NotNull Collection<S> ids, @NotNull Class<E> clazz) {
         ids.forEach(id->delete(id,clazz));
     }
 
     @Override
     @Transactional
-    public <E extends Entity<S>, S extends Serializable> void delete(S id, Class<E> clazz) {
+    public <E extends Entity<S>, S extends Serializable>
+            void delete(@NotNull S id, @NotNull Class<E> clazz) {
         JoinHelper<E,S> joinHelper = new JoinHelper<>(getDao());
         if(joinHelper.hasJoinAndAggregation(clazz)) {
             E entity = this.load(id, clazz);
@@ -97,7 +102,8 @@ public class Repository extends DecoratorDao implements BasicDao {
     }
 
     @Override
-    public <E extends Entity<S>, S extends Serializable> E load(S id, Class<E> clazz) {
+    public <E extends Entity<S>, S extends Serializable>
+            E load(@NotNull S id, @NotNull Class<E> clazz) {
         E entity = super.load(id, clazz);
         if(entity==null) return null;
         (new JoinHelper<E,S>(this)).setJoins(entity);
@@ -106,7 +112,8 @@ public class Repository extends DecoratorDao implements BasicDao {
     }
 
     @Override
-    public <E extends Entity<S>, S extends Serializable> Collection<E> loadForList(Collection<S> ids, Class<E> clazz) {
+    public <E extends Entity<S>, S extends Serializable>
+            Collection<E> loadForList(@NotNull Collection<S> ids, @NotNull Class<E> clazz) {
         Collection<E> collection = super.loadForList(ids, clazz);
         (new JoinHelper<E,S>(this)).setJoinForList(collection);
         (new RefHelper<E,S>(context)).setRefForList(collection);
@@ -114,7 +121,7 @@ public class Repository extends DecoratorDao implements BasicDao {
     }
 
     @Override
-    public <E extends Entity<S>, S extends Serializable> Collection<E> loadAll(E template) {
+    public <E extends Entity<S>, S extends Serializable> Collection<E> loadAll(@NotNull E template) {
         Collection<E> collection = super.loadAll(template);
         (new JoinHelper<E,S>(this)).setJoinForList(collection);
         (new RefHelper<E,S>(context)).setRefForList(collection);
@@ -122,7 +129,8 @@ public class Repository extends DecoratorDao implements BasicDao {
     }
 
     @Override
-    public <E extends Entity<S>, S extends Serializable> Collection<E> loadAll(List<Map<Object, Object>> colMap, Class<E> clazz) {
+    public <E extends Entity<S>, S extends Serializable>
+            Collection<E> loadAll(@NotNull List<Map<Object, Object>> colMap, @NotNull Class<E> clazz) {
         Collection<E> collection = super.loadAll(colMap, clazz);
         (new JoinHelper<E,S>(this)).setJoinForList(collection);
         (new RefHelper<E,S>(context)).setRefForList(collection);

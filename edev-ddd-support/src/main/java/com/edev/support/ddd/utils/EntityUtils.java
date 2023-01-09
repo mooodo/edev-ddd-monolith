@@ -21,11 +21,15 @@ public class EntityUtils {
     public static boolean isEntity(Class<?> clazz) {
         if(clazz==null||Entity.class.equals(clazz)) return false;
         if(Entity.class.isAssignableFrom(clazz)) {
-            if(clazz.getSuperclass()!=null&&DomainObjectFactory.isExists(clazz.getSuperclass().getName())) return true;
             if (DomainObjectFactory.isExists(clazz.getName())) return true;
+            if(clazz.getSuperclass()!=null&&DomainObjectFactory.isExists(clazz.getSuperclass().getName())) return true;
             throw new DddException("The entity[%s] isn't register in domain objects register files.", clazz.getName());
         }
         return false;
+    }
+
+    public static boolean isSubClass(Class<?> clazz) {
+        return isEntity(clazz)&&!clazz.getSuperclass().equals(Entity.class);
     }
 
     /**
@@ -48,7 +52,6 @@ public class EntityUtils {
         return hasSubClass(clazz.getName());
     }
 
-
     /**
      * whether the class has subclass
      * @param className the class name
@@ -59,21 +62,73 @@ public class EntityUtils {
         return hasSubClass(dObj);
     }
 
+    /**
+     * whether the class has subclass
+     * @param dObj the domain object
+     * @return true if it has subclass
+     */
     public static boolean hasSubClass(DomainObject dObj) {
         String subClassType = dObj.getSubClassType();
         return subClassType!=null&&!subClassType.equals("");
     }
 
-    public static <E extends Entity<S>, S extends Serializable>
-            Class<E> getClassOfEntity(String className) {
+    /**
+     * get the class of the entity by its class name
+     * @param className the class name of the entity
+     * @param <E> the entity
+     * @param <S> the id of the entity
+     * @return the class of the entity
+     */
+    public static <E extends Entity<S>, S extends Serializable> Class<E> getClassOfEntity(String className) {
         Class<?> clazz = BeanUtils.getClazz(className);
         if(!Entity.class.isAssignableFrom(clazz))
             throw new DddException("The class is not an entity: [%s]", className);
         return (Class<E>)clazz;
     }
 
+    public static <E extends Entity<S>, S extends Serializable> Class<E> getClass(E entity) {
+        return (Class<E>) entity.getClass();
+    }
+
+    public static <E extends Entity<S>, S extends Serializable> Class<E> getSuperclass(E entity) {
+        return (Class<E>) entity.getClass().getSuperclass();
+    }
+
+    public static <E extends Entity<S>, S extends Serializable> Class<E> getSuperclass(Class<E> clazz) {
+        return (Class<E>)clazz.getSuperclass();
+    }
+
+    /**
+     * compare two collections their difference,
+     * then get 3 collections: inserted, updated, deleted
+     * and call fallback method to do something.
+     * @param source the source collection
+     * @param target the target collection
+     * @param callback the callback method
+     * @param <E> the entity
+     * @param <S> the id of the entity
+     */
     public static <E extends Entity<S>, S extends Serializable>
             void compareListOrSetOfEntity(Collection<E> source, Collection<E> target, ComparedCollectionCallback<E> callback) {
+        compareListOrSetOfEntity(source, target, (sourceEntity, targetEntity)->{
+            return targetEntity.getId().equals(sourceEntity.getId());
+        }, callback);
+    }
+
+    /**
+     * compare two collections their difference,
+     * then get 3 collections: inserted, updated, deleted
+     * and call fallback method to do something.
+     * @param source the source collection
+     * @param target the target collection
+     * @param matchKeyCallback the callback method whether their match the primary key
+     * @param callback the callback method
+     * @param <E> the entity
+     * @param <S> the id of the entity
+     */
+    public static <E extends Entity<S>, S extends Serializable>
+            void compareListOrSetOfEntity(Collection<E> source, Collection<E> target,
+                                          MatchKeyCallback<E> matchKeyCallback, ComparedCollectionCallback<E> callback) {
         if(source==null) source = new ArrayList<>();
         if(target==null) target = new ArrayList<>();
 
@@ -83,7 +138,7 @@ public class EntityUtils {
         for(E targetEntity : target) {
             boolean isMatched = false;
             for (E sourceEntity : source) {
-                if(targetEntity.getId().equals(sourceEntity.getId())) {
+                if(matchKeyCallback.isKeyMatch(sourceEntity, targetEntity)) {
                     isMatched = true;
                     if(!targetEntity.equals(sourceEntity))
                         updated.add(targetEntity);
@@ -94,6 +149,11 @@ public class EntityUtils {
             deleted.remove(targetEntity);
         }
         callback.apply(inserted, updated, deleted);
+    }
+
+    @FunctionalInterface
+    public interface MatchKeyCallback<E> {
+        boolean isKeyMatch(E sourceEntity, E targetEntity);
     }
 
     @FunctionalInterface

@@ -1,12 +1,18 @@
 package com.edev.support.ddd.utils;
 
 import com.edev.support.entity.Entity;
+import com.edev.support.subclass.utils.SubClassBuilder;
 import com.edev.support.utils.BeanUtils;
 
 import java.io.Serializable;
 
+/**
+ * The builder for create entity with its class or class name
+ * @param <E> the entity
+ * @param <S> the id of the entity
+ */
 public class EntityBuilder <E extends Entity<S>, S extends Serializable> {
-    private final Class<E> clazz;
+    protected final Class<E> clazz;
     public EntityBuilder(Class<E> clazz) {
         this.clazz = clazz;
     }
@@ -16,6 +22,8 @@ public class EntityBuilder <E extends Entity<S>, S extends Serializable> {
     }
 
     public E createEntity() {
+        if(EntityUtils.isSubClass(clazz))
+            return SubClassBuilder.build(clazz);
         return BeanUtils.createBean(clazz);
     }
 
