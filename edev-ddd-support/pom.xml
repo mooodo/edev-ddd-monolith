@@ -60,6 +60,10 @@
             <artifactId>spring-messaging</artifactId>
             <version>5.1.6.RELEASE</version>
         </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+        </dependency>
 
         <!-- spring boot test-->
         <dependency>
