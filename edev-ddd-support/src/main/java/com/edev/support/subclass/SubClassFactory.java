@@ -14,7 +14,7 @@ import java.util.Map;
 @Component
 public class SubClassFactory {
     @Autowired
-    private Map<String, SubClassDao> subClassMap = new HashMap<>();
+    private final Map<String, SubClassDao> subClassMap = new HashMap<>();
 
     public SubClassDao getSubClass(String name) {
         return subClassMap.get(name);

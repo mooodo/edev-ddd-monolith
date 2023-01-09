@@ -1,257 +1,205 @@
 package com.edev.support.subclass;
 
 import com.edev.support.dao.impl.utils.DaoEntity;
-import com.edev.support.ddd.NullEntityException;
+import com.edev.support.dao.impl.utils.DaoEntityBuilder;
 import com.edev.support.ddd.utils.EntityBuilder;
+import com.edev.support.ddd.utils.EntityUtils;
 import com.edev.support.dsl.DomainObject;
 import com.edev.support.dsl.DomainObjectFactory;
+import com.edev.support.dsl.SubClass;
 import com.edev.support.entity.Entity;
-import com.edev.support.subclass.exception.SubClassException;
+import com.edev.support.subclass.utils.DaoEntityForSubClassUtils;
+import com.edev.support.subclass.utils.SubClassUtils;
 import com.edev.support.utils.DowncastHelper;
-import com.edev.support.utils.NameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
-import java.lang.reflect.Type;
-import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.*;
 
-@Component()
+@Component
 public class JoinedSubClass extends AbstractSubClass implements SubClassDao {
     @Autowired
     private DowncastHelper downcastHelper;
     @Override
-    public boolean available(DomainObject dObj) {
+    public boolean available(@NotNull DomainObject dObj) {
         return dObj.getSubClassType().equalsIgnoreCase("joined");
     }
 
-    /**
-     * read the data from entity and decode from its parent, then build the daoEntity.
-     * @param entity the entity
-     * @return daoEntity
-     */
-    private DaoEntity readDataFromEntityForParent(Entity<?> entity) {
-        DomainObject dObj = DomainObjectFactory.getDomainObject(entity.getClass().getSuperclass());
-        return DaoEntity.readDataFromEntity(entity, dObj);
-    }
-
-    /**
-     * read the data from entity and decode from itself, then build the daoEntity.
-     * @param entity the entity
-     * @return daoEntity
-     */
-    private DaoEntity readDataFromEntityForChild(Entity<?> entity) {
-        return DaoEntity.readDataFromEntity(entity);
-    }
-
     @Override
     @Transactional
-    public <E extends Entity<S>, S extends Serializable> S insert(E entity) {
-        if(entity==null) throw new NullEntityException();
-        if(isParent(entity)) entity = createSubClassByParent(entity);
-        try {
-            DaoEntity parent = readDataFromEntityForParent(entity);
-            doInsert(parent);
-            DaoEntity child = readDataFromEntityForChild(entity);
-            doInsert(child);
-        } catch (DataAccessException e) {
-            throw new SubClassException("error when insert entity: [%s]", e, entity);
-        }
+    public <E extends Entity<S>, S extends Serializable> S insert(@NotNull E entity) {
+        E childEntity = SubClassUtils.isParent(entity) ? SubClassUtils.createSubClassByParent(entity) : entity;
+        DaoEntity parent = DaoEntityForSubClassUtils.buildForParent(childEntity);
+        daoExecutor.insert(parent, childEntity);
+        DaoEntity child = DaoEntityBuilder.build(childEntity);
+        daoExecutor.insert(child, childEntity);
         return entity.getId();
     }
 
     @Override
     @Transactional
-    public <E extends Entity<S>, S extends Serializable> void update(E entity) {
-        if(entity==null) throw new NullEntityException();
-        if(isParent(entity)) entity = createSubClassByParent(entity);
-        E old = load(entity.getId(), (Class<E>)entity.getClass().getSuperclass());
-        if(old==null)
-            throw new SubClassException("No found the entity which need update: [%s]", entity);
-        try {
-            DaoEntity parent = readDataFromEntityForParent(entity);
-            doUpdate(parent);
-            if(old.getClass().equals(entity.getClass())) {
-                DaoEntity child = readDataFromEntityForChild(entity);
-                doUpdate(child);
-            } else {
-                //change to another subclass
-                DaoEntity oldChild = readDataFromEntityForChild(old);
-                doDelete(oldChild);
-                DaoEntity newChild = readDataFromEntityForChild(entity);
-                doInsert(newChild);
-            }
-        } catch (DataAccessException e) {
-            throw new SubClassException("error when update entity: [%s]", e, entity);
-        }
+    public <E extends Entity<S>, S extends Serializable> void update(@NotNull E entity) {
+        E childEntity = SubClassUtils.isParent(entity) ? SubClassUtils.createSubClassByParent(entity) : entity;
+        //update child table firstly
+        updateForChild(childEntity);
+        //update parent table lastly
+        DaoEntity parent = DaoEntityForSubClassUtils.buildForParent(childEntity);
+        daoExecutor.update(parent);
     }
 
     @Override
     @Transactional
-    public <E extends Entity<S>, S extends Serializable> S insertOrUpdate(E entity) {
-        if(entity==null) throw new NullEntityException();
-        if(isParent(entity)) entity = createSubClassByParent(entity);
-        try {
-            DaoEntity parent = readDataFromEntityForParent(entity);
-            doInsertOrUpdate(parent);
-            DaoEntity child = readDataFromEntityForChild(entity);
-            doInsertOrUpdate(child);
-        } catch (DataAccessException e) {
-            throw new SubClassException("error when insert or update entity: [%s]", e, entity);
-        }
-        return entity.getId();
+    public <E extends Entity<S>, S extends Serializable> void delete(@NotNull E entity) {
+        //delete the parent table
+        DaoEntity parent = SubClassUtils.isParent(entity) ? DaoEntityBuilder.build(entity) :
+                DaoEntityForSubClassUtils.buildForParent(entity);
+        daoExecutor.delete(parent);
+        //delete the child tables
+        deleteChildTable(entity);
     }
 
     @Override
     @Transactional
-    public <E extends Entity<S>, S extends Serializable> void delete(E entity) {
-        if(entity==null) throw new NullEntityException();
-        if(isParent(entity)) entity = createSubClassByParent(entity);
-        try {
-            DaoEntity parent = readDataFromEntityForParent(entity);
-            doDelete(parent);
-            DaoEntity child = readDataFromEntityForChild(entity);
-            doDelete(child);
-        } catch (DataAccessException e) {
-            throw new SubClassException("error when delete entity: [%s]", e, entity);
-        }
-    }
-
-    @Override
-    @Transactional
-    public <E extends Entity<S>, S extends Serializable, C extends Collection<E>> void insertOrUpdateForList(C list) {
-        if(list==null) throw new SubClassException("The list is null!");
-        list.forEach(this::insertOrUpdate);
-    }
-
-    @Override
-    @Transactional
-    public <E extends Entity<S>, S extends Serializable, C extends Collection<E>> void deleteForList(C list) {
-        if(list==null) throw new SubClassException("The list is null!");
-        list.forEach(this::delete);
-    }
-
-    @Override
-    @Transactional
-    public <E extends Entity<S>, S extends Serializable> void delete(S id, Class<E> clazz) {
-        E entity = load(id, clazz);
-        if(entity==null) return;
+    public <E extends Entity<S>, S extends Serializable>
+            void delete(@NotNull S id, @NotNull Class<E> clazz) {
+        E entity = EntityBuilder.build(clazz);
+        entity.setId(id);
         delete(entity);
     }
 
     @Override
-    public <E extends Entity<S>, S extends Serializable> E load(S id, Class<E> clazz) {
-        if(id==null||clazz==null) throw new SubClassException("The id or class is null!");
-        //load data from parent table firstly
-        E entity = createEntityWithParentData(id, clazz);
-        if(isParent(clazz)) entity = createEntityWithParentData(id, clazz);
-        else entity = createEntityWithParentData(id, (Class<E>) clazz.getSuperclass());
-        if (entity == null) return null;
-        //load data from child table lastly
-        fillEntityWithChildData(entity);
-        return entity;
-    }
-
-    private <E extends Entity<S>, S extends Serializable> E createEntityWithParentData(S id, Class<E> parentClass) {
-        E template = EntityBuilder.build(parentClass);
-        template.setId(id);
-        DaoEntity daoEntity = DaoEntity.readDataFromEntity(template);
-        List<Map<String, Object>> list = dao.find(daoEntity.getTableName(), daoEntity.getPkMap());
-        if(list==null||list.isEmpty()) return null;
-        return createEntityByRow(parentClass, list.get(0));
-    }
-
-    private <E extends Entity<S>, S extends Serializable> void fillEntityWithChildData(E entity) {
-        if(entity==null) throw new NullEntityException();
-        DaoEntity daoEntity = readDataFromEntityForChild(entity);
-        List<Map<String, Object>> list = dao.find(daoEntity.getTableName(), daoEntity.getPkMap());
-        if(list==null||list.isEmpty()) return;
-        Map<String, Object> child = list.get(0);
-        child.forEach((column, value)->{
-            if(value==null) return;
-            String fieldName = NameUtils.convertToCamelCase(column);
-            Type type = entity.getType(fieldName);
-            if(type==null) return;
-            entity.setValue(fieldName, downcastHelper.downcast(type, value));
-        });
-    }
-
-    @Override
     @Transactional
-    public <E extends Entity<S>, S extends Serializable> void deleteForList(Collection<S> ids, Class<E> clazz) {
-        if(ids==null||clazz==null) throw new SubClassException("The ids or class is null!");
-        if(!isParent(clazz)) {
-            throw new SubClassException("The class must be a parent class:[%s]",clazz);
-        }
-        DaoEntity daoEntity = DaoEntity.prepareForList(ids, clazz);
-        //delete parent data
-        dao.deleteForList(daoEntity.getTableName(), daoEntity.getPkMap());
+    public <E extends Entity<S>, S extends Serializable>
+            void deleteForList(@NotNull Collection<S> ids, @NotNull Class<E> clazz) {
+        DaoEntity daoEntity = DaoEntityBuilder.buildForList(ids,
+                SubClassUtils.isParent(clazz) ? clazz : EntityUtils.getSuperclass(clazz)
+                );
+        //delete parent table
+        daoExecutor.deleteForList(daoEntity);
+        deleteChildTableForList(ids, clazz);
+    }
 
-        DomainObject dObj = DomainObjectFactory.getDomainObject(clazz);
-        dObj.getSubClasses().forEach(subClass -> {
-            DomainObject dObjOfChild = DomainObjectFactory.getDomainObject(subClass.getClazz());
-            //delete child data
-            dao.deleteForList(dObjOfChild.getTable(), daoEntity.getPkMap());
-        });
+    private <E extends Entity<S>, S extends Serializable>
+            Set<Object> distinctDiscriminators(@NotNull Collection<E> parents) {
+        Map<Object, Object> discriminatorMap = new HashMap<>();
+        //distinct discriminators by keys of the map
+        parents.forEach(entity->discriminatorMap.put(SubClassUtils.getValueOfDiscriminator(entity),null));
+        return discriminatorMap.keySet();
     }
 
     @Override
-    public <E extends Entity<S>, S extends Serializable> Collection<E> loadForList(Collection<S> ids, Class<E> clazz) {
-        if(ids==null||clazz==null) throw new SubClassException("The ids or class is null!");
-        if(!isParent(clazz)) {
-            throw new SubClassException("The class must be a parent class:[%s]",clazz);
-        }
-        DaoEntity daoEntity = DaoEntity.prepareForList(ids, clazz);
-        List<Map<String, Object>> listOfRow = dao.load(daoEntity.getTableName(), daoEntity.getPkMap());
-        if(listOfRow==null||listOfRow.isEmpty()) return new ArrayList<>();
+    public <E extends Entity<S>, S extends Serializable>
+            Collection<E> loadForList(@NotNull Collection<S> ids, @NotNull Class<E> clazz) {
+        //load for parent table
+        Collection<E> parents = super.loadForList(ids,
+                SubClassUtils.isParent(clazz) ? clazz : EntityUtils.getSuperclass(clazz));
+        if(parents==null||parents.isEmpty()) return new ArrayList<>();
+
+        //load for child tables
         List<E> entities = new ArrayList<>();
-        listOfRow.forEach(row->{
-            E entity = createEntityByRow(clazz, row);
-            fillEntityWithChildData(entity);
-            entities.add(entity);
+        if(SubClassUtils.isParent(clazz))
+            distinctDiscriminators(parents).forEach(discriminator->{
+                DomainObject dObj = DomainObjectFactory.getDomainObject(clazz);
+                SubClass subClass = SubClassUtils.getSubClassByValue(dObj, discriminator);
+                Class<E> subClazz = EntityUtils.getClassOfEntity(subClass.getClazz());
+                Collection<E> children = super.loadForList(ids, subClazz);
+                entities.addAll(assembleForList(parents, children));
+            });
+        else {
+            Collection<E> children = super.loadForList(ids, clazz);
+            entities.addAll(assembleForList(parents, children));
+        }
+        return entities;
+    }
+
+    private <E extends Entity<S>, S extends Serializable>
+            E assemble(E parent, E child) {
+        child.merge(parent);
+        return child;
+    }
+
+    private <E extends Entity<S>, S extends Serializable>
+            Collection<E> assembleForList(@NotNull Collection<E> parents, @NotNull Collection<E> children) {
+        Map<S,E> parentMap = new HashMap<>();
+        parents.forEach(parent->parentMap.put(parent.getId(), parent));
+        Map<S,E> childMap = new HashMap<>();
+        children.forEach(child->childMap.put(child.getId(), child));
+        Collection<E> entities = new ArrayList<>();
+        parentMap.forEach((id,parent) -> {
+            E child = childMap.get(id);
+            if(child==null) return;
+            entities.add(assemble(parent, child));
         });
         return entities;
     }
 
     @Override
-    public <E extends Entity<S>, S extends Serializable> Collection<E> loadAll(E template) {
-        if(template==null) throw new NullEntityException();
-        if(isParent(template)) {
-            throw new SubClassException("The template must be a parent:[%s]",template);
+    public <E extends Entity<S>, S extends Serializable>
+            Collection<E> loadAll(@NotNull E template) {
+        if(SubClassUtils.isParent(template)) {
+            Object value = SubClassUtils.getValueOfDiscriminator(template);
+            if(value!=null) {//the template is a parent with discriminator
+                E childTemplate = SubClassUtils.createSubClassByParent(template);
+                return loadAllForChild(childTemplate);
+            } else {//the template is a parent without discriminator
+                return loadAllForParent(template);
+            }
         }
-        try {
-            DaoEntity parent = readDataFromEntityForParent(template);
-            List<Map<String, Object>> listOfParents = dao.find(parent.getTableName(), parent.getColMap());
-            List<E> entities = new ArrayList<>();
-            listOfParents.forEach(row -> {
-                E entity = createEntityByRow((Class<E>)template.getClass(), row);
-                fillEntityWithChildData(entity);
-                entities.add(entity);
+        //the template is a child
+        return loadAllForChild(template);
+    }
+
+    private <E extends Entity<S>, S extends Serializable>
+            Collection<E> loadAllForParent(@NotNull E template) {
+        //load data from parent table.
+        Collection<E> parents = super.loadAll(template);
+        //load data from child tables.
+        List<E> entities = new ArrayList<>();
+        distinctDiscriminators(parents).forEach(discriminator->{
+            DomainObject dObj = DomainObjectFactory.getDomainObject(template.getClass());
+            SubClass subClass = SubClassUtils.getSubClassByValue(dObj, discriminator);
+            E childTemplate = (new EntityBuilder<E,S>(subClass.getClazz())).createEntity();
+            childTemplate.merge(template);
+            Collection<E> children = super.loadAll(childTemplate);
+            if(children==null||children.isEmpty()) return;
+            entities.addAll(assembleForList(parents, children));
+        });
+        return entities;
+    }
+
+    private <E extends Entity<S>, S extends Serializable>
+            Collection<E> loadAllForChild(@NotNull E template) {
+        E parent = EntityBuilder.build(EntityUtils.getSuperclass(template));
+        parent.merge(template);
+        Collection<E> parents = super.loadAll(parent);
+        if(parents==null||parents.isEmpty()) return new ArrayList<>();
+        Collection<E> children = super.loadAll(template);
+        return assembleForList(parents, children);
+    }
+
+    @Override
+    public <E extends Entity<S>, S extends Serializable>
+            Collection<E> loadAll(@NotNull List<Map<Object, Object>> colMap, @NotNull Class<E> clazz) {
+        if(SubClassUtils.isParent(clazz)) {
+            Collection<E> parents = super.loadAll(colMap, clazz);
+            if(parents==null||parents.isEmpty()) return new ArrayList<>();
+            Collection<E> entities = new ArrayList<>();
+            distinctDiscriminators(parents).forEach(discriminator->{
+                DomainObject dObj = DomainObjectFactory.getDomainObject(clazz);
+                SubClass subClass = SubClassUtils.getSubClassByValue(dObj, discriminator);
+                Class<E> subClazz = EntityUtils.getClassOfEntity(subClass.getClazz());
+                Collection<E> children = super.loadAll(colMap, subClazz);
+                entities.addAll(assembleForList(parents, children));
             });
             return entities;
-        } catch (DataAccessException e) {
-            throw new SubClassException("error when load entities: [template:%s]", e, template);
+        } else {
+            Collection<E> parents = super.loadAll(colMap, EntityUtils.getSuperclass(clazz));
+            if(parents==null||parents.isEmpty()) return new ArrayList<>();
+            Collection<E> children = super.loadAll(colMap, clazz);
+            return assembleForList(parents, children);
         }
-    }
-
-    @Override
-    public <E extends Entity<S>, S extends Serializable> Collection<E> loadAll(List<Map<Object, Object>> colMap, Class<E> clazz) {
-        if(colMap==null||clazz==null) throw new SubClassException("The colMap or class is null");
-        if(!isParent(clazz)) {
-            throw new SubClassException("The class must be a parent class:[%s]",clazz);
-        }
-        DomainObject dObj = DomainObjectFactory.getDomainObject(clazz);
-        String tableName = dObj.getTable();
-        List<Map<String, Object>> list = dao.find(tableName, colMap);
-        List<E> entities = new ArrayList<>();
-        list.forEach(row->{
-            E entity = createEntityByRow(clazz, row);
-            fillEntityWithChildData(entity);
-            entities.add(entity);
-        });
-        return entities;
     }
 }
