@@ -8,14 +8,15 @@ import com.edev.support.entity.Entity;
 import com.edev.support.utils.BeanUtils;
 import org.springframework.context.ApplicationContext;
 
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.lang.reflect.Method;
 import java.util.*;
 
 public class RefHelper<E extends Entity<S>, S extends Serializable> {
-    private ApplicationContext context;
+    private final ApplicationContext context;
     public RefHelper(ApplicationContext context) { this.context = context; }
-    private void doWithRefs(E entity, Callback callback) {
+    private void doWithRefs(@NotNull E entity, @NotNull Callback callback) {
         if(entity==null) throw new DddException("The entity is null");
         DomainObject dObj = DomainObjectFactory.getDomainObject(entity.getClass());
         dObj.getRefs().forEach(callback::apply);
@@ -35,7 +36,7 @@ public class RefHelper<E extends Entity<S>, S extends Serializable> {
             Object service = BeanUtils.getService(bean, context);
             String methodName = ref.getMethod();
             Method method = BeanUtils.getMethod(service, methodName);
-            S id = null;
+            S id;
             if("oneToOne".equals(ref.getRefType()))
                 id = entity.getId();
             else if("manyToOne".equals(ref.getRefType()))
@@ -63,7 +64,6 @@ public class RefHelper<E extends Entity<S>, S extends Serializable> {
      */
     public void setRefForList(Collection<E> list) {
         doWithRefsForList(list, ref -> {
-
             String bean = ref.getBean();
             Object service = BeanUtils.getService(bean, context);
             String methodName = ref.getListMethod();
@@ -94,9 +94,10 @@ public class RefHelper<E extends Entity<S>, S extends Serializable> {
                 Collection<Entity<S>> listOfEntities = (Collection<Entity<S>>) BeanUtils.invoke(service, method, ids);
                 Map<S,List<Entity<S>>> mapOfValues = new HashMap<>();
                 listOfEntities.forEach(entity->{
-                    List<Entity<S>> value = mapOfValues.get(entity.getValue(ref.getRefKey()));
-                    if(value==null) value = new ArrayList<>();
-                    value.add(entity);
+                    S key = (S)entity.getValue(ref.getRefKey());
+                    List<Entity<S>> value = mapOfValues.get(key);
+                    if(value==null) mapOfValues.put(key,new ArrayList<>());
+                    mapOfValues.get(key).add(entity);
                 });
                 list.forEach(entity->{
                     Object value = mapOfValues.get(entity.getId());

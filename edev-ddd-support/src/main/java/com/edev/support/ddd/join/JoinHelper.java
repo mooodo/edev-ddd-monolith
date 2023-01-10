@@ -2,12 +2,13 @@ package com.edev.support.ddd.join;
 
 import com.edev.support.dao.BasicDao;
 import com.edev.support.ddd.DddException;
-import com.edev.support.ddd.NullEntityException;
+import com.edev.support.ddd.utils.EntityUtils;
 import com.edev.support.dsl.DomainObject;
 import com.edev.support.dsl.DomainObjectFactory;
 import com.edev.support.dsl.Join;
 import com.edev.support.entity.Entity;
 
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Collection;
 
@@ -18,8 +19,7 @@ public class JoinHelper<E extends Entity<S>, S extends Serializable> {
         this.dao = dao;
     }
 
-    private void doWithJoins(E entity, Callback callback) {
-        if(entity==null) throw new NullEntityException();
+    private void doWithJoins(@NotNull E entity, @NotNull Callback callback) {
         DomainObject dObj = DomainObjectFactory.getDomainObject(entity.getClass());
         dObj.getJoins().forEach(callback::apply);
     }
@@ -28,7 +28,7 @@ public class JoinHelper<E extends Entity<S>, S extends Serializable> {
         void apply(Join join);
     }
 
-    private Relation<E,S> getRelation(Join join) {
+    private Relation<E,S> getRelation(@NotNull Join join) {
         String joinType = join.getJoinType();
         switch (joinType) {
             case "oneToOne":
@@ -93,8 +93,7 @@ public class JoinHelper<E extends Entity<S>, S extends Serializable> {
      * @param clazz the class of entity
      * @return true, if the entity has a join which is aggregation
      */
-    public boolean hasJoinAndAggregation(Class<E> clazz) {
-        if(clazz==null) throw new NullEntityException();
+    public boolean hasJoinAndAggregation(@NotNull Class<E> clazz) {
         DomainObject dObj = DomainObjectFactory.getDomainObject(clazz);
         for(Join join : dObj.getJoins())
             if(join.isAggregation()||join.getJoinType().equals("manyToMany")) return true;
@@ -106,9 +105,8 @@ public class JoinHelper<E extends Entity<S>, S extends Serializable> {
      * @param entity the entity
      * @return true, if the entity has a join which is aggregation
      */
-    public boolean hasJoinAndAggregation(E entity) {
-        if(entity==null) throw new NullEntityException();
-        return hasJoinAndAggregation((Class<E>)entity.getClass());
+    public boolean hasJoinAndAggregation(@NotNull E entity) {
+        return hasJoinAndAggregation(EntityUtils.getClass(entity));
     }
 
     private void doWithJoinsForList(Collection<E> list, Callback callback) {

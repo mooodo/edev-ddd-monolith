@@ -7,15 +7,14 @@ import com.edev.support.dsl.Join;
 import com.edev.support.entity.Entity;
 import com.edev.support.utils.BeanUtils;
 
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
-import java.util.Collection;
 
 public abstract class AbstractRelation<E extends Entity<S>, S extends Serializable> implements Relation<E,S> {
     protected Join join;
     protected BasicDao dao;
 
-    protected AbstractRelation(Join join, BasicDao dao) {
-        if(join==null||dao==null) throw new DddException("The parameters is null");
+    protected AbstractRelation(@NotNull Join join, @NotNull BasicDao dao) {
         this.join = join;
         this.dao = dao;
     }
