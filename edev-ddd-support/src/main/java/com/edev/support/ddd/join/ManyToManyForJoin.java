@@ -82,7 +82,7 @@ public class ManyToManyForJoin<E extends Entity<S>, S extends Serializable> exte
         Collection<Entity<S>> joinObjects = dao.loadAll(template);
 
         List<S> ids = new ArrayList<>();
-        joinObjects.forEach(e->{ids.add((S)e.getValue(join.getJoinClassKey()));});
+        joinObjects.forEach(e-> ids.add((S)e.getValue(join.getJoinClassKey())));
         Collection<Entity<S>> collection = dao.loadForList(ids, EntityUtils.getClassOfEntity(join.getClazz()));
         entity.setValue(join.getName(), collection);
     }
@@ -110,7 +110,7 @@ public class ManyToManyForJoin<E extends Entity<S>, S extends Serializable> exte
             if(joinObjects==null||joinObjects.isEmpty()) return;
 
             List<S> idList = new ArrayList<>();
-            joinObjects.forEach(e->{idList.add((S)e.getValue(join.getJoinClassKey()));});
+            joinObjects.forEach(e-> idList.add((S)e.getValue(join.getJoinClassKey())));
             Collection<Entity<S>> collection = dao.loadForList(idList, EntityUtils.getClassOfEntity(join.getClazz()));
             entity.setValue(join.getName(), collection);
         });
