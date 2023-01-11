@@ -49,16 +49,17 @@ public class ManyToManyForJoin<E extends Entity<S>, S extends Serializable> exte
         if(collection.isEmpty()) return;
 
         String joinKey = join.getJoinKey();
+        String joinClassKey = join.getJoinClassKey();
         Entity<S> template = createJoinObject();
         template.setValue(joinKey, entity.getId());
         Collection<Entity<S>> source = dao.loadAll(template);
-
-        EntityUtils.compareListOrSetOfEntity(source, collection,
+        EntityUtils.compareListOrSetOfEntity(source, collection, (sourceEntity, targetEntity)->
+                targetEntity.getValue(joinKey).equals(sourceEntity.getValue(joinKey))
+                &&targetEntity.getValue(joinClassKey).equals(sourceEntity.getValue(joinClassKey)),
                 (inserted, updated, deleted) -> {
                     inserted.forEach(dao::insert);
-                    updated.forEach(dao::update);
                     deleted.forEach(dao::delete);
-                });
+        });
     }
 
     @Override

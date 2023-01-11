@@ -2,6 +2,8 @@ package com.edev.support.ddd;
 
 import com.edev.support.dao.BasicDao;
 import com.edev.trade.TradeApplication;
+import com.edev.trade.authority.entity.Authority;
+import com.edev.trade.authority.entity.User;
 import com.edev.trade.order.entity.*;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -9,6 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
+
+import java.util.Arrays;
+import java.util.List;
 
 import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.*;
@@ -29,6 +34,9 @@ public class RepositoryTest {
         Address address = new Address(1000100L,10001L,"中国","湖北",
                 "武汉","洪山区","珞瑜路726号","13300224466");
         order.setAddress(address);
+        Long accountId = 1000901L;
+        Payment payment = new Payment(order.getId(), accountId);
+        order.setPayment(payment);
         OrderItem orderItem0 = new OrderItem(1L,id,30001L,1L,4000D,null);
         Product product0 = new Product(30001L,"Apple iPhone X 256GB 深空灰色 移动联通电信4G手机",4000D,
                 "台",20004L,"手机","/static/img/product1.jpg",5600D,"自营");
@@ -43,5 +51,41 @@ public class RepositoryTest {
         dao.delete(id, Order.class);
         dao.insert(order);
         assertThat(dao.load(id, Order.class), equalTo(order));
+
+        order.setCustomerId(10002L);
+        dao.update(order);
+        Order actual = dao.load(id, Order.class);
+        Customer excepted = new Customer(10002L,"逍遥子","男","510110197607103322","13422584349");
+        assertThat(actual.getCustomerId(), equalTo(10002L));
+        assertThat(actual.getCustomer(),equalTo(excepted));
+
+        dao.delete(id, Order.class);
+        assertNull(dao.load(id, Order.class));
+    }
+    @Test
+    public void testSaveAndDeleteForManyToMany() {
+        Long id = 1L;
+        User user = new User(id,"Johnwood","123");
+        Authority authority0 = new Authority(50001L,"registerUser","/orm/user/register",true);
+        Authority authority1 = new Authority(50002L,"modifyUser","/orm/user/modify",true);
+        user.addAuthority(authority0);
+        user.addAuthority(authority1);
+
+        dao.delete(id, User.class);
+        dao.insert(user);
+        assertThat(dao.load(id, User.class), equalTo(user));
+
+        user.setName("Mary");
+        dao.update(user);
+        assertThat(dao.load(id, User.class), equalTo(user));
+
+        Authority authority2 = new Authority(50003L,"removeUser","/orm/user/remove",true);
+        List<Authority> authorities = Arrays.asList(authority0, authority2);
+        user.setAuthorities(authorities);
+        dao.update(user);
+        assertThat(user.getAuthorities(), hasItems(authority0, authority2));
+
+        dao.delete(id, User.class);
+        assertNull(dao.load(id, User.class));
     }
 }

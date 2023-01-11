@@ -237,7 +237,6 @@ public abstract class Entity<T extends Serializable> implements Serializable, Cl
     public boolean equals(Object obj) {
         if(obj==null) return false;
         if(!(this.getClass().equals(obj.getClass()))) return false;
-        if(!Entity.class.isAssignableFrom(obj.getClass())) return false;
 
         Entity<?> target = (Entity<?>) obj;
         Field[] fields = getFields(this.getClass());

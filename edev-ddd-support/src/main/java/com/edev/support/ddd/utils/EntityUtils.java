@@ -110,9 +110,7 @@ public class EntityUtils {
      */
     public static <E extends Entity<S>, S extends Serializable>
             void compareListOrSetOfEntity(Collection<E> source, Collection<E> target, ComparedCollectionCallback<E> callback) {
-        compareListOrSetOfEntity(source, target, (sourceEntity, targetEntity)->{
-            return targetEntity.getId().equals(sourceEntity.getId());
-        }, callback);
+        compareListOrSetOfEntity(source, target, (sourceEntity, targetEntity)-> targetEntity.getId().equals(sourceEntity.getId()), callback);
     }
 
     /**
@@ -146,7 +144,11 @@ public class EntityUtils {
                 }
             }
             if(!isMatched) inserted.add(targetEntity);
-            deleted.remove(targetEntity);
+            for (int i=0; i<deleted.size(); i++)
+                if(matchKeyCallback.isKeyMatch(deleted.get(i), targetEntity)) {
+                    deleted.remove(i);
+                    break;
+                }
         }
         callback.apply(inserted, updated, deleted);
     }
