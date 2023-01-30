@@ -1,6 +1,7 @@
 package com.edev.support.ddd.join;
 
 import com.edev.support.dao.BasicDao;
+import com.edev.support.ddd.Repository;
 import com.edev.support.ddd.utils.EntityBuilder;
 import com.edev.support.ddd.utils.EntityUtils;
 import com.edev.support.dsl.Join;
@@ -83,7 +84,9 @@ public class ManyToManyForJoin<E extends Entity<S>, S extends Serializable> exte
 
         List<S> ids = new ArrayList<>();
         joinObjects.forEach(e-> ids.add((S)e.getValue(join.getJoinClassKey())));
+        Repository.setNotJoin(true);
         Collection<Entity<S>> collection = dao.loadForList(ids, EntityUtils.getClassOfEntity(join.getClazz()));
+        Repository.setNotJoin(false);
         entity.setValue(join.getName(), collection);
     }
 
@@ -111,7 +114,9 @@ public class ManyToManyForJoin<E extends Entity<S>, S extends Serializable> exte
 
             List<S> idList = new ArrayList<>();
             joinObjects.forEach(e-> idList.add((S)e.getValue(join.getJoinClassKey())));
+            Repository.setNotJoin(true);
             Collection<Entity<S>> collection = dao.loadForList(idList, EntityUtils.getClassOfEntity(join.getClazz()));
+            Repository.setNotJoin(false);
             entity.setValue(join.getName(), collection);
         });
     }
