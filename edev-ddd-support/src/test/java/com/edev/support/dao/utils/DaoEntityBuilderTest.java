@@ -43,6 +43,6 @@ public class DaoEntityBuilderTest {
         List<Long> ids = Arrays.asList(1L,2L,3L);
         DaoEntity daoEntity = DaoEntityBuilder.buildForList(ids, Product.class);
         assertThat(daoEntity.getTableName(), equalTo("t_product"));
-        assertThat(daoEntity.getPkMap(), hasItems(getItem("id", ids)));
+        assertThat(daoEntity.getColMap(), hasItems(getItem("id", ids)));
     }
 }

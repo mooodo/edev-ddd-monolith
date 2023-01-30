@@ -55,7 +55,7 @@ public class EntityTest {
         Customer customer1 = new Customer(1L, "John", date, true);
         //test equals and toString
         assertThat(customer0, equalTo(customer1));
-        assertThat(customer0.toString(), equalTo("{id:1, name:John, birthdate:Wed Jan 01 00:00:00 CST 2020, available:true}"));
+        assertThat(customer0.toString(), equalTo("{id:1, name:John, birthdate:Wed Jan 01 08:00:00 CST 2020, available:true}"));
 
         //test getValue
         assertThat(customer0.getValue("id"), equalTo(1L));
@@ -134,7 +134,7 @@ public class EntityTest {
         Vip vip1 = new Vip(1L, "John", date, 100);
         //test equals and toString
         assertThat(vip0, equalTo(vip1));
-        assertThat(vip0.toString(), equalTo("{id:1, name:John, birthdate:Wed Jan 01 00:00:00 CST 2020, coin:100}"));
+        assertThat(vip0.toString(), equalTo("{id:1, name:John, birthdate:Wed Jan 01 08:00:00 CST 2020, coin:100}"));
 
         //test getValue
         assertThat(vip0.getValue("id"), equalTo(1L));

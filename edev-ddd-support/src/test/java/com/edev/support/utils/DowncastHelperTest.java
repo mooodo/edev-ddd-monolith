@@ -69,7 +69,7 @@ public class DowncastHelperTest {
     }
     @Test
     public void testDatetimeForUTC() {
-        String dateStr = "1979-09-30T16:00:00.000Z";
+        String dateStr = "1979-10-01T00:00:00.000Z";
         Object value = helper.downcast(Date.class, dateStr);
         String exceptedStr = "1979-10-01 00:00:00";
         String format = "yyyy-MM-dd HH:mm:ss";

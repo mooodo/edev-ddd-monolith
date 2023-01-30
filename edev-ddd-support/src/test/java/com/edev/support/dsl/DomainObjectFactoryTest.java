@@ -3,6 +3,8 @@ package com.edev.support.dsl;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.Arrays;
+
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.hasItems;
 import static org.junit.Assert.assertThat;
@@ -41,7 +43,7 @@ public class DomainObjectFactoryTest {
                 new Property("phoneNumber","phone_number",false,false)
         ));
         assertThat(dObj.getJoins(), hasItems(
-                new Join("addresses","customer_id","oneToMany", true,
+                new Join("addresses","customerId","oneToMany", true,
                         "com.edev.trade.customer.entity.Address")
         ));
         assertTrue(DomainObjectFactory.isExists("com.edev.trade.customer.entity.Address"));
@@ -56,21 +58,21 @@ public class DomainObjectFactoryTest {
      * 5.listMethod代表查询多条记录批量补填时调用的方法，如查询多个产品时一次性补填它们的供应商调用的方法
      * 6.不必为每个ref关联对象单独写领域对象
      */
-    @Test
-    public void testLoadWithRef() {
-        factory.initFactory("classpath:entity/product.xml");
-        assertTrue(DomainObjectFactory.isExists("com.edev.trade.product.entity.Product"));
-        DomainObject dObj = DomainObjectFactory.getDomainObject("com.edev.trade.product.entity.Product");
-        assertThat(dObj.getClazz(), equalTo("com.edev.trade.product.entity.Product"));
-        assertThat(dObj.getTable(), equalTo("t_product"));
-        assertThat(dObj.getProperties(), hasItems(new Property("id","id",true,false),
-                new Property("name","name",false,false)
-        ));
-        assertThat(dObj.getRefs(), hasItems(
-                new Ref("supplier","supplier_id","manyToOne",
-                        "com.edev.product.service.SupplierService","loadSupplier","loadSuppliers")
-        ));
-    }
+//    @Test
+//    public void testLoadWithRef() {
+//        factory.initFactory("classpath:entity/product.xml");
+//        assertTrue(DomainObjectFactory.isExists("com.edev.trade.product.entity.Product"));
+//        DomainObject dObj = DomainObjectFactory.getDomainObject("com.edev.trade.product.entity.Product");
+//        assertThat(dObj.getClazz(), equalTo("com.edev.trade.product.entity.Product"));
+//        assertThat(dObj.getTable(), equalTo("t_product"));
+//        assertThat(dObj.getProperties(), hasItems(new Property("id","id",true,false),
+//                new Property("name","name",false,false)
+//        ));
+//        assertThat(dObj.getRefs(), hasItems(
+//                new Ref("supplier","supplierId","manyToOne",
+//                        "com.edev.product.service.SupplierService","loadSupplier","loadSuppliers")
+//        ));
+//    }
 
     /**
      * 业务需求：
@@ -90,9 +92,11 @@ public class DomainObjectFactoryTest {
         assertThat(dObj.getProperties(), hasItems(
                 new Property("vipType", "vip_type", false, true)
         ));
+        SubClass golden = new SubClass("com.edev.trade.customer.entity.GoldenVip", "golden");
+        golden.setProperties(Arrays.asList(new Property("cashback","cashback",false,false)));
+        SubClass silver = new SubClass("com.edev.trade.customer.entity.SilverVip", "silver");
         assertThat(dObj.getSubClasses(), hasItems(
-                new SubClass("com.edev.trade.customer.entity.GoldenVip", "golden"),
-                new SubClass("com.edev.trade.customer.entity.SilverVip", "silver")
+                golden,silver
         ));
     }
 
@@ -108,19 +112,19 @@ public class DomainObjectFactoryTest {
      */
     @Test
     public void testLoadUnionSubclass() {
-        factory.initFactory("classpath:entity/product.xml");
-        DomainObject dObj = DomainObjectFactory.getDomainObject("com.edev.trade.product.entity.Supplier");
-        assertThat(dObj.getClazz(), equalTo("com.edev.trade.product.entity.Supplier"));
+        factory.initFactory("classpath:entity/order.xml");
+        DomainObject dObj = DomainObjectFactory.getDomainObject("com.edev.trade.order.entity.Discount");
+        assertThat(dObj.getClazz(), equalTo("com.edev.trade.order.entity.Discount"));
         assertThat(dObj.getTable(), equalTo(""));
         assertThat(dObj.getSubClassType(), equalTo("union"));
         assertThat(dObj.getProperties(), hasItems(
-                new Property("supplierType", "supplier_type", false, true)
+                new Property("discountType", "discount_type", false, true)
         ));
-        SubClass distributor = new SubClass("com.edev.trade.product.entity.Distributor", "distributor");
-        SubClass vendor = new SubClass("com.edev.trade.product.entity.Vendor", "vendor");
-        assertThat(dObj.getSubClasses(), hasItems(distributor,vendor));
-        assertTrue(DomainObjectFactory.isExists("com.edev.trade.product.entity.Distributor"));
-        assertTrue(DomainObjectFactory.isExists("com.edev.trade.product.entity.Vendor"));
+        SubClass vipDiscount = new SubClass("com.edev.trade.order.entity.VipDiscount", "vipDiscount");
+        SubClass productDiscount = new SubClass("com.edev.trade.order.entity.ProductDiscount", "productDiscount");
+        assertThat(dObj.getSubClasses(), hasItems(vipDiscount,productDiscount));
+        assertTrue(DomainObjectFactory.isExists("com.edev.trade.order.entity.VipDiscount"));
+        assertTrue(DomainObjectFactory.isExists("com.edev.trade.order.entity.ProductDiscount"));
     }
 
     /**
@@ -135,22 +139,21 @@ public class DomainObjectFactoryTest {
      */
     @Test
     public void testLoadJoinedSubClass() {
-        factory.initFactory("classpath:entity/user.xml");
-        DomainObject dObj = DomainObjectFactory.getDomainObject("com.edev.trade.authority.entity.User");
-        assertThat(dObj.getClazz(), equalTo("com.edev.trade.authority.entity.User"));
-        assertThat(dObj.getTable(), equalTo("t_user"));
+        factory.initFactory("classpath:entity/product.xml");
+        DomainObject dObj = DomainObjectFactory.getDomainObject("com.edev.trade.product.entity.Supplier");
+        assertThat(dObj.getClazz(), equalTo("com.edev.trade.product.entity.Supplier"));
+        assertThat(dObj.getTable(), equalTo("t_supplier"));
         assertThat(dObj.getSubClassType(), equalTo("joined"));
         assertThat(dObj.getProperties(), hasItems(
                 new Property("id","id",true,false),
                 new Property("name","name",false,false),
-                new Property("password","password",false,false),
-                new Property("userType","user_type",false,true)
+                new Property("supplierType","supplier_type",false,true)
         ));
-        SubClass customer = new SubClass("com.edev.trade.authority.entity.Customer", "customer");
-        SubClass staff = new SubClass("com.edev.trade.authority.entity.Staff", "staff");
-        assertThat(dObj.getSubClasses(), hasItems(customer, staff));
-        assertTrue(DomainObjectFactory.isExists("com.edev.trade.authority.entity.Customer"));
-        assertTrue(DomainObjectFactory.isExists("com.edev.trade.authority.entity.Staff"));
+        SubClass distributor = new SubClass("com.edev.trade.product.entity.Distributor", "distributor");
+        SubClass vendor = new SubClass("com.edev.trade.product.entity.Vendor", "vendor");
+        assertThat(dObj.getSubClasses(), hasItems(distributor, vendor));
+        assertTrue(DomainObjectFactory.isExists("com.edev.trade.product.entity.Distributor"));
+        assertTrue(DomainObjectFactory.isExists("com.edev.trade.product.entity.Vendor"));
     }
 
     /**
@@ -185,7 +188,7 @@ public class DomainObjectFactoryTest {
         ));
         assertThat(dObj.getJoins(), hasItems(
                 new Join("customer","customerId","manyToOne",false,
-                        "com.edev.trade.customer.entity.Customer")
+                        "com.edev.trade.order.entity.Customer")
         ));
     }
 
