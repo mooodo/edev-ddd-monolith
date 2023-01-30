@@ -94,8 +94,9 @@ public class Repository extends DecoratorDao implements BasicDao {
         JoinHelper<E,S> joinHelper = new JoinHelper<>(getDao());
         if(joinHelper.hasJoinAndAggregation(clazz)) {
             E entity = this.load(id, clazz);
-            if(entity!=null) delete(entity);
-        } else super.delete(id, clazz);
+            if(entity!=null) deleteWithJoin(entity);
+        }
+        super.delete(id, clazz);
     }
 
     @Override
