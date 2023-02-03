@@ -17,8 +17,9 @@ import java.util.TimeZone;
  */
 public class DateUtils {
 	private DateUtils() {}
+	private static final String TIMEZONE="GMT+8";
 	private static final String DATE_FORMAT = "yyyy-MM-dd HH:mm:ss";
-	private static final TimeZone TIME_ZONE = TimeZone.getTimeZone("GTM+8");
+	private static final TimeZone TIME_ZONE = TimeZone.getTimeZone(TIMEZONE);
 
 	/**
 	 * @param date the date
