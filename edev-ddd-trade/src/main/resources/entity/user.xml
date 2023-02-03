@@ -1,35 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dobjs>
-    <do class="com.edev.trade.authority.entity.User" tableName="t_user" subclassType="joined">
+    <do class="com.edev.trade.authority.entity.User" tableName="t_user">
         <property name="id" column="id" isPrimaryKey="true"/>
         <property name="name" column="name"/>
         <property name="password" column="password"/>
-        <property name="userType" column="user_type" isDiscriminator="true"/>
-        <join name="authorities" joinKey="userId" joinType="manyToMany"
+        <join name="authorities" joinKey="userId" joinType="manyToMany" joinClassKey="authorityId"
               joinClass="com.edev.trade.authority.entity.UserGrantedAuthority"
               class="com.edev.trade.authority.entity.Authority"/>
-        <subclass class="com.edev.trade.authority.entity.Customer" value="customer"/>
-        <subclass class="com.edev.trade.authority.entity.Staff" value="staff"/>
-    </do>
-    <do class="com.edev.trade.authority.entity.Customer" tableName="t_customer">
-        <property name="id" column="id" isPrimaryKey="true"/>
-        <property name="name" column="name"/>
-        <property name="gender" column="gender"/>
-        <property name="birthdate" column="birthdate"/>
-        <property name="identification" column="identification"/>
-        <property name="phoneNumber" column="phone_number"/>
-    </do>
-    <do class="com.edev.trade.authority.entity.Staff" tableName="t_staff">
-        <property name="id" column="id" isPrimaryKey="true"/>
-        <property name="name" column="name"/>
-        <property name="gender" column="gender"/>
-        <property name="position" column="position"/>
     </do>
     <do class="com.edev.trade.authority.entity.Role" tableName="t_role">
         <property name="id" column="id" isPrimaryKey="true"/>
         <property name="name" column="name"/>
         <property name="comment" column="comment"/>
-        <join name="authorities" joinKey="roleId" joinType="manyToMany"
+        <join name="authorities" joinKey="roleId" joinType="manyToMany" joinClassKey="authorityId"
               joinClass="com.edev.trade.authority.entity.RoleGrantedAuthority"
               class="com.edev.trade.authority.entity.Authority"/>
     </do>
@@ -43,12 +26,13 @@
         <property name="id" column="id" isPrimaryKey="true"/>
         <property name="name" column="name"/>
         <property name="available" column="available"/>
-        <join name="users" joinKey="authorityId" joinType="manyToMany"
+        <!--
+        <join name="users" joinKey="authorityId" joinType="manyToMany" joinClassKey="userId"
               joinClass="com.edev.trade.authority.entity.UserGrantedAuthority"
               class="com.edev.trade.authority.entity.User"/>
-        <join name="roles" joinKey="authorityId" joinType="manyToMany"
+        <join name="roles" joinKey="authorityId" joinType="manyToMany" joinClassKey="roleId"
               joinClass="com.edev.trade.authority.entity.RoleGrantedAuthority"
-              class="com.edev.trade.authority.entity.Role"/>
+              class="com.edev.trade.authority.entity.Role"/>-->
     </do>
     <do class="com.edev.trade.authority.entity.UserGrantedAuthority" tableName="t_user_granted_authority">
         <property name="id" column="id" isPrimaryKey="true"/>

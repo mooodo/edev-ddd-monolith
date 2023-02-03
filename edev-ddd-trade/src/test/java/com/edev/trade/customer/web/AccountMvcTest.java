@@ -1,8 +1,6 @@
 package com.edev.trade.customer.web;
 
-import com.alibaba.fastjson.JSONObject;
-import com.edev.support.utils.DateUtils;
-import com.edev.trade.customer.entity.Account;
+import com.edev.support.utils.JsonFile;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,43 +19,42 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 public class AccountMvcTest {
     @Autowired
     private MockMvc mvc;
+
     @Test
     public void testSaveAndDelete() throws Exception {
-        Long id = 1L;
-        Account account = new Account(id,10001L,10000D,null,null);
-        String json = JSONObject.toJSONStringWithDateFormat(account, "yyyy-MM-dd HH:mm:ss");
-
+        String id = "1";
+        String json = JsonFile.read("json/account/account0.json");
+        String excepted0 = JsonFile.read("json/account/excepted0.json");
         mvc.perform(get("/orm/account/remove")
-                .param("id",id.toString())
+                .param("id",id)
         ).andExpect(status().isOk());
         mvc.perform(post("/orm/account/create")
                 .content(json).contentType(MediaType.APPLICATION_JSON)
-        ).andExpect(status().isOk()).andExpect(content().string(id.toString()));
+        ).andExpect(status().isOk()).andExpect(content().string(id));
         mvc.perform(get("/orm/account/get")
-                .param("id", id.toString())
-        ).andExpect(status().isOk()).andExpect(content().json(json));
+                .param("id", id)
+        ).andExpect(status().isOk()).andExpect(content().json(excepted0));
 
         mvc.perform(get("/account/topUp")
-                .param("id", id.toString()).param("amount", "1000")
+                .param("id", id).param("amount", "1000")
         ).andExpect(status().isOk()).andExpect(content().string("11000.0"));
-        account.setBalance(11000D);
-        String json1 = JSONObject.toJSONStringWithDateFormat(account, "yyyy-MM-dd HH:mm:ss");
+        String excepted1 = JsonFile.read("json/account/excepted1.json");
         mvc.perform(get("/orm/account/get")
-                .param("id", id.toString())
-        ).andExpect(status().isOk()).andExpect(content().json(json1));
+                .param("id", id)
+        ).andExpect(status().isOk()).andExpect(content().json(excepted1));
 
         mvc.perform(get("/account/payoff")
-                .param("id", id.toString()).param("amount", "1000")
+                .param("id", id).param("amount", "1000")
         ).andExpect(status().isOk()).andExpect(content().string("10000.0"));
         mvc.perform(get("/orm/account/get")
-                .param("id", id.toString())
-        ).andExpect(status().isOk()).andExpect(content().json(json));
+                .param("id", id)
+        ).andExpect(status().isOk()).andExpect(content().json(excepted0));
 
         mvc.perform(get("/orm/account/remove")
-                .param("id",id.toString())
+                .param("id",id)
         ).andExpect(status().isOk());
         mvc.perform(get("/orm/account/get")
-                .param("id", id.toString())
+                .param("id", id)
         ).andExpect(status().isOk()).andExpect(content().string(""));
     }
 }

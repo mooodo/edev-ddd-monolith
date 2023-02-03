@@ -106,6 +106,7 @@ public class Customer extends Entity<Long> {
 	 */
 	public void setIdentification(String identification) {
 		this.identification = identification;
+		setBirthdateByIdentification();
 	}
 	/**
 	 * @return the phoneNumber

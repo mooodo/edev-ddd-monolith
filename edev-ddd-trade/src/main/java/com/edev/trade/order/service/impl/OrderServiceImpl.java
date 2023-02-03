@@ -2,10 +2,10 @@ package com.edev.trade.order.service.impl;
 
 import com.edev.support.dao.BasicDao;
 import com.edev.support.exception.ValidException;
-import com.edev.trade.customer.service.VipService;
 import com.edev.trade.order.entity.Order;
 import com.edev.trade.order.entity.OrderItem;
 import com.edev.trade.order.entity.Payment;
+import com.edev.trade.order.service.DiscountService;
 import com.edev.trade.order.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -13,12 +13,12 @@ import java.util.Collection;
 import java.util.List;
 
 public class OrderServiceImpl implements OrderService {
-    @Autowired
-    private VipService vipService;
     private final BasicDao dao;
     public OrderServiceImpl(BasicDao dao) {
         this.dao = dao;
     }
+    @Autowired
+    private DiscountService discountService;
 
     private void validOrder(Order order) {
         if(order.getId()==null) throw new ValidException("The id is null!");
@@ -26,27 +26,29 @@ public class OrderServiceImpl implements OrderService {
         if(order.getAddressId()==null) throw new ValidException("The addressId is null");
     }
 
+    private void setAmount(Order order) {
+        if(order==null||order.getOrderItems()==null) return;
+        order.getOrderItems().forEach(orderItem -> {
+            Double amount = orderItem.getAmount();
+            if(amount==null) amount = orderItem.getPrice() * orderItem.getQuantity();
+            orderItem.setAmount(amount);
+        });
+    }
+
+    private void discount(Order order) {
+        if(order==null||order.getOrderItems()==null) return;
+        order.getOrderItems().forEach(orderItem -> {
+            discountService.doDiscount(order);
+        });
+    }
+
     private void sumOfAmount(Order order) {
-        if(order.getOrderItems()==null||order.getOrderItems().isEmpty()) return;
-        Double discount = vipService.discount(order.getCustomerId());
+        if(order==null||order.getOrderItems()==null) return;
         Double amount = 0D;
         for(OrderItem orderItem : order.getOrderItems()) {
-            setAmount(orderItem);
-            vipDiscount(orderItem, discount);
             amount += orderItem.getAmount();
         }
         order.setAmount(amount);
-    }
-
-    private void vipDiscount(OrderItem orderItem, Double discount) {
-        Double amount = orderItem.getAmount() * discount;
-        orderItem.setAmount(amount);
-    }
-
-    private void setAmount(OrderItem orderItem) {
-        Double amount = orderItem.getAmount();
-        if(amount==null) amount = orderItem.getPrice() * orderItem.getQuantity();
-        orderItem.setAmount(amount);
     }
 
     private void payoff(Order order) {
@@ -59,6 +61,8 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public Long create(Order order) {
         validOrder(order);
+        setAmount(order);
+        discount(order);
         sumOfAmount(order);
         payoff(order);
         return dao.insert(order);
@@ -67,6 +71,8 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public void modify(Order order) {
         validOrder(order);
+        setAmount(order);
+        discount(order);
         sumOfAmount(order);
         payoff(order);
         dao.update(order);
@@ -86,6 +92,8 @@ public class OrderServiceImpl implements OrderService {
     public void saveAll(List<Order> orders) {
         orders.forEach(order -> {
             validOrder(order);
+            setAmount(order);
+            discount(order);
             sumOfAmount(order);
             payoff(order);
         });

@@ -1,0 +1,30 @@
+{
+  "id": 2,
+  "name": "Mary",
+  "gender": "female",
+  "birthdate": "2000-12-13 00:00:00",
+  "identification": "510212200012137812",
+  "phoneNumber": "13456567878",
+  "addresses": [
+    {
+      "id": 10,
+      "customerId": 2,
+      "country": "China",
+      "province": "Shandong",
+      "city": "Jinan",
+      "zone": "Lixiaqu",
+      "address": "Happy street No.12",
+      "phoneNumber": "0531-88896666"
+    },
+    {
+      "id": 20,
+      "customerId": 2,
+      "country": "China",
+      "province": "Zhejiang",
+      "city": "Hangzhou",
+      "zone": "Xihuqu",
+      "address": "The park of Gushan",
+      "phoneNumber": "0571-64128989"
+    }
+  ]
+}

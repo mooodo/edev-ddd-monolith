@@ -1,10 +1,6 @@
 package com.edev.trade.customer.web;
 
-import com.alibaba.fastjson.JSONObject;
-import com.edev.trade.customer.entity.Customer;
-import com.edev.trade.customer.entity.GoldenVip;
-import com.edev.trade.customer.entity.SilverVip;
-import com.edev.trade.customer.entity.Vip;
+import com.edev.support.utils.JsonFile;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,11 +9,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -41,34 +32,33 @@ public class VipMvcTest {
      */
     @Test
     public void testSaveAndDelete() throws Exception {
-        Long id = 1L;
-        Vip vip = new SilverVip(id, true, 200L);
-        String json = JSONObject.toJSONStringWithDateFormat(vip, "yyyy-MM-dd HH:mm:ss");
-
+        String id = "1";
+        String json = JsonFile.read("json/vip/vip0.json");
+        String excepted = JsonFile.read("json/vip/excepted0.json");
         mvc.perform(get("/orm/vip/delete")
-                .param("vipId", id.toString())
+                .param("vipId", id)
         ).andExpect(status().isOk());
         mvc.perform(post("/orm/vip/register")
                 .content(json).contentType(MediaType.APPLICATION_JSON)
-        ).andExpect(status().isOk()).andExpect(content().string(id.toString()));
+        ).andExpect(status().isOk()).andExpect(content().string(id));
         mvc.perform(get("/orm/vip/load")
-                .param("vipId", id.toString())
-        ).andExpect(status().isOk()).andExpect(content().json(json));
+                .param("vipId", id)
+        ).andExpect(status().isOk()).andExpect(content().json(excepted));
 
-        vip = new GoldenVip(id, true, 500L, 2000D);
-        json = JSONObject.toJSONStringWithDateFormat(vip, "yyyy-MM-dd HH:mm:ss");
+        String json1 = JsonFile.read("json/vip/vip1.json");
+        String excepted1 = JsonFile.read("json/vip/excepted1.json");
         mvc.perform(post("/orm/vip/modify")
-                .content(json).contentType(MediaType.APPLICATION_JSON)
+                .content(json1).contentType(MediaType.APPLICATION_JSON)
         ).andExpect(status().isOk());
         mvc.perform(get("/orm/vip/load")
-                .param("vipId", id.toString())
-        ).andExpect(status().isOk()).andExpect(content().json(json));
+                .param("vipId", id)
+        ).andExpect(status().isOk()).andExpect(content().json(excepted1));
 
         mvc.perform(post("/orm/vip/deleteVip")
-                        .content(json).contentType(MediaType.APPLICATION_JSON)
+                        .content(json1).contentType(MediaType.APPLICATION_JSON)
         ).andExpect(status().isOk());
         mvc.perform(get("/orm/vip/load")
-                .param("vipId", id.toString())
+                .param("vipId", id)
         ).andExpect(status().isOk()).andExpect(content().string(""));
     }
 
@@ -80,37 +70,33 @@ public class VipMvcTest {
      */
     @Test
     public void testSaveAndDeleteWithCustomer() throws Exception {
-        Long id = 10001L;
-        Vip vip = new SilverVip(id, true, 200L);
-        Customer customer = new Customer(10001L,"李秋水","女",
-                "510110197910012312","13388990123");
-        vip.setCustomer(customer);
-        String json = JSONObject.toJSONStringWithDateFormat(vip, "yyyy-MM-dd HH:mm:ss");
-
+        String id = "10001";
+        String json = JsonFile.read("json/vip/vip2.json");
+        String excepted = JsonFile.read("json/vip/excepted2.json");
         mvc.perform(get("/orm/vip/delete")
-                .param("vipId", id.toString())
+                .param("vipId", id)
         ).andExpect(status().isOk());
         mvc.perform(post("/orm/vip/register")
                 .content(json).contentType(MediaType.APPLICATION_JSON)
-        ).andExpect(status().isOk()).andExpect(content().string(id.toString()));
+        ).andExpect(status().isOk()).andExpect(content().string(id));
         mvc.perform(get("/orm/vip/load")
-                .param("vipId", id.toString())
-        ).andExpect(status().isOk()).andExpect(content().json(json));
+                .param("vipId", id)
+        ).andExpect(status().isOk()).andExpect(content().json(excepted));
 
-        vip = new GoldenVip(id, true, 500L, 2000D);
-        json = JSONObject.toJSONStringWithDateFormat(vip, "yyyy-MM-dd HH:mm:ss");
+        String json1 = JsonFile.read("json/vip/vip3.json");
+        String excepted1 = JsonFile.read("json/vip/excepted3.json");
         mvc.perform(post("/orm/vip/modify")
-                .content(json).contentType(MediaType.APPLICATION_JSON)
+                .content(json1).contentType(MediaType.APPLICATION_JSON)
         ).andExpect(status().isOk());
         mvc.perform(get("/orm/vip/load")
-                .param("vipId", id.toString())
-        ).andExpect(status().isOk()).andExpect(content().json(json));
+                .param("vipId", id)
+        ).andExpect(status().isOk()).andExpect(content().json(excepted1));
 
         mvc.perform(post("/orm/vip/deleteVip")
-                .content(json).contentType(MediaType.APPLICATION_JSON)
+                .content(json1).contentType(MediaType.APPLICATION_JSON)
         ).andExpect(status().isOk());
         mvc.perform(get("/orm/vip/load")
-                .param("vipId", id.toString())
+                .param("vipId", id)
         ).andExpect(status().isOk()).andExpect(content().string(""));
     }
 
@@ -122,32 +108,23 @@ public class VipMvcTest {
      */
     @Test
     public void testSaveAndDeleteForList() throws Exception {
-        Long id0 = 1L;
-        Vip vip0 = new SilverVip(id0, true, 200L);
-        Long id1 = 10001L;
-        Vip vip1 = new SilverVip(id1, true, 200L);
-        Customer customer = new Customer(10001L,"李秋水","女",
-                "510110197910012312","13388990123");
-        vip1.setCustomer(customer);
-        List<Vip> vipList = new ArrayList<>();
-        vipList.add(vip0);
-        vipList.add(vip1);
-        String jsonArray = JSONObject.toJSONStringWithDateFormat(vipList, "yyyy-MM-dd HH:mm:ss");
-
+        String json = JsonFile.read("json/vip/vips0.json");
+        String excepted = JsonFile.read("json/vip/exceptedList.json");
         mvc.perform(post("/list/vip/deleteAll")
                 .content("[1,10001]").contentType(MediaType.APPLICATION_JSON)
         ).andExpect(status().isOk());
         mvc.perform(post("/list/vip/saveAll")
-                .content(jsonArray).contentType(MediaType.APPLICATION_JSON)
+                .content(json).contentType(MediaType.APPLICATION_JSON)
         ).andExpect(status().isOk());
         mvc.perform(post("/list/vip/loadAll")
                 .content("[1,10001]").contentType(MediaType.APPLICATION_JSON)
-        ).andExpect(status().isOk()).andExpect(content().json(jsonArray));
+        ).andExpect(status().isOk()).andExpect(content().json(excepted));
 
+        String query = JsonFile.read("json/vip/query.json");
+        String resultSet = JsonFile.read("json/vip/resultSet.json");
         mvc.perform(post("/query/vipQry")
-                .content("{\"page\":0,\"size\":10,\"aggregation\":{\"id\":\"count\"}}")
-                .contentType(MediaType.APPLICATION_JSON)
-        ).andExpect(status().isOk());
+                .content(query).contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(status().isOk()).andExpect(content().json(resultSet));
 
         mvc.perform(post("/list/vip/deleteAll")
                 .content("[1,10001]").contentType(MediaType.APPLICATION_JSON)
@@ -165,20 +142,8 @@ public class VipMvcTest {
      */
     @Test
     public void testSaveAndDeleteForJsonList() throws Exception {
-        Long id0 = 1L;
-        Vip vip0 = new SilverVip(id0, true, 200L);
-        Long id1 = 10001L;
-        Vip vip1 = new SilverVip(id1, true, 200L);
-        Customer customer = new Customer(10001L,"李秋水","女",
-                "510110197910012312","13388990123");
-        vip1.setCustomer(customer);
-        List<Vip> vipList = new ArrayList<>();
-        vipList.add(vip0);
-        vipList.add(vip1);
-        String jsonArray = JSONObject.toJSONStringWithDateFormat(vipList, "yyyy-MM-dd HH:mm:ss");
-        Map<String, Object> map = new HashMap<>();
-        map.put("list", vipList);
-        String json = JSONObject.toJSONStringWithDateFormat(map, "yyyy-MM-dd HH:mm:ss");
+        String json = JsonFile.read("json/vip/vips1.json");
+        String excepted = JsonFile.read("json/vip/exceptedList.json");
 
         mvc.perform(get("/orm/vip/deleteAll")
                 .param("vipIds", "1,10001")
@@ -188,7 +153,7 @@ public class VipMvcTest {
         ).andExpect(status().isOk());
         mvc.perform(get("/orm/vip/loadAll")
                 .param("vipIds", "1,10001")
-        ).andExpect(status().isOk()).andExpect(content().json(jsonArray));
+        ).andExpect(status().isOk()).andExpect(content().json(excepted));
 
         mvc.perform(get("/query/vipQry")
                 .param("page","0").param("size","10")

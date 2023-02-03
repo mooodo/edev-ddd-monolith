@@ -1,0 +1,11 @@
+{
+  "id": 1,
+  "name": "BookNode",
+  "price": 7500.0,
+  "unit": "unit",
+  "supplierId": null,
+  "classify": "electric",
+  "image": "/img/NodeBook",
+  "originalPrice": 8000.0,
+  "tip": "自营"
+}

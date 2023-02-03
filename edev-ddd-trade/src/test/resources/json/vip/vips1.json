@@ -1,0 +1,6 @@
+{
+  "list":[
+    {"id":1,"available":true,"coin":200,"vipType":"silver"},
+    {"id":10001,"available":true,"coin":500,"vipType":"golden","cashback":2000}
+  ]
+}

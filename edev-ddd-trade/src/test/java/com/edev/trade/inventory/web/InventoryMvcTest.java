@@ -1,6 +1,7 @@
 package com.edev.trade.inventory.web;
 
 import com.alibaba.fastjson.JSONObject;
+import com.edev.support.utils.JsonFile;
 import com.edev.trade.inventory.entity.Inventory;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -27,34 +28,31 @@ public class InventoryMvcTest {
      */
     @Test
     public void testStockInAndOut() throws Exception {
-        Long id = 1L;
-        Inventory inventory = new Inventory(id, 50L, null);
-        String json = JSONObject.toJSONString(inventory);
-
+        String id = "1";
+        String json = JsonFile.read("json/inventory/inventory0.json");
         mvc.perform(get("/orm/inventory/remove")
-                .param("id", id.toString())
+                .param("id", id)
         ).andExpect(status().isOk());
         mvc.perform(get("/orm/inventory/stockIn")
-                .param("id", id.toString()).param("quantity","50")
+                .param("id", id).param("quantity","50")
         ).andExpect(status().isOk());
         mvc.perform(get("/orm/inventory/checkInventory")
-                .param("id", id.toString())
+                .param("id", id)
         ).andExpect(status().isOk()).andExpect(content().json(json));
 
-        inventory.setQuantity(0L);
-        json = JSONObject.toJSONString(inventory);
+        String json1 = JsonFile.read("json/inventory/inventory1.json");
         mvc.perform(get("/orm/inventory/stockOut")
-                .param("id",id.toString()).param("quantity","50")
+                .param("id",id).param("quantity","50")
         ).andExpect(status().isOk());
         mvc.perform(get("/orm/inventory/checkInventory")
-                .param("id", id.toString())
-        ).andExpect(status().isOk()).andExpect(content().json(json));
+                .param("id", id)
+        ).andExpect(status().isOk()).andExpect(content().json(json1));
 
         mvc.perform(get("/orm/inventory/remove")
-                .param("id", id.toString())
+                .param("id", id)
         ).andExpect(status().isOk());
         mvc.perform(get("/orm/inventory/checkInventory")
-                .param("id", id.toString())
+                .param("id", id)
         ).andExpect(status().isOk()).andExpect(content().string(""));
     }
 }

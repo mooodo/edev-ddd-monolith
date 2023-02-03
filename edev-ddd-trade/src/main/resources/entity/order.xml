@@ -10,7 +10,7 @@
 		<property name="flag" column="flag"/>
 		<join name="customer" joinKey="customerId" joinType="manyToOne"
 			  class="com.edev.trade.order.entity.Customer"/>
-  		<join name="address" joinKey="addressId" joinType="manyToOne"
+		<join name="address" joinKey="addressId" joinType="manyToOne"
 			  class="com.edev.trade.order.entity.Address"/>
 		<join name="payment" joinType="oneToOne" isAggregation="true"
 			  class="com.edev.trade.order.entity.Payment"/>
@@ -61,5 +61,33 @@
 		<property name="image" column="image"/>
 		<property name="originalPrice" column="original_price"/>
 		<property name="tip" column="tip"/>
+	</do>
+	<do class="com.edev.trade.order.entity.Discount" subclassType="union">
+		<property name="id" column="id" isPrimaryKey="true"/>
+		<property name="name" column="name"/>
+		<property name="beginTime" column="begin_time"/>
+		<property name="endTime" column="end_time"/>
+		<property name="discount" column="discount"/>
+		<property name="discountType" column="discount_type" isDiscriminator="true"/>
+		<subclass class="com.edev.trade.order.entity.VipDiscount" value="vipDiscount"/>
+		<subclass class="com.edev.trade.order.entity.ProductDiscount" value="productDiscount"/>
+	</do>
+	<do class="com.edev.trade.order.entity.VipDiscount" tableName="t_vip_discount">
+		<property name="id" column="id" isPrimaryKey="true"/>
+		<property name="name" column="name"/>
+		<property name="beginTime" column="begin_time"/>
+		<property name="endTime" column="end_time"/>
+		<property name="discount" column="discount"/>
+		<property name="discountType" column="discount_type" isDiscriminator="true"/>
+		<property name="vipType" column="vip_type"/>
+	</do>
+	<do class="com.edev.trade.order.entity.ProductDiscount" tableName="t_product_discount">
+		<property name="id" column="id" isPrimaryKey="true"/>
+		<property name="name" column="name"/>
+		<property name="beginTime" column="begin_time"/>
+		<property name="endTime" column="end_time"/>
+		<property name="discount" column="discount"/>
+		<property name="discountType" column="discount_type" isDiscriminator="true"/>
+		<property name="productId" column="product_id"/>
 	</do>
 </dobjs>

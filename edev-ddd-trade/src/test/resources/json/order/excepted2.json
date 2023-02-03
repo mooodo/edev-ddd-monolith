@@ -1,0 +1,71 @@
+{
+  "id": 1,
+  "customerId": 10001,
+  "addressId": 1000100,
+  "amount": 5916.0,
+  "flag": "CREATE",
+  "customer": {
+    "id": 10001,
+    "name": "李秋水",
+    "gender": "女",
+    "birthdate": "1979-10-01 00:00:00",
+    "identification": "510110197910012312",
+    "phoneNumber": "13388990123"
+  },
+  "address": {
+    "id": 1000100,
+    "customerId": 10001,
+    "country": "中国",
+    "province": "湖北",
+    "city": "武汉",
+    "zone": "洪山区",
+    "address": "珞瑜路726号",
+    "phoneNumber": "13300224466"
+  },
+  "payment": {
+    "id": 1,
+    "accountId": 1000901,
+    "amount": 5916.0,
+    "status": "payoff"
+  },
+  "orderItems": [
+    {
+      "id": 10,
+      "orderId": 1,
+      "productId": 30001,
+      "quantity": 1,
+      "price": 4000.0,
+      "amount": 4000.0,
+      "product": {
+        "id": 30001,
+        "name": "Apple iPhone X 256GB 深空灰色 移动联通电信4G手机",
+        "price": 4000.0,
+        "unit": "台",
+        "supplierId": 20004,
+        "classify": "手机",
+        "image": "/static/img/product1.jpg",
+        "originalPrice": 5600.0,
+        "tip": "自营"
+      }
+    },
+    {
+      "id": 20,
+      "orderId": 1,
+      "productId": 30004,
+      "quantity": 2,
+      "price": 958.0,
+      "amount": 1916.0,
+      "product": {
+        "id": 30004,
+        "name": "Kindle Paperwhite电纸书阅读器 电子书墨水屏 6英寸wifi 黑色",
+        "price": 958.0,
+        "unit": "个",
+        "supplierId": 20002,
+        "classify": "电子书",
+        "image": "/static/img/product4.jpg",
+        "originalPrice": 999.0,
+        "tip": "秒杀"
+      }
+    }
+  ]
+}

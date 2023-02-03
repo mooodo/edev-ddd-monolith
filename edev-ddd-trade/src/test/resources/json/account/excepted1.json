@@ -1,0 +1,35 @@
+{
+  "id": 1,
+  "customerId": 10001,
+  "balance": 11000.0,
+  "customer": {
+    "id": 10001,
+    "name": "李秋水",
+    "gender": "女",
+    "birthdate": "1979-10-01 00:00:00",
+    "identification": "510110197910012312",
+    "phoneNumber": "13388990123",
+    "addresses": [
+      {
+        "id": 1000100,
+        "customerId": 10001,
+        "country": "中国",
+        "province": "湖北",
+        "city": "武汉",
+        "zone": "洪山区",
+        "address": "珞瑜路726号",
+        "phoneNumber": "13300224466"
+      },
+      {
+        "id": 1000101,
+        "customerId": 10001,
+        "country": "中国",
+        "province": "湖北",
+        "city": "荆州",
+        "zone": "沙市区",
+        "address": "北京西路410号",
+        "phoneNumber": "13388990123"
+      }
+    ]
+  }
+}

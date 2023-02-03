@@ -1,0 +1,7 @@
+[
+  {
+    "id":1,"name":"BookNode","price":7500,"unit":"unit","classify":"electric",
+    "image":"/img/NodeBook","originalPrice":8000,"tip":"自营"
+  },
+  {"id":2,"name":"SmartPhone","price":2000,"unit":"unit","classify":"electric"}
+]

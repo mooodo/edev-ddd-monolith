@@ -14,6 +14,15 @@ public class Supplier extends Entity<Long> {
 	private String name;
 	private String supplierType;
 
+	public Supplier() {
+	}
+
+	public Supplier(Long id, String name, String supplierType) {
+		this.id = id;
+		this.name = name;
+		this.supplierType = supplierType;
+	}
+
 	/**
 	 * @return the id
 	 */

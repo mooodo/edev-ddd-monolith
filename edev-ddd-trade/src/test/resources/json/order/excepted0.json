@@ -1,0 +1,28 @@
+{
+  "id": 1,
+  "customerId": 10001,
+  "addressId": 1000100,
+  "amount": 5000.0,
+  "flag": "CREATE",
+  "customer": {
+    "id": 10001,
+    "level": 0,
+    "name": "李秋水",
+    "gender": "女",
+    "birthdate": "1979-10-01 00:00:00",
+    "identification": "510110197910012312",
+    "phoneNumber": "13388990123"
+  },
+  "address": {
+    "id": 1000100,
+    "customerId": 10001,
+    "country": "中国",
+    "province": "湖北",
+    "city": "武汉",
+    "zone": "洪山区",
+    "address": "珞瑜路726号",
+    "phoneNumber": "13300224466"
+  },
+  "payment": null,
+  "orderItems": null
+}

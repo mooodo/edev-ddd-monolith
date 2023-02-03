@@ -1,8 +1,6 @@
 package com.edev.trade.customer.web;
 
-import com.alibaba.fastjson.JSONObject;
-import com.edev.trade.customer.entity.Address;
-import com.edev.trade.customer.entity.Customer;
+import com.edev.support.utils.JsonFile;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,15 +10,8 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -28,7 +19,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class CustomerMvcTest {
     @Autowired
     private MockMvc mvc;
-
     /**
      * 业务需求：
      * 1）对客户可以进行增删改查的操作
@@ -36,37 +26,33 @@ public class CustomerMvcTest {
      */
     @Test
     public void testSaveAndDelete() throws Exception {
-        Long id = 1L;
-        Customer customer = new Customer(id, "John", "male",
-                "510212199901012211", "13677778888");
-        String json = JSONObject.toJSONStringWithDateFormat(customer, "yyyy-MM-dd HH:mm:ss");
-
+        String id = "1";
+        String json = JsonFile.read("json/customer/customer0.json");
+        String excepted = JsonFile.read("json/customer/excepted0.json");
         mvc.perform(get("/orm/customer/delete")
-                .param("customerId", id.toString())
+                .param("customerId", id)
         ).andExpect(status().isOk());
         mvc.perform(post("/orm/customer/register")
                 .content(json).contentType(MediaType.APPLICATION_JSON)
-        ).andExpect(status().isOk()).andExpect(content().string(id.toString()));
+        ).andExpect(status().isOk()).andExpect(content().string(id));
         mvc.perform(get("/orm/customer/load")
-                .param("customerId", id.toString())
-        ).andExpect(status().isOk()).andExpect(content().json(json));
+                .param("customerId", id)
+        ).andExpect(status().isOk()).andExpect(content().json(excepted));
 
-        customer.setName("Jone");
-        customer.setGender("female");
-        customer.setIdentification("100101200003052314");
-        json = JSONObject.toJSONStringWithDateFormat(customer, "yyyy-MM-dd HH:mm:ss");
+        String json1 = JsonFile.read("json/customer/customer1.json");
+        String excepted1 = JsonFile.read("json/customer/excepted1.json");
         mvc.perform(post("/orm/customer/modify")
-                .content(json).contentType(MediaType.APPLICATION_JSON)
+                .content(json1).contentType(MediaType.APPLICATION_JSON)
         ).andExpect(status().isOk());
         mvc.perform(get("/orm/customer/load")
-                .param("customerId", id.toString())
-        ).andExpect(status().isOk()).andExpect(content().json(json));
+                .param("customerId", id)
+        ).andExpect(status().isOk()).andExpect(content().json(excepted1));
 
         mvc.perform(get("/orm/customer/delete")
-                .param("customerId", id.toString())
+                .param("customerId", id)
         ).andExpect(status().isOk());
         mvc.perform(get("/orm/customer/load")
-                .param("customerId", id.toString())
+                .param("customerId", id)
         ).andExpect(status().isOk()).andExpect(content().string(""));
     }
 
@@ -80,49 +66,34 @@ public class CustomerMvcTest {
      */
     @Test
     public void testSaveAndDeleteWithAddress() throws Exception {
-        Long id = 2L;
-        Customer customer = new Customer(id, "Mary", "female",
-                "510212200012137812", "13456567878");
-        Address address0 = new Address(10L,null,"China","Shandong","Jinan",
-                "Lixiaqu","Happy street No.12","0531-88896666");
-        Address address1 = new Address(20L,null,"China","Zhejiang","Hangzhou",
-                "Xihuqu","The park of Gushan","0571-64128989");
-        List<Address> addressList = new ArrayList<>();
-        addressList.add(address0);
-        addressList.add(address1);
-        customer.setAddresses(addressList);
-        String json = JSONObject.toJSONStringWithDateFormat(customer, "yyyy-MM-dd HH:mm:ss");
+        String id = "2";
+        String json = JsonFile.read("json/customer/customer2.json");
+        String excepted = JsonFile.read("json/customer/excepted2.json");
 
         mvc.perform(get("/orm/customer/delete")
-                .param("customerId", id.toString())
+                .param("customerId", id)
         ).andExpect(status().isOk());
         mvc.perform(post("/orm/customer/register")
                 .content(json).contentType(MediaType.APPLICATION_JSON)
-        ).andExpect(status().isOk()).andExpect(content().string(id.toString()));
+        ).andExpect(status().isOk()).andExpect(content().string(id));
         mvc.perform(get("/orm/customer/load")
-                .param("customerId", id.toString())
-        ).andExpect(status().isOk()).andExpect(content().json(json));
+                .param("customerId", id)
+        ).andExpect(status().isOk()).andExpect(content().json(excepted));
 
-        customer.setName("Mike");
-        customer.setGender("male");
-        customer.setIdentification("100101200003052314");
-        customer.getAddresses().remove(0);
-        Address address2 = new Address(30L,null,"China","Chongqing","Chongqing",
-                "ShaPingBaQu","The ChongQing University","023-62325544");
-        customer.getAddresses().add(address2);
-        json = JSONObject.toJSONStringWithDateFormat(customer, "yyyy-MM-dd HH:mm:ss");
+        String json1 = JsonFile.read("json/customer/customer3.json");
+        String excepted1 = JsonFile.read("json/customer/excepted3.json");
         mvc.perform(post("/orm/customer/modify")
-                .content(json).contentType(MediaType.APPLICATION_JSON)
+                .content(json1).contentType(MediaType.APPLICATION_JSON)
         ).andExpect(status().isOk());
         mvc.perform(get("/orm/customer/load")
-                .param("customerId", id.toString())
-        ).andExpect(status().isOk()).andExpect(content().json(json));
+                .param("customerId", id)
+        ).andExpect(status().isOk()).andExpect(content().json(excepted1));
 
         mvc.perform(get("/orm/customer/delete")
-                .param("customerId", id.toString())
+                .param("customerId", id)
         ).andExpect(status().isOk());
         mvc.perform(get("/orm/customer/load")
-                .param("customerId", id.toString())
+                .param("customerId", id)
         ).andExpect(status().isOk()).andExpect(content().string(""));
     }
 
@@ -134,40 +105,23 @@ public class CustomerMvcTest {
      */
     @Test
     public void testSaveAndDeleteForList() throws Exception {
-        Long id0 = 1L;
-        Customer customer0 = new Customer(id0, "Johnwood", "male",
-                "510212199901012211", "13677778888");
-        Long id1 = 2L;
-        Customer customer1 = new Customer(id1, "Mary", "female",
-                "510212200012137812", "13456567878");
-        Address address0 = new Address(10L,null,"China","Shandong","Jinan",
-                "Lixiaqu","Happy street No.12","0531-88896666");
-        Address address1 = new Address(20L,null,"China","Zhejiang","Hangzhou",
-                "Xihuqu","The park of Gushan","0571-64128989");
-        List<Address> addressList = new ArrayList<>();
-        addressList.add(address0);
-        addressList.add(address1);
-        customer1.setAddresses(addressList);
-
-        List<Customer> customers = new ArrayList<>();
-        customers.add(customer0);
-        customers.add(customer1);
-        String jsonArray = JSONObject.toJSONStringWithDateFormat(customers, "yyyy-MM-dd HH:mm:ss");
-
+        String json = JsonFile.read("json/customer/customers0.json");
+        String excepted = JsonFile.read("json/customer/exceptedList.json");
         mvc.perform(post("/list/customer/deleteAll")
                 .content("[1,2]").contentType(MediaType.APPLICATION_JSON)
         ).andExpect(status().isOk());
         mvc.perform(post("/list/customer/saveAll")
-                .content(jsonArray).contentType(MediaType.APPLICATION_JSON)
+                .content(json).contentType(MediaType.APPLICATION_JSON)
         ).andExpect(status().isOk());
         mvc.perform(post("/list/customer/loadAll")
                 .content("[1,2]").contentType(MediaType.APPLICATION_JSON)
-        ).andExpect(status().isOk()).andExpect(content().json(jsonArray));
+        ).andExpect(status().isOk()).andExpect(content().json(excepted));
 
+        String query = JsonFile.read("json/customer/query.json");
+        String resultSet = JsonFile.read("json/customer/resultSet.json");
         mvc.perform(post("/query/customerQry")
-                .content("{\"page\":0,\"size\":10,\"aggregation\":{\"name\":\"count\"}}")
-                .contentType(MediaType.APPLICATION_JSON)
-        ).andExpect(status().isOk());
+                .content(query).contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(status().isOk()).andExpect(content().json(resultSet));
 
         mvc.perform(post("/list/customer/deleteAll")
                 .content("[1,2]").contentType(MediaType.APPLICATION_JSON)
@@ -185,30 +139,8 @@ public class CustomerMvcTest {
      */
     @Test
     public void testSaveAndDeleteForJsonList() throws Exception {
-        Long id0 = 1L;
-        Customer customer0 = new Customer(id0, "Johnwood", "male",
-                "510212199901012211", "13677778888");
-
-        Long id1 = 2L;
-        Customer customer1 = new Customer(id1, "Mary", "female",
-                "510212200012137812", "13456567878");
-        Address address0 = new Address(10L,null,"China","Shandong","Jinan",
-                "Lixiaqu","Happy street No.12","0531-88896666");
-        Address address1 = new Address(20L,null,"China","Zhejiang","Hangzhou",
-                "Xihuqu","The park of Gushan","0571-64128989");
-        List<Address> addressList = new ArrayList<>();
-        addressList.add(address0);
-        addressList.add(address1);
-        customer1.setAddresses(addressList);
-
-        List<Customer> customers = new ArrayList<>();
-        customers.add(customer0);
-        customers.add(customer1);
-        String jsonArray = JSONObject.toJSONStringWithDateFormat(customers, "yyyy-MM-dd HH:mm:ss");
-        Map<String, Object> map = new HashMap<>();
-        map.put("customers", customers);
-        String json = JSONObject.toJSONStringWithDateFormat(map, "yyyy-MM-dd HH:mm:ss");
-
+        String json = JsonFile.read("json/customer/customers1.json");
+        String excepted = JsonFile.read("json/customer/exceptedList.json");
         mvc.perform(get("/orm/customer/deleteAll")
                 .param("customerIds", "1,2")
         ).andExpect(status().isOk());
@@ -217,11 +149,13 @@ public class CustomerMvcTest {
         ).andExpect(status().isOk());
         mvc.perform(get("/orm/customer/loadAll")
                 .param("customerIds", "1,2")
-        ).andExpect(status().isOk()).andExpect(content().json(jsonArray));
+        ).andExpect(status().isOk()).andExpect(content().json(excepted));
 
+        String resultSet = JsonFile.read("json/customer/resultSet.json");
         mvc.perform(get("/query/customerQry")
+                .param("id","1,2")
                 .param("page","0").param("size","10")
-        ).andExpect(status().isOk());
+        ).andExpect(status().isOk()).andExpect(content().json(resultSet));
 
         mvc.perform(get("/orm/customer/deleteAll")
                 .param("customerIds", "1,2")

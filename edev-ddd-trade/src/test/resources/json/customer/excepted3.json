@@ -1,0 +1,30 @@
+{
+  "id": 2,
+  "name": "Mike",
+  "gender": "male",
+  "birthdate": "2000-03-05 00:00:00",
+  "identification": "100101200003052314",
+  "phoneNumber": "13456567878",
+  "addresses": [
+    {
+      "id": 20,
+      "customerId": 2,
+      "country": "China",
+      "province": "Zhejiang",
+      "city": "Hangzhou",
+      "zone": "Xihuqu",
+      "address": "The park of Gushan",
+      "phoneNumber": "0571-64128989"
+    },
+    {
+      "id": 30,
+      "customerId": 2,
+      "country": "China",
+      "province": "Chongqing",
+      "city": "Chongqing",
+      "zone": "ShaPingBaQu",
+      "address": "The ChongQing University",
+      "phoneNumber": "023-62325544"
+    }
+  ]
+}

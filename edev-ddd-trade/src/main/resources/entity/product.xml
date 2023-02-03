@@ -11,7 +11,7 @@
     <property name="originalPrice" column="original_price"/>
     <property name="tip" column="tip"/>
   </do>
-  <do class="com.edev.trade.product.entity.Supplier" subclassType="union">
+  <do class="com.edev.trade.product.entity.Supplier" tableName="t_supplier" subclassType="joined">
     <property name="id" column="id" isPrimaryKey="true"/>
     <property name="name" column="name"/>
     <property name="supplierType" column="supplier_type" isDiscriminator="true"/>
@@ -21,14 +21,16 @@
   <do class="com.edev.trade.product.entity.Distributor" tableName="t_distributor">
     <property name="id" column="id" isPrimaryKey="true"/>
     <property name="name" column="name"/>
-    <property name="supplierType" column="supplier_type" isDiscriminator="true"/>
+    <property name="introduce" column="introduce"/>
+    <property name="address" column="address"/>
+    <property name="range" column="range"/>
+    <join name="distributor" joinKey="distributorId" joinType="oneToMany"
+          class="com.edev.trade.product.entity.Vendor"/>
   </do>
   <do class="com.edev.trade.product.entity.Vendor" tableName="t_vendor">
     <property name="id" column="id" isPrimaryKey="true"/>
     <property name="name" column="name"/>
-    <property name="supplierType" column="supplier_type" isDiscriminator="true"/>
+    <property name="position" column="position"/>
     <property name="distributorId" column="distributor_id"/>
-    <join name="distributor" joinKey="distributorId" joinType="manyToOne"
-          class="com.edev.trade.product.entity.Distributor"/>
   </do>
 </dobjs>

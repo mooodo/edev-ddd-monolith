@@ -19,6 +19,7 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public Long create(Account account) {
         validAccount(account);
+        account.setCreateTime(DateUtils.getNow());
         return dao.insert(account);
     }
 

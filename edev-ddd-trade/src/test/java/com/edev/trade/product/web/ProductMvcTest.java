@@ -1,7 +1,6 @@
 package com.edev.trade.product.web;
 
-import com.alibaba.fastjson.JSONObject;
-import com.edev.trade.product.entity.Product;
+import com.edev.support.utils.JsonFile;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,10 +10,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -34,37 +30,33 @@ public class ProductMvcTest {
      */
     @Test
     public void testSaveAndDelete() throws Exception {
-        Long id = 1L;
-        Product product = new Product(id,"BookNode",8000D,"unit",null,"electric");
-        String json = JSONObject.toJSONString(product);
-
+        String id = "1";
+        String json = JsonFile.read("json/product/product0.json");
+        String excepted = JsonFile.read("json/product/excepted0.json");
         mvc.perform(get("/orm/product/deleteProduct")
-                .param("id", id.toString())
+                .param("id", id)
         ).andExpect(status().isOk());
         mvc.perform(post("/orm/product/saveProduct")
                 .content(json).contentType(MediaType.APPLICATION_JSON)
-        ).andExpect(status().isOk()).andExpect(content().string(id.toString()));
+        ).andExpect(status().isOk()).andExpect(content().string(id));
         mvc.perform(get("/orm/product/getProduct")
-                .param("id",id.toString())
-        ).andExpect(status().isOk()).andExpect(content().json(json));
+                .param("id",id)
+        ).andExpect(status().isOk()).andExpect(content().json(excepted));
 
-        product.setImage("/img/NodeBook");
-        product.setOriginalPrice(8000D);
-        product.setPrice(7500D);
-        product.setTip("自营");
-        String json1 = JSONObject.toJSONString(product);
+        String json1 = JsonFile.read("json/product/product1.json");
+        String excepted1 = JsonFile.read("json/product/excepted1.json");
         mvc.perform(post("/orm/product/saveProduct")
                 .content(json1).contentType(MediaType.APPLICATION_JSON)
-        ).andExpect(status().isOk()).andExpect(content().string(id.toString()));
+        ).andExpect(status().isOk()).andExpect(content().string(id));
         mvc.perform(get("/orm/product/getProduct")
-                .param("id",id.toString())
-        ).andExpect(status().isOk()).andExpect(content().json(json1));
+                .param("id",id)
+        ).andExpect(status().isOk()).andExpect(content().json(excepted1));
 
         mvc.perform(get("/orm/product/deleteProduct")
-                .param("id",id.toString())
+                .param("id",id)
         ).andExpect(status().isOk());
         mvc.perform(get("/orm/product/getProduct")
-                .param("id",id.toString())
+                .param("id",id)
         ).andExpect(status().isOk()).andExpect(content().string(""));
     }
 
@@ -76,15 +68,8 @@ public class ProductMvcTest {
      */
     @Test
     public void testSaveAndDeleteForList() throws Exception {
-        Long id0 = 1L;
-        Product product0 = new Product(id0,"BookNode",8000D,"unit",null,"electric");
-        Long id1 = 2L;
-        Product product1 = new Product(id1,"SmartPhone",2000D,"unit",null,"electric");
-        List<Product> list = new ArrayList<>();
-        list.add(product0);
-        list.add(product1);
-        String json = JSONObject.toJSONString(list);
-
+        String json = JsonFile.read("json/product/products0.json");
+        String excepted = JsonFile.read("json/product/exceptedList.json");
         mvc.perform(post("/list/product/deleteProducts")
                 .content("[1,2]").contentType(MediaType.APPLICATION_JSON)
         ).andExpect(status().isOk());
@@ -93,21 +78,16 @@ public class ProductMvcTest {
         ).andExpect(status().isOk());
         mvc.perform(post("/list/product/listProducts")
                 .content("[1,2]").contentType(MediaType.APPLICATION_JSON)
-        ).andExpect(status().isOk()).andExpect(content().json(json));
+        ).andExpect(status().isOk()).andExpect(content().json(excepted));
 
-        product0.setImage("/img/NodeBook");
-        product0.setOriginalPrice(8000D);
-        product0.setPrice(7500D);
-        product0.setTip("自营");
-        list.remove(0);
-        list.add(product0);
-        String json1 = JSONObject.toJSONString(list);
+        String json1 = JsonFile.read("json/product/products1.json");
+        String excepted1 = JsonFile.read("json/product/exceptedList1.json");
         mvc.perform(post("/list/product/saveProducts")
                 .content(json1).contentType(MediaType.APPLICATION_JSON)
         ).andExpect(status().isOk());
         mvc.perform(post("/list/product/listProducts")
                 .content("[1,2]").contentType(MediaType.APPLICATION_JSON)
-        ).andExpect(status().isOk()).andExpect(content().json(json1));
+        ).andExpect(status().isOk()).andExpect(content().json(excepted1));
 
         mvc.perform(post("/list/product/deleteProducts")
                 .content("[1,2]").contentType(MediaType.APPLICATION_JSON)
@@ -125,18 +105,8 @@ public class ProductMvcTest {
      */
     @Test
     public void testSaveAndDeleteForJsonList() throws Exception {
-        Long id0 = 1L;
-        Product product0 = new Product(id0,"BookNode",8000D,"unit",null,"electric");
-        Long id1 = 2L;
-        Product product1 = new Product(id1,"SmartPhone",2000D,"unit",null,"electric");
-        List<Product> list = new ArrayList<>();
-        list.add(product0);
-        list.add(product1);
-        String jsonArray = JSONObject.toJSONString(list);
-        Map<String, Object> map = new HashMap<>();
-        map.put("products", list);
-        String json = JSONObject.toJSONString(map);
-
+        String json = JsonFile.read("json/product/products2.json");
+        String excepted = JsonFile.read("json/product/exceptedList.json");
         mvc.perform(get("/orm/product/deleteProducts")
                 .param("ids","1,2")
         ).andExpect(status().isOk());
@@ -145,23 +115,16 @@ public class ProductMvcTest {
         ).andExpect(status().isOk());
         mvc.perform(get("/orm/product/listProducts")
                 .param("ids","1,2")
-        ).andExpect(status().isOk()).andExpect(content().json(jsonArray));
+        ).andExpect(status().isOk()).andExpect(content().json(excepted));
 
-        product0.setImage("/img/NodeBook");
-        product0.setOriginalPrice(8000D);
-        product0.setPrice(7500D);
-        product0.setTip("自营");
-        list.remove(0);
-        list.add(product0);
-        String jsonArray1 = JSONObject.toJSONString(list);
-        map.put("products", list);
-        String json1 = JSONObject.toJSONString(map);
+        String json1 = JsonFile.read("json/product/products3.json");
+        String excepted1 = JsonFile.read("json/product/exceptedList1.json");
         mvc.perform(post("/orm/product/saveProducts")
                 .content(json1).contentType(MediaType.APPLICATION_JSON)
         ).andExpect(status().isOk());
         mvc.perform(get("/orm/product/listProducts")
                 .param("ids","1,2")
-        ).andExpect(status().isOk()).andExpect(content().json(jsonArray1));
+        ).andExpect(status().isOk()).andExpect(content().json(excepted1));
 
         mvc.perform(get("/orm/product/deleteProducts")
                 .param("ids","1,2")

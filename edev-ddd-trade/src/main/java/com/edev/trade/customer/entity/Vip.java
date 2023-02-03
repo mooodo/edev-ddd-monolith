@@ -1,7 +1,6 @@
 package com.edev.trade.customer.entity;
 
 import com.edev.support.entity.Entity;
-import com.edev.support.utils.DateUtils;
 
 import java.util.Date;
 
@@ -44,7 +43,6 @@ public class Vip extends Entity<Long> {
     }
 
     public void setCreateTime(Date createTime) {
-        if(createTime == null) createTime = DateUtils.getNow();
         this.createTime = createTime;
     }
 

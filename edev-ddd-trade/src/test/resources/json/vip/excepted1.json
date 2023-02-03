@@ -1,0 +1,8 @@
+{
+  "id": 1,
+  "available": true,
+  "coin": 500,
+  "vipType": "golden",
+  "customer": null,
+  "cashback": 2000.0
+}

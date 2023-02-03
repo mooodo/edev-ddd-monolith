@@ -25,6 +25,7 @@ public class VipServiceImpl implements VipService {
     @Override
     public Long register(Vip vip) {
         validVip(vip);
+        vip.setCreateTime(DateUtils.getNow());
         return dao.insert(vip);
     }
 

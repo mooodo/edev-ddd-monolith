@@ -4,14 +4,12 @@
 package com.edev.trade.order.entity;
 
 import com.edev.support.entity.Entity;
-import com.edev.trade.product.entity.Supplier;
 
 /**
  * The product entity
  * @author fangang
  */
 public class Product extends Entity<Long> {
-	private static final long serialVersionUID = 7149822235159719740L;
 	private Long id;
 	private String name;
 	private Double price;

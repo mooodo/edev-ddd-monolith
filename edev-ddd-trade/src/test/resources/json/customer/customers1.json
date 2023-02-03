@@ -1,0 +1,11 @@
+{"customers": [
+  {"id":1,"name":"Jone","gender":"female","identification":"100101200003052314","phoneNumber":"13677778888"},
+  {"id":2,"name":"Mike","gender":"male","identification":"100101200003052314","phoneNumber":"13456567878",
+    "addresses":[
+      {"id":30,"country":"China","province":"Chongqing","city":"Chongqing","zone":"ShaPingBaQu",
+        "address":"The ChongQing University","phoneNumber":"023-62325544"},
+      {"id":20,"country":"China","province":"Zhejiang","city":"Hangzhou","zone":"Xihuqu",
+        "address":"The park of Gushan","phoneNumber":"0571-64128989"}
+    ]
+  }
+]}

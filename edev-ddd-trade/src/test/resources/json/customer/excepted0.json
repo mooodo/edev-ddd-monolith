@@ -1,0 +1,9 @@
+{
+  "id": 1,
+  "name": "John",
+  "gender": "male",
+  "birthdate": "1999-01-01 00:00:00",
+  "identification": "510212199901012211",
+  "phoneNumber": "13677778888",
+  "addresses": null
+}

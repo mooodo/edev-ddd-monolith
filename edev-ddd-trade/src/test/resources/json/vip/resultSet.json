@@ -1,0 +1,32 @@
+{
+  "data": [
+    {
+      "id": 1,
+      "available": true,
+      "coin": 200,
+      "vipType": "silver",
+      "customer": null
+    },
+    {
+      "id": 10001,
+      "available": true,
+      "coin": 500,
+      "vipType": "golden",
+      "customer": {
+        "id": 10001,
+        "level": 0,
+        "name": "李秋水",
+        "gender": "女",
+        "birthdate": "1979-10-01 08:00:00",
+        "identification": "510110197910012312",
+        "phoneNumber": "13388990123",
+        "addresses": null
+      },
+      "cashback": 2000.0
+    }
+  ],
+  "page": 0,
+  "size": 10,
+  "count": 2,
+  "aggregation": null
+}

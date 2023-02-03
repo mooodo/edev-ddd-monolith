@@ -1,0 +1,4 @@
+[
+  {"id":1,"name":"BookNode","price":8000,"unit":"unit","classify":"electric"},
+  {"id":2,"name":"SmartPhone","price":2000,"unit":"unit","classify":"electric"}
+]
