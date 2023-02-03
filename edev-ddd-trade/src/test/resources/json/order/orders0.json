@@ -1,10 +1,10 @@
 [
   {"id":1,"customerId":10001,"flag":"CREATE","addressId":1000100,"amount":5000.0},
   {
-    "id":1,"customerId":10001,"addressId":1000100,"flag":"CREATE",
+    "id":2,"customerId":10001,"addressId":1000100,"flag":"CREATE",
     "orderItems":[
-      {"id":10,"productId":30001,"quantity":1,"price":4000},
-      {"id":20,"productId":30004,"quantity":2,"price":958}
+      {"id":20,"productId":30001,"quantity":1,"price":4000},
+      {"id":21,"productId":30004,"quantity":2,"price":958}
     ]
   }
 ]
