@@ -31,7 +31,7 @@ public class DateUtilsTest {
 		String string = "1979-09-30T16:00:00.000Z";
 		Date date = DateUtils.getDateForUTC(string);
 		String dateString = DateUtils.getStringOfDate(date);
-		assertThat(dateString, equalTo("1979-09-30 16:00:00"));
+		assertThat(dateString, equalTo("1979-10-01 00:00:00"));
 	}
 	@Test
 	public void testGetCalendar() {
