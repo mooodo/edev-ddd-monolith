@@ -2,6 +2,7 @@ package com.edev.trade.order.service.impl;
 
 import com.edev.support.dao.BasicDao;
 import com.edev.support.exception.ValidException;
+import com.edev.support.utils.DateUtils;
 import com.edev.trade.order.entity.Order;
 import com.edev.trade.order.entity.OrderItem;
 import com.edev.trade.order.entity.Payment;
@@ -65,6 +66,7 @@ public class OrderServiceImpl implements OrderService {
         discount(order);
         sumOfAmount(order);
         payoff(order);
+        order.setOrderTime(DateUtils.getNow());
         return dao.insert(order);
     }
 
@@ -75,6 +77,7 @@ public class OrderServiceImpl implements OrderService {
         discount(order);
         sumOfAmount(order);
         payoff(order);
+        order.setModifyTime(DateUtils.getNow());
         dao.update(order);
     }
 

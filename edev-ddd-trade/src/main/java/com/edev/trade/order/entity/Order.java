@@ -72,7 +72,7 @@ public class Order extends Entity<Long> {
 	}
 
 	public void setAmount(Double amount) {
-		this.amount = (amount==null) ? 0D : amount;
+		this.amount = amount;
 	}
 
 	public Date getOrderTime() {
@@ -80,7 +80,7 @@ public class Order extends Entity<Long> {
 	}
 
 	public void setOrderTime(Date orderTime) {
-		this.orderTime = (orderTime==null) ? DateUtils.getNow() : orderTime;
+		this.orderTime = orderTime;
 	}
 
 	public Date getModifyTime() {
@@ -96,7 +96,7 @@ public class Order extends Entity<Long> {
 	}
 
 	public void setFlag(String flag) {
-		this.flag = (flag==null) ? "create" : flag;
+		this.flag = flag;
 	}
 
 	public Customer getCustomer() {

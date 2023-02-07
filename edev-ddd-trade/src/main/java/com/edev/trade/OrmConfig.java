@@ -8,10 +8,8 @@ import com.edev.trade.customer.service.impl.*;
 import com.edev.trade.inventory.service.InventoryService;
 import com.edev.trade.inventory.service.impl.InventoryServiceImpl;
 import com.edev.trade.order.service.DiscountService;
-import com.edev.trade.order.service.OrderAggService;
 import com.edev.trade.order.service.OrderService;
 import com.edev.trade.order.service.impl.DiscountServiceImpl;
-import com.edev.trade.order.service.impl.OrderAggServiceImpl;
 import com.edev.trade.order.service.impl.OrderServiceImpl;
 import com.edev.trade.order.service.impl.discount.DiscountStrategy;
 import com.edev.trade.product.service.ProductService;
@@ -43,10 +41,6 @@ public class OrmConfig {
         return new OrderServiceImpl(repository);
     }
     @Bean
-    public OrderAggService orderAgg() {
-        return new OrderAggServiceImpl();
-    }
-    @Bean
     public ProductService product() {
         return new ProductServiceImpl(repository);
     }
@@ -61,10 +55,6 @@ public class OrmConfig {
     @Bean
     public AccountService account() {
         return new AccountServiceImpl(repository);
-    }
-    @Bean
-    public AccountAggService accountAgg() {
-        return new AccountAggServiceImpl();
     }
     @Bean
     public JournalAccountService journalAccount() {

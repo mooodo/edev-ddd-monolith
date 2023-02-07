@@ -10,8 +10,10 @@ import com.edev.trade.order.service.OrderAggService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+@Service
 public class OrderAggServiceImpl implements OrderAggService {
     private final static Log log = LogFactory.getLog(OrderAggServiceImpl.class);
     @Autowired
