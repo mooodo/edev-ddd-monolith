@@ -155,9 +155,10 @@ public class VipMvcTest {
                 .param("vipIds", "1,10001")
         ).andExpect(status().isOk()).andExpect(content().json(excepted));
 
-        mvc.perform(get("/query/vipQry")
+        String resultSet = JsonFile.read("json/vip/resultSet.json");
+        mvc.perform(get("/query/vipQry").param("id","1,10001")
                 .param("page","0").param("size","10")
-        ).andExpect(status().isOk());
+        ).andExpect(status().isOk()).andExpect(content().json(resultSet));
 
         mvc.perform(get("/orm/vip/deleteAll")
                 .param("vipIds", "1,10001")
