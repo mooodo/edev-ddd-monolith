@@ -116,10 +116,11 @@ public class OrderMvcTest {
                 .content("[1,2]").contentType(MediaType.APPLICATION_JSON)
         ).andExpect(status().isOk()).andExpect(content().json(excepted));
 
+        String query = JsonFile.read("json/order/query0.json");
+        String resultSet = JsonFile.read("json/order/resultSet0.json");
         mvc.perform(post("/query/orderQry")
-                .content("{\"page\":0,\"size\":10,\"aggregation\":{\"id\":\"count\",\"amount\":\"sum\"}}")
-                .contentType(MediaType.APPLICATION_JSON)
-        ).andExpect(status().isOk());
+                .content(query).contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(status().isOk()).andExpect(content().json(resultSet));
 
         mvc.perform(post("/list/order/deleteAll")
                 .content("[1,2]").contentType(MediaType.APPLICATION_JSON)
@@ -142,9 +143,10 @@ public class OrderMvcTest {
                 .param("orderIds", "1,2")
         ).andExpect(status().isOk()).andExpect(content().json(excepted));
 
-        mvc.perform(get("/query/orderQry")
-                .param("page","0").param("size","10")
-        ).andExpect(status().isOk());
+        String resultSet = JsonFile.read("json/order/resultSet1.json");
+        mvc.perform(get("/query/orderQry").param("id","1,2")
+                .param("page","0").param("size","5")
+        ).andExpect(status().isOk()).andExpect(content().json(resultSet));
 
         mvc.perform(get("/orm/order/deleteAll")
                 .param("orderIds", "1,2")

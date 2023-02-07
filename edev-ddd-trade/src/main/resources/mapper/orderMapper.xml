@@ -8,7 +8,7 @@
 	
 	<sql id="conditions">
 		<if test="id != '' and id != null">
-			and id = #{id}
+			and id in (${id})
 		</if>
 	</sql>
 	

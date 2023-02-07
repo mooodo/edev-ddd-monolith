@@ -1,0 +1,10 @@
+{
+  "id": "1,2",
+  "page": 0,
+  "size": 5,
+  "aggregation": {
+    "name": "count",
+    "amount": "sum",
+    "id": "合计"
+  }
+}

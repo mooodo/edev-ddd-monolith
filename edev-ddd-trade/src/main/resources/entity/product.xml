@@ -24,7 +24,7 @@
     <property name="introduce" column="introduce"/>
     <property name="address" column="address"/>
     <property name="range" column="range"/>
-    <join name="distributor" joinKey="distributorId" joinType="oneToMany"
+    <join name="vendors" joinKey="distributorId" joinType="oneToMany"
           class="com.edev.trade.product.entity.Vendor"/>
   </do>
   <do class="com.edev.trade.product.entity.Vendor" tableName="t_vendor">
