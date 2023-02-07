@@ -33,29 +33,29 @@ public class VipMvcTest {
     @Test
     public void testSaveAndDelete() throws Exception {
         String id = "1";
-        String json = JsonFile.read("json/vip/vip0.json");
+        String silver = JsonFile.read("json/vip/vip0.json");
         String excepted = JsonFile.read("json/vip/excepted0.json");
         mvc.perform(get("/orm/vip/delete")
                 .param("vipId", id)
         ).andExpect(status().isOk());
         mvc.perform(post("/orm/vip/register")
-                .content(json).contentType(MediaType.APPLICATION_JSON)
+                .content(silver).contentType(MediaType.APPLICATION_JSON)
         ).andExpect(status().isOk()).andExpect(content().string(id));
         mvc.perform(get("/orm/vip/load")
                 .param("vipId", id)
         ).andExpect(status().isOk()).andExpect(content().json(excepted));
 
-        String json1 = JsonFile.read("json/vip/vip1.json");
+        String golden = JsonFile.read("json/vip/vip1.json");
         String excepted1 = JsonFile.read("json/vip/excepted1.json");
         mvc.perform(post("/orm/vip/modify")
-                .content(json1).contentType(MediaType.APPLICATION_JSON)
+                .content(golden).contentType(MediaType.APPLICATION_JSON)
         ).andExpect(status().isOk());
         mvc.perform(get("/orm/vip/load")
                 .param("vipId", id)
         ).andExpect(status().isOk()).andExpect(content().json(excepted1));
 
         mvc.perform(post("/orm/vip/deleteVip")
-                        .content(json1).contentType(MediaType.APPLICATION_JSON)
+                        .content(golden).contentType(MediaType.APPLICATION_JSON)
         ).andExpect(status().isOk());
         mvc.perform(get("/orm/vip/load")
                 .param("vipId", id)
@@ -71,29 +71,29 @@ public class VipMvcTest {
     @Test
     public void testSaveAndDeleteWithCustomer() throws Exception {
         String id = "10001";
-        String json = JsonFile.read("json/vip/vip2.json");
+        String silver = JsonFile.read("json/vip/vip2.json");
         String excepted = JsonFile.read("json/vip/excepted2.json");
         mvc.perform(get("/orm/vip/delete")
                 .param("vipId", id)
         ).andExpect(status().isOk());
         mvc.perform(post("/orm/vip/register")
-                .content(json).contentType(MediaType.APPLICATION_JSON)
+                .content(silver).contentType(MediaType.APPLICATION_JSON)
         ).andExpect(status().isOk()).andExpect(content().string(id));
         mvc.perform(get("/orm/vip/load")
                 .param("vipId", id)
         ).andExpect(status().isOk()).andExpect(content().json(excepted));
 
-        String json1 = JsonFile.read("json/vip/vip3.json");
+        String golden = JsonFile.read("json/vip/vip3.json");
         String excepted1 = JsonFile.read("json/vip/excepted3.json");
         mvc.perform(post("/orm/vip/modify")
-                .content(json1).contentType(MediaType.APPLICATION_JSON)
+                .content(golden).contentType(MediaType.APPLICATION_JSON)
         ).andExpect(status().isOk());
         mvc.perform(get("/orm/vip/load")
                 .param("vipId", id)
         ).andExpect(status().isOk()).andExpect(content().json(excepted1));
 
         mvc.perform(post("/orm/vip/deleteVip")
-                .content(json1).contentType(MediaType.APPLICATION_JSON)
+                .content(golden).contentType(MediaType.APPLICATION_JSON)
         ).andExpect(status().isOk());
         mvc.perform(get("/orm/vip/load")
                 .param("vipId", id)
