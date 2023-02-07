@@ -13,7 +13,9 @@ import com.edev.trade.order.service.impl.DiscountServiceImpl;
 import com.edev.trade.order.service.impl.OrderServiceImpl;
 import com.edev.trade.order.service.impl.discount.DiscountStrategy;
 import com.edev.trade.product.service.ProductService;
+import com.edev.trade.product.service.SupplierService;
 import com.edev.trade.product.service.impl.ProductServiceImpl;
+import com.edev.trade.product.service.impl.SupplierServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
@@ -43,6 +45,10 @@ public class OrmConfig {
     @Bean
     public ProductService product() {
         return new ProductServiceImpl(repository);
+    }
+    @Bean
+    public SupplierService supplier() {
+        return new SupplierServiceImpl(repository);
     }
     @Bean
     public UserService user() {
