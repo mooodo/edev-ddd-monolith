@@ -17,7 +17,6 @@ public class RefHelper<E extends Entity<S>, S extends Serializable> {
     private final ApplicationContext context;
     public RefHelper(ApplicationContext context) { this.context = context; }
     private void doWithRefs(@NotNull E entity, @NotNull Callback callback) {
-        if(entity==null) throw new DddException("The entity is null");
         DomainObject dObj = DomainObjectFactory.getDomainObject(entity.getClass());
         dObj.getRefs().forEach(callback::apply);
     }

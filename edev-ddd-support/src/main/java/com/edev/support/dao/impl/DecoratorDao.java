@@ -17,8 +17,8 @@ import java.util.Map;
  */
 public abstract class DecoratorDao implements BasicDao {
 	private BasicDao dao;
-	public DecoratorDao() {}
-	public DecoratorDao(BasicDao dao) {
+	protected DecoratorDao() {}
+	protected DecoratorDao(BasicDao dao) {
 		this.dao = dao;
 	}
 

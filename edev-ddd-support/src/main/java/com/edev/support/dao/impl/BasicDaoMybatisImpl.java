@@ -82,7 +82,6 @@ public class BasicDaoMybatisImpl implements BasicDao {
     @Override
     public <E extends Entity<S>, S extends Serializable>
             E load(@NotNull S id, @NotNull Class<E> clazz) {
-        if(id==null||clazz==null) throw new DaoException("The id or clazz is null");
         E template = EntityBuilder.build(clazz);
         template.setId(id);
         DaoEntity daoEntity = DaoEntityBuilder.build(template);

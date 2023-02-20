@@ -15,10 +15,7 @@ public abstract class AbstractResourceLoader implements ResourceLoader {
 	@Override
 	public Filter getFilter() {
 		if(filter==null){
-			filter = new Filter(){
-				public boolean isSatisfied(String fileName) {
-					return fileName.endsWith(".xml") || fileName.endsWith(".XML");
-				}};
+			filter = fileName -> fileName.endsWith(".xml") || fileName.endsWith(".XML");
 		}
 		return filter;
 	}

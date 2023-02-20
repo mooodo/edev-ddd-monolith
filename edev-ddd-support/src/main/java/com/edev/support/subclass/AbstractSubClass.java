@@ -119,7 +119,6 @@ public abstract class AbstractSubClass implements SubClassDao {
         } else deleteForChild(entity);
     }
 
-    @Transactional
     private <E extends Entity<S>, S extends Serializable> void deleteEachChildTables(@NotNull E entity) {
         SubClassUtils.doForEachSubClass(EntityUtils.getClass(entity), subClass->{
             E child = EntityBuilder.build(subClass);
@@ -147,7 +146,6 @@ public abstract class AbstractSubClass implements SubClassDao {
         list.forEach(this::delete);
     }
 
-    @Transactional
     protected  <E extends Entity<S>, S extends Serializable>
             void deleteChildTableForList(@NotNull Collection<S> ids, @NotNull Class<E> clazz) {
         if(SubClassUtils.isParent(clazz))

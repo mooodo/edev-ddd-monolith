@@ -9,8 +9,6 @@ import com.edev.support.dao.impl.utils.DaoEntityBuilder;
 import com.edev.support.ddd.utils.EntityUtils;
 import com.edev.support.entity.Entity;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
