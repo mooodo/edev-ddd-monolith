@@ -18,7 +18,6 @@ public class UserServiceImpl implements UserService {
         if(user.getId()==null) throw new ValidException("The id is null");
         if(user.getName()==null) throw new ValidException("The name is null");
         if(user.getPassword()==null) throw new ValidException("The password is null");
-        if(user.getUserType()==null) throw new ValidException("The user type is null");
     }
 
     @Override

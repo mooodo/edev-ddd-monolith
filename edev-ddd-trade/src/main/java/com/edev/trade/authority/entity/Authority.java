@@ -2,6 +2,7 @@ package com.edev.trade.authority.entity;
 
 import com.edev.support.entity.Entity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Authority extends Entity<Long> {
@@ -9,8 +10,18 @@ public class Authority extends Entity<Long> {
     private String name;
     private String url;
     private String available;
-    private List<User> users;
-    private List<Role> roles;
+    private List<User> users = new ArrayList<>();
+    private List<Role> roles = new ArrayList<>();
+
+    public Authority() {
+    }
+
+    public Authority(Long id, String name, String url, Boolean available) {
+        this.id = id;
+        this.name = name;
+        this.url = url;
+        setAvailable(available);
+    }
 
     @Override
     public Long getId() {
@@ -39,11 +50,11 @@ public class Authority extends Entity<Long> {
     }
 
     public boolean isAvailable() {
-        return "true".equals(available);
+        return "T".equals(available);
     }
 
     public void setAvailable(boolean available) {
-        this.available = available?"true":"false";
+        this.available = available?"T":"F";
     }
 
     public List<User> getUsers() {

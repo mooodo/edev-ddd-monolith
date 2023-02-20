@@ -2,23 +2,22 @@ package com.edev.trade.authority.entity;
 
 import com.edev.support.entity.Entity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class User extends Entity<Long> {
     private Long id;
     private String name;
     private String password;
-    private String userType;
-    private List<Authority> authorities;
+    private List<Authority> authorities = new ArrayList<>();
 
     public User() {
     }
 
-    public User(Long id, String name, String password, String userType) {
+    public User(Long id, String name, String password) {
         this.id = id;
         this.name = name;
         this.password = password;
-        this.userType = userType;
     }
 
     @Override
@@ -47,19 +46,15 @@ public class User extends Entity<Long> {
         this.password = password;
     }
 
-    public String getUserType() {
-        return userType;
-    }
-
-    public void setUserType(String userType) {
-        this.userType = userType;
-    }
-
     public List<Authority> getAuthorities() {
         return authorities;
     }
 
     public void setAuthorities(List<Authority> authorities) {
         this.authorities = authorities;
+    }
+
+    public void addAuthority(Authority authority) {
+        this.authorities.add(authority);
     }
 }

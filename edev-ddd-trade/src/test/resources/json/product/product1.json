@@ -1,4 +1,4 @@
 {
   "id":1,"name":"BookNode","price":7500,"unit":"unit","classify":"electric",
-  "image":"/img/NodeBook","originalPrice":8000,"tip":"自营"
+  "image":"/img/NodeBook","originalPrice":8000,"tip":"自营","supplierId":20005
 }

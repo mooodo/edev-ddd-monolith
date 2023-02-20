@@ -4,7 +4,7 @@ import com.edev.support.entity.Entity;
 
 public class UserGrantedAuthority extends Entity<Long> {
     private Long id;
-    private boolean available;
+    private String available;
     private Long userId;
     private Long authorityId;
 
@@ -19,11 +19,11 @@ public class UserGrantedAuthority extends Entity<Long> {
     }
 
     public boolean isAvailable() {
-        return available;
+        return "T".equals(available);
     }
 
     public void setAvailable(boolean available) {
-        this.available = available;
+        this.available = available?"T":"F";
     }
 
     public Long getUserId() {

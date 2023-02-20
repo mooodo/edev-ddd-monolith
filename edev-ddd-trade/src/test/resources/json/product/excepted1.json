@@ -3,9 +3,14 @@
   "name": "BookNode",
   "price": 7500.0,
   "unit": "unit",
-  "supplierId": null,
+  "supplierId": 20005,
   "classify": "electric",
   "image": "/img/NodeBook",
   "originalPrice": 8000.0,
-  "tip": "自营"
+  "tip": "自营",
+  "supplier": {
+    "id": 20005,
+    "name": "微软公司(Microsoft)",
+    "supplierType": "distributor"
+  }
 }

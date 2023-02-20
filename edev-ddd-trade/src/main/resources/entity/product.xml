@@ -10,6 +10,8 @@
     <property name="image" column="image"/>
     <property name="originalPrice" column="original_price"/>
     <property name="tip" column="tip"/>
+    <join name="supplier" joinKey="supplierId" joinType="manyToOne"
+          class="com.edev.trade.product.entity.Supplier"/>
   </do>
   <do class="com.edev.trade.product.entity.Supplier" tableName="t_supplier" subclassType="joined">
     <property name="id" column="id" isPrimaryKey="true"/>

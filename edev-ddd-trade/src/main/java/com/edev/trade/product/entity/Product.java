@@ -19,6 +19,7 @@ public class Product extends Entity<Long> {
 	private String image;
 	private Double originalPrice;
 	private String tip;
+	private Supplier supplier;
 	
 	public Product() { super(); }
 	public Product(Long id, String name, Double price, String unit, Long supplierId,
@@ -141,5 +142,12 @@ public class Product extends Entity<Long> {
 	public void setTip(String tip) {
 		this.tip = tip;
 	}
-	
+
+	public Supplier getSupplier() {
+		return supplier;
+	}
+
+	public void setSupplier(Supplier supplier) {
+		this.supplier = supplier;
+	}
 }
