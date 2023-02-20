@@ -151,4 +151,8 @@ public class Repository extends DecoratorDao implements BasicDao {
         if(isNotJoin.get()==null) isNotJoin.set(false);
         return isNotJoin.get();
     }
+
+    public static void removeNotJoin() {
+        isNotJoin.remove();
+    }
 }

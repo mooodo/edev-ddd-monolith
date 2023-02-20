@@ -35,7 +35,8 @@ public class DaoExecutor {
     }
 
     public void deleteForList(DaoEntity daoEntity) {
-        dao.deleteForList(daoEntity.getTableName(), daoEntity.getPkMap());
+        dao.deleteForList(daoEntity.getTableName(),
+                (daoEntity.getPkMap().isEmpty())?daoEntity.getColMap():daoEntity.getPkMap());
     }
 
     public <E extends Entity<S>, S extends Serializable>
