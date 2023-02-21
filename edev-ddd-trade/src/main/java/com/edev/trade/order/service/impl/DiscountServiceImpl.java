@@ -1,22 +1,31 @@
 package com.edev.trade.order.service.impl;
 
 import com.edev.support.dao.BasicDao;
+import com.edev.support.exception.ValidException;
 import com.edev.trade.order.entity.Discount;
 import com.edev.trade.order.entity.Order;
 import com.edev.trade.order.service.DiscountService;
 import com.edev.trade.order.service.impl.discount.DiscountStrategy;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 public class DiscountServiceImpl implements DiscountService {
+    @Autowired
+    private ApplicationContext applicationContext;
     private final BasicDao dao;
-    private final List<DiscountStrategy> strategies;
+    private Map<String,DiscountStrategy> strategies;
 
-    public DiscountServiceImpl(BasicDao dao, List<DiscountStrategy> strategies) {
+    public DiscountServiceImpl(BasicDao dao) {
         this.dao = dao;
-        this.strategies = strategies;
+    }
+
+    private Map<String,DiscountStrategy> getStrategies() {
+        if (strategies == null) {
+            strategies = applicationContext.getBeansOfType(DiscountStrategy.class);
+        }
+        return strategies;
     }
 
     @Override
@@ -49,6 +58,6 @@ public class DiscountServiceImpl implements DiscountService {
 
     @Override
     public void doDiscount(Order order) {
-        strategies.forEach(strategy -> strategy.doDiscount(order));
+        getStrategies().forEach((key,strategy) -> strategy.doDiscount(order));
     }
 }

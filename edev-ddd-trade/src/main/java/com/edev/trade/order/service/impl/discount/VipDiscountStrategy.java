@@ -21,6 +21,7 @@ public class VipDiscountStrategy implements DiscountStrategy {
     @Override
     public void doDiscount(Order order) {
         Vip vip = vipService.loadByCustomer(order.getCustomerId());
+        if(vip==null) return;
         VipDiscount template = new VipDiscount();
         template.setVipType(vip.getVipType());
         Discount discount = discountService.load(template);

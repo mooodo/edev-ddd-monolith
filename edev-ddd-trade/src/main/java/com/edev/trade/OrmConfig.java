@@ -11,7 +11,6 @@ import com.edev.trade.order.service.DiscountService;
 import com.edev.trade.order.service.OrderService;
 import com.edev.trade.order.service.impl.DiscountServiceImpl;
 import com.edev.trade.order.service.impl.OrderServiceImpl;
-import com.edev.trade.order.service.impl.discount.DiscountStrategy;
 import com.edev.trade.product.service.ProductService;
 import com.edev.trade.product.service.SupplierService;
 import com.edev.trade.product.service.impl.ProductServiceImpl;
@@ -20,9 +19,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Configuration
 public class OrmConfig {
@@ -66,15 +62,8 @@ public class OrmConfig {
     public JournalAccountService journalAccount() {
         return new JournalAccountServiceImpl(basicDao);
     }
-    @Autowired @Qualifier("vipDiscountStrategy")
-    private DiscountStrategy vipDiscountStrategy;
-    @Autowired @Qualifier("productDiscountStrategy")
-    private DiscountStrategy productDiscountStrategy;
     @Bean
     public DiscountService discount() {
-        List<DiscountStrategy> strategies = new ArrayList<>();
-        //strategies.add(vipDiscountStrategy);
-        //strategies.add(productDiscountStrategy);
-        return new DiscountServiceImpl(basicDao, strategies);
+        return new DiscountServiceImpl(basicDao);
     }
 }
