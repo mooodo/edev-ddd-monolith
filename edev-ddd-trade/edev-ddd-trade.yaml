@@ -46,3 +46,23 @@ spec:
     nodePort: 31800
   selector:
     app: edev-ddd-trade
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ingress-edev-trade
+  namespace: default
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+spec:
+  rules:
+    - host: trade
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: edev-ddd-trade
+                port:
+                  number: 8800
