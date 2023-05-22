@@ -4,8 +4,8 @@ import com.edev.support.utils.DateUtils;
 import org.springframework.messaging.support.MessageBuilder;
 
 public class DomainEventPublisher {
-    private DomainEventOutput domainEventOutput;
-    private String eventId;
+    private final DomainEventOutput domainEventOutput;
+    private final String eventId;
     public DomainEventPublisher(String eventId, DomainEventOutput output) {
         this.eventId = eventId;
         this.domainEventOutput = output;

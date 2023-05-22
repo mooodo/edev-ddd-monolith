@@ -31,7 +31,7 @@ public class NameUtils {
         StringBuilder result = new StringBuilder();
         char[] chars = name.toCharArray();
         for(char c : chars)
-            if(c>='A'&&c<='Z') result.append("_"+c);
+            if(c>='A'&&c<='Z') result.append("_").append(c);
             else result.append(c);
         return result.toString().toLowerCase();
     }
