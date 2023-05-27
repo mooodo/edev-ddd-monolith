@@ -35,7 +35,7 @@ public class DaoExecutorTest {
     @Test
     public void testSaveAndDelete() {
         Long id = 1L;
-        User user = new User(id,"John","123");
+        User user = User.build().setValues(id,"John","123");
         DaoEntity daoEntity = new DaoEntity();
         daoEntity.setTableName("t_user");
         daoEntity.addColMap(buildColMap("id", id));
@@ -78,8 +78,8 @@ public class DaoExecutorTest {
     }
     @Test
     public void testSaveAndDeleteForList() {
-        JournalAccount journalAccount0 = new JournalAccount(null,5000D,"test");
-        JournalAccount journalAccount1 = new JournalAccount(null,3000D,"test");
+        JournalAccount journalAccount0 = JournalAccount.build().setValues(null,5000D,"test");
+        JournalAccount journalAccount1 = JournalAccount.build().setValues(null,3000D,"test");
         DaoEntity daoEntity = new DaoEntity();
         daoEntity.setTableName("t_journal_account");
         daoEntity.addColMap(buildColMap("amount",5000D));

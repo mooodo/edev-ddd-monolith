@@ -25,7 +25,7 @@ public class BasicDaoTest {
     @Test
     public void testSaveAndDelete() {
         Long id = 1L;
-        Order order = new Order(id,10001L,1000100L,5000D);
+        Order order = Order.build().setValues(id,10001L,1000100L,5000D);
         dao.delete(id, Order.class);
         dao.insert(order);
         assertThat(dao.load(id, Order.class), equalTo(order));
@@ -42,7 +42,7 @@ public class BasicDaoTest {
     @Test
     public void testInsertOrUpdate() {
         Long id = 1L;
-        Order order = new Order(id,10001L,1000100L,5000D);
+        Order order = Order.build().setValues(id,10001L,1000100L,5000D);
         dao.delete(order);
         dao.insertOrUpdate(order);
         assertThat(dao.load(id, Order.class), equalTo(order));
@@ -62,9 +62,9 @@ public class BasicDaoTest {
     public void testSaveAndDeleteForList() {
         Date orderTime = DateUtils.getDate("2020-01-01","yyyy-MM-dd");
         Long id0 = 1L;
-        Order order0 = new Order(id0,10001L,1000100L,5000D, orderTime,"CREATE");
+        Order order0 = Order.build().setValues(id0,10001L,1000100L,5000D, orderTime,"CREATE");
         Long id1 = 2L;
-        Order order1 = new Order(id1,10002L,1000200L,6000D, orderTime,"CREATE");
+        Order order1 = Order.build().setValues(id1,10002L,1000200L,6000D, orderTime,"CREATE");
         List<Long> ids = new ArrayList<>();
         ids.add(id0);
         ids.add(id1);

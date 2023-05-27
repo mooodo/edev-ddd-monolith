@@ -1,9 +1,13 @@
 package com.edev.trade.order.entity;
 
 import com.edev.support.entity.Entity;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.util.Date;
 
+@EqualsAndHashCode(callSuper = true)
+@Data
 public class Discount extends Entity<Long> {
     private Long id;
     private String name;
@@ -12,65 +16,17 @@ public class Discount extends Entity<Long> {
     private Double discount;
     private String discountType;
 
-    public Discount() {
+    public static Discount build() {
+        return new Discount();
     }
 
-    public Discount(Long id, String name, Date beginTime, Date endTime, Double discount, String discountType) {
+    public Discount setValues(Long id, String name, Date beginTime, Date endTime, Double discount, String discountType) {
         this.id = id;
         this.name = name;
         this.beginTime = beginTime;
         this.endTime = endTime;
         this.discount = discount;
         this.discountType = discountType;
-    }
-
-    @Override
-    public Long getId() {
-        return id;
-    }
-
-    @Override
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public Date getBeginTime() {
-        return beginTime;
-    }
-
-    public void setBeginTime(Date beginTime) {
-        this.beginTime = beginTime;
-    }
-
-    public Date getEndTime() {
-        return endTime;
-    }
-
-    public void setEndTime(Date endTime) {
-        this.endTime = endTime;
-    }
-
-    public Double getDiscount() {
-        return discount;
-    }
-
-    public void setDiscount(Double discount) {
-        this.discount = discount;
-    }
-
-    public String getDiscountType() {
-        return discountType;
-    }
-
-    public void setDiscountType(String discountType) {
-        this.discountType = discountType;
+        return this;
     }
 }

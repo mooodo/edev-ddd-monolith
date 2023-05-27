@@ -1,26 +1,26 @@
 package com.edev.trade.customer.entity;
 
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+
 import java.util.Date;
 
+@Data
+@EqualsAndHashCode(callSuper = true)
 public class GoldenVip extends Vip{
     private Double cashback;
-    public GoldenVip() { super(); }
 
-    public GoldenVip(Long id, Boolean available, Long coin, Double cashback) {
-        super(id, available, coin, "golden");
-        this.cashback = cashback;
+    public static GoldenVip build() {
+        return new GoldenVip();
     }
 
-    public GoldenVip(Long id, Date createTime, Date updateTime, Boolean available, Long coin, Double cashback) {
-        super(id, createTime, updateTime, available, coin, "golden");
-        this.cashback = cashback;
+    public GoldenVip setValues(Long id, Boolean available, Long coin, Double cashback) {
+        return setValues(id, null, null, available, coin, cashback);
     }
 
-    public Double getCashback() {
-        return cashback;
-    }
-
-    public void setCashback(Double cashback) {
+    public GoldenVip setValues(Long id, Date createTime, Date updateTime, Boolean available, Long coin, Double cashback) {
+        super.setValues(id, createTime, updateTime, available, coin, "golden");
         this.cashback = cashback;
+        return this;
     }
 }

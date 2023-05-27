@@ -23,7 +23,7 @@ public class DaoEntityForSubClassUtilsTest {
     @Test
     public void testBuildWithEntityAndItsSubClass() {
         factory.initFactory("classpath:entity/customer.xml");
-        Vip vip = new GoldenVip(1L,true,600L,100D);
+        Vip vip = GoldenVip.build().setValues(1L,true,600L,100D);
         DaoEntity daoEntity = DaoEntityForSubClassUtils.buildWithEntityAndItsSubClass(vip);
         assertThat(daoEntity.getTableName(), equalTo("t_vip"));
         assertThat(daoEntity.getColMap(), hasItems(

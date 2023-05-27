@@ -20,7 +20,8 @@ public class DomainObjectFactory extends XmlBuildFactoryTemplate {
         if(map.isEmpty()) initFactory(this.paths);
     }
     public DomainObjectFactory(String paths) {
-        if(map.isEmpty()) initFactory(paths);
+        this.paths = paths;
+        initFactory(this.paths);
     }
     @Override
     protected void loadBean(Element element) {

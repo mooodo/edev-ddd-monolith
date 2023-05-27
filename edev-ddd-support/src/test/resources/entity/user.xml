@@ -25,7 +25,7 @@
     <do class="com.edev.trade.authority.entity.Authority" tableName="t_authority">
         <property name="id" column="id" isPrimaryKey="true"/>
         <property name="name" column="name"/>
-        <property name="available" column="available"/>
+        <property name="authenticated" column="authenticated"/>
         <!---->
         <join name="users" joinKey="authorityId" joinType="manyToMany" joinClassKey="userId"
               joinClass="com.edev.trade.authority.entity.UserGrantedAuthority"

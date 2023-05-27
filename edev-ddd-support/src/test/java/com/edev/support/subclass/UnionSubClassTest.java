@@ -35,24 +35,28 @@ public class UnionSubClassTest {
     @Test
     public void testSaveAndDeleteForParent() {
         Long id = 1L;
-        Discount discount = new Discount(id,"The Golden Vip Discount",null,null,0.75D,"vipDiscount");
+        Discount discount = Discount.build()
+                .setValues(id,"The Golden Vip Discount",null,null,0.75D,"vipDiscount");
         dao.delete(id, Discount.class);
         dao.insert(discount);
         assertThat(dao.load(id, Discount.class), equalTo(
-                new VipDiscount(id,"The Golden Vip Discount",null,null,0.75D,null)
+                VipDiscount.build()
+                        .setValues(id,"The Golden Vip Discount",null,null,0.75D,null)
         ));
 
         discount.setDiscount(0.8D);
         dao.update(discount);
         assertThat(dao.load(id, Discount.class), equalTo(
-                new VipDiscount(id,"The Golden Vip Discount",null,null,0.8D,null)
+                VipDiscount.build()
+                        .setValues(id,"The Golden Vip Discount",null,null,0.8D,null)
         ));
 
         discount.setName("The Product Discount");
         discount.setDiscountType("productDiscount");
         dao.update(discount);
         assertThat(dao.load(id, Discount.class), equalTo(
-                new ProductDiscount(id,"The Product Discount",null,null,0.8D,null)
+                ProductDiscount.build()
+                        .setValues(id,"The Product Discount",null,null,0.8D,(Long) null)
         ));
 
         Discount template = new Discount();
@@ -64,23 +68,28 @@ public class UnionSubClassTest {
     @Test
     public void testSaveAndDeleteForChild() {
         Long id = 1L;
-        Discount discount = new VipDiscount(id,"The Golden Vip Discount",null,null,0.75D,"golden");
+        Discount discount = VipDiscount.build()
+                .setValues(id,"The Golden Vip Discount",null,null,0.75D,"golden");
         dao.delete(id, Discount.class);
         dao.insert(discount);
         assertThat(dao.load(id, VipDiscount.class), equalTo(
-                new VipDiscount(id,"The Golden Vip Discount",null,null,0.75D,"golden")
+                VipDiscount.build()
+                        .setValues(id,"The Golden Vip Discount",null,null,0.75D,"golden")
         ));
 
         discount.setDiscount(0.8D);
         dao.update(discount);
         assertThat(dao.load(id, VipDiscount.class), equalTo(
-                new VipDiscount(id,"The Golden Vip Discount",null,null,0.8D,"golden")
+                VipDiscount.build()
+                        .setValues(id,"The Golden Vip Discount",null,null,0.8D,"golden")
         ));
 
-        discount = new ProductDiscount(id,"The Apple iPhone Discount",null,null,0.9D,30001L);
+        discount = ProductDiscount.build()
+                .setValues(id,"The Apple iPhone Discount",null,null,0.9D,30001L);
         dao.update(discount);
         assertThat(dao.load(id, Discount.class), equalTo(
-                new ProductDiscount(id,"The Apple iPhone Discount",null,null,0.9D,30001L)
+                ProductDiscount.build()
+                        .setValues(id,"The Apple iPhone Discount",null,null,0.9D,30001L)
         ));
 
         dao.delete(id, ProductDiscount.class);
@@ -89,34 +98,43 @@ public class UnionSubClassTest {
     @Test
     public void testSaveAndDeleteForListParent() {
         Long id0 = 1L;
-        Discount discount0 = new Discount(id0,"The Golden Vip Discount",null,null,0.75D,"vipDiscount");
+        Discount discount0 = Discount.build()
+                .setValues(id0,"The Golden Vip Discount",null,null,0.75D,"vipDiscount");
         Long id1 = 2L;
-        Discount discount1 = new Discount(id1,"The Silver Vip Discount",null,null,0.9D,"vipDiscount");
+        Discount discount1 = Discount.build()
+                .setValues(id1,"The Silver Vip Discount",null,null,0.9D,"vipDiscount");
         Long id2 = 3L;
-        Discount discount2 = new Discount(id2,"The Product Discount",null,null,0.75D,"productDiscount");
+        Discount discount2 = Discount.build()
+                .setValues(id2,"The Product Discount",null,null,0.75D,"productDiscount");
         List<Long> ids = Arrays.asList(id0, id1, id2, 4L);
         List<Discount> discounts = Arrays.asList(discount0, discount1, discount2);
 
         dao.deleteForList(ids, Discount.class);
         dao.insertOrUpdateForList(discounts);
         assertThat(dao.loadForList(ids, Discount.class), hasItems(
-                new VipDiscount(id0,"The Golden Vip Discount",null,null,0.75D,null),
-                new VipDiscount(id1,"The Silver Vip Discount",null,null,0.9D,null),
-                new ProductDiscount(id2,"The Product Discount",null,null,0.75D,null)
+                VipDiscount.build()
+                        .setValues(id0,"The Golden Vip Discount",null,null,0.75D,null),
+                VipDiscount.build()
+                        .setValues(id1,"The Silver Vip Discount",null,null,0.9D,null),
+                ProductDiscount.build()
+                        .setValues(id2,"The Product Discount",null,null,0.75D,(Long) null)
         ));
 
         discount0.setDiscount(0.8D);
         discount1.setName("The Apple iPad Discount");
         discount1.setDiscountType("productDiscount");
         Long id3 = 4L;
-        Discount discount3 = new Discount(id3,"The Smart Phone Discount",null,null,0.75D,"productDiscount");
+        Discount discount3 = Discount.build().setValues(id3,"The Smart Phone Discount",null,null,0.75D,"productDiscount");
         ids = Arrays.asList(id0, id1, id3);
         discounts = Arrays.asList(discount0, discount1, discount3);
         dao.insertOrUpdateForList(discounts);
         assertThat(dao.loadForList(ids, Discount.class), hasItems(
-                new VipDiscount(id0,"The Golden Vip Discount",null,null,0.8D,null),
-                new ProductDiscount(id1,"The Apple iPad Discount",null,null,0.9D,null),
-                new ProductDiscount(id3,"The Smart Phone Discount",null,null,0.75D,null)
+                VipDiscount.build()
+                        .setValues(id0,"The Golden Vip Discount",null,null,0.8D,null),
+                ProductDiscount.build()
+                        .setValues(id1,"The Apple iPad Discount",null,null,0.9D,(Long) null),
+                ProductDiscount.build()
+                        .setValues(id3,"The Smart Phone Discount",null,null,0.75D,(Long) null)
         ));
 
         ids = Arrays.asList(id0, id1, id2, id3);
@@ -126,35 +144,46 @@ public class UnionSubClassTest {
     @Test
     public void testSaveAndDeleteForListChild() {
         Long id0 = 1L;
-        Discount discount0 = new VipDiscount(id0,"The Golden Vip Discount",null,null,0.75D,"golden");
+        Discount discount0 = VipDiscount.build()
+                .setValues(id0,"The Golden Vip Discount",null,null,0.75D,"golden");
         Long id1 = 2L;
-        Discount discount1 = new VipDiscount(id1,"The Silver Vip Discount",null,null,0.9D,"silver");
+        Discount discount1 = VipDiscount.build()
+                .setValues(id1,"The Silver Vip Discount",null,null,0.9D,"silver");
         Long id2 = 3L;
-        Discount discount2 = new ProductDiscount(id2,"The Kindle Discount",null,null,0.75D,30004L);
+        Discount discount2 = ProductDiscount.build()
+                .setValues(id2,"The Kindle Discount",null,null,0.75D,30004L);
         List<Long> ids = Arrays.asList(id0, id1, id2, 4L);
         List<Discount> discounts = Arrays.asList(discount0, discount1, discount2);
 
         dao.deleteForList(ids, Discount.class);
         dao.insertOrUpdateForList(discounts);
         assertThat(dao.loadForList(ids, Discount.class), hasItems(
-                new VipDiscount(id0,"The Golden Vip Discount",null,null,0.75D,"golden"),
-                new VipDiscount(id1,"The Silver Vip Discount",null,null,0.9D,"silver"),
-                new ProductDiscount(id2,"The Kindle Discount",null,null,0.75D,30004L)
+                VipDiscount.build()
+                        .setValues(id0,"The Golden Vip Discount",null,null,0.75D,"golden"),
+                VipDiscount.build()
+                        .setValues(id1,"The Silver Vip Discount",null,null,0.9D,"silver"),
+                ProductDiscount.build()
+                        .setValues(id2,"The Kindle Discount",null,null,0.75D,30004L)
         ));
 
         discount0.setDiscount(0.8D);
         discount1.setName("The Apple iPad Discount");
         discount1.setDiscountType("productDiscount");
-        discount1 = new ProductDiscount(id1,"The Apple iPad Discount",null,null,0.9D,30002L);
+        discount1 = ProductDiscount.build()
+                .setValues(id1,"The Apple iPad Discount",null,null,0.9D,30002L);
         Long id3 = 4L;
-        Discount discount3 = new ProductDiscount(id3,"The Smart Phone Discount",null,null,0.75D,30007L);
+        Discount discount3 = ProductDiscount.build()
+                .setValues(id3,"The Smart Phone Discount",null,null,0.75D,30007L);
         ids = Arrays.asList(id0, id1, id3);
         discounts = Arrays.asList(discount0, discount1, discount3);
         dao.insertOrUpdateForList(discounts);
         assertThat(dao.loadForList(ids, Discount.class), hasItems(
-                new VipDiscount(id0,"The Golden Vip Discount",null,null,0.8D,"golden"),
-                new ProductDiscount(id1,"The Apple iPad Discount",null,null,0.9D,30002L),
-                new ProductDiscount(id3,"The Smart Phone Discount",null,null,0.75D,30007L)
+                VipDiscount.build()
+                        .setValues(id0,"The Golden Vip Discount",null,null,0.8D,"golden"),
+                ProductDiscount.build()
+                        .setValues(id1,"The Apple iPad Discount",null,null,0.9D,30002L),
+                ProductDiscount.build()
+                        .setValues(id3,"The Smart Phone Discount",null,null,0.75D,30007L)
         ));
 
         ids = Arrays.asList(id0, id1, id2, id3);

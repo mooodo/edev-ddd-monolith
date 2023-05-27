@@ -4,6 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.util.Arrays;
+import java.util.Collections;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.hasItems;
@@ -14,7 +15,7 @@ public class DomainObjectFactoryTest {
     private DomainObjectFactory factory;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         factory = new DomainObjectFactory();
     }
 
@@ -51,31 +52,6 @@ public class DomainObjectFactoryTest {
 
     /**
      * 业务需求：
-     * 1.定义领域对象所有与其它领域对象的关联关系，本地关联用join标签，远程关联用ref标签
-     * 2.远程关联时，被关联的对象需要通过微服务进行远程调用，才能获取其数据
-     * 3.在ref标签中，refKey代表关联字段，refType代表关联类型，bean代表进行远程调用的feign接口
-     * 4.method代表查询单条记录时调用的方法，如查询一个产品时补填它的供应商调用的方法
-     * 5.listMethod代表查询多条记录批量补填时调用的方法，如查询多个产品时一次性补填它们的供应商调用的方法
-     * 6.不必为每个ref关联对象单独写领域对象
-     */
-//    @Test
-//    public void testLoadWithRef() {
-//        factory.initFactory("classpath:entity/product.xml");
-//        assertTrue(DomainObjectFactory.isExists("com.edev.trade.product.entity.Product"));
-//        DomainObject dObj = DomainObjectFactory.getDomainObject("com.edev.trade.product.entity.Product");
-//        assertThat(dObj.getClazz(), equalTo("com.edev.trade.product.entity.Product"));
-//        assertThat(dObj.getTable(), equalTo("t_product"));
-//        assertThat(dObj.getProperties(), hasItems(new Property("id","id",true,false),
-//                new Property("name","name",false,false)
-//        ));
-//        assertThat(dObj.getRefs(), hasItems(
-//                new Ref("supplier","supplierId","manyToOne",
-//                        "com.edev.product.service.SupplierService","loadSupplier","loadSuppliers")
-//        ));
-//    }
-
-    /**
-     * 业务需求：
      * 1.当领域对象存在继承关系时，将继承关系的父子关系全部存储在一张表中，用Simple方案
      * 2.在定义父类的领域对象时，subClassType=simple
      * 3.在父类领域对象中，有一个标识字段来标识每个子类，该字段isDiscriminator=true
@@ -93,7 +69,7 @@ public class DomainObjectFactoryTest {
                 new Property("vipType", "vip_type", false, true)
         ));
         SubClass golden = new SubClass("com.edev.trade.customer.entity.GoldenVip", "golden");
-        golden.setProperties(Arrays.asList(new Property("cashback","cashback",false,false)));
+        golden.setProperties(Collections.singletonList(new Property("cashback", "cashback", false, false)));
         SubClass silver = new SubClass("com.edev.trade.customer.entity.SilverVip", "silver");
         assertThat(dObj.getSubClasses(), hasItems(
                 golden,silver

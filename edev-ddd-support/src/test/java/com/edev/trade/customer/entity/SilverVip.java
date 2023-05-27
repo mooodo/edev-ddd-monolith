@@ -1,15 +1,22 @@
 package com.edev.trade.customer.entity;
 
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+
 import java.util.Date;
 
+@EqualsAndHashCode(callSuper = true)
+@Data
 public class SilverVip extends Vip {
-    public SilverVip() {}
-
-    public SilverVip(Long id, Boolean available, Long coin) {
-        super(id, available, coin, "silver");
+    public static SilverVip build() {
+        return new SilverVip();
     }
 
-    public SilverVip(Long id, Date createTime, Date updateTime, Boolean available, Long coin) {
-        super(id, createTime, updateTime, available, coin, "silver");
+    public SilverVip setValues(Long id, Boolean available, Long coin) {
+        return (SilverVip) super.setValues(id, available, coin, "silver");
+    }
+
+    public SilverVip setValues(Long id, Date createTime, Date updateTime, Boolean available, Long coin) {
+        return (SilverVip) super.setValues(id, createTime, updateTime, available, coin, "silver");
     }
 }

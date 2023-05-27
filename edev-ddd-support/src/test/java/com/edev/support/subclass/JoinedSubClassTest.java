@@ -35,18 +35,22 @@ public class JoinedSubClassTest {
     @Test
     public void testSaveAndDeleteForParent() {
         Long id = 1L;
-        Supplier supplier = new Supplier(id, "IBM", "distributor");
+        Supplier supplier = Supplier.build()
+                .setValues(id, "IBM", "distributor");
         dao.delete(id, Supplier.class);
         dao.insert(supplier);
-        assertThat(dao.load(id, Supplier.class), equalTo(new Distributor(id,"IBM",null,null,null)));
+        assertThat(dao.load(id, Supplier.class), equalTo(Distributor.build()
+                .setValues(id,"IBM",null,null,null)));
 
         supplier.setName("Microsoft");
         dao.update(supplier);
-        assertThat(dao.load(id, Supplier.class), equalTo(new Distributor(id,"Microsoft",null,null,null)));
+        assertThat(dao.load(id, Supplier.class), equalTo(Distributor.build()
+                .setValues(id,"Microsoft",null,null,null)));
 
         supplier.setSupplierType("vendor");
         dao.update(supplier);
-        assertThat(dao.load(id, Supplier.class), equalTo(new Vendor(id,"Microsoft",null,null)));
+        assertThat(dao.load(id, Supplier.class), equalTo(Vendor.build()
+                .setValues(id,"Microsoft",null,null)));
 
         dao.delete(id, Supplier.class);
         assertNull(dao.load(id, Supplier.class));
@@ -54,19 +58,23 @@ public class JoinedSubClassTest {
     @Test
     public void testSaveAndDeleteForChild() {
         Long id = 1L;
-        Distributor distributor = new Distributor(id, "IBM", "International Business Machines Corporation", "USA", "IT Technology");
+        Distributor distributor = Distributor.build()
+                .setValues(id, "IBM", "International Business Machines Corporation", "USA", "IT Technology");
         dao.delete(id, Supplier.class);
         dao.insert(distributor);
-        assertThat(dao.load(id, Supplier.class), equalTo(new Distributor(id,"IBM","International Business Machines Corporation", "USA", "IT Technology")));
+        assertThat(dao.load(id, Supplier.class), equalTo(Distributor.build()
+                .setValues(id,"IBM","International Business Machines Corporation", "USA", "IT Technology")));
 
         distributor.setName("Microsoft");
         distributor.setIntroduce("The Microsoft Technology Corporation");
         dao.update(distributor);
-        assertThat(dao.load(id, Distributor.class), equalTo(new Distributor(id,"Microsoft","The Microsoft Technology Corporation", "USA", "IT Technology")));
+        assertThat(dao.load(id, Distributor.class), equalTo(Distributor.build()
+                .setValues(id,"Microsoft","The Microsoft Technology Corporation", "USA", "IT Technology")));
 
-        Vendor vendor = new Vendor(id,"IBM Special Store(Beijing)",20001L,"Beijing");
+        Vendor vendor = Vendor.build().setValues(id,"IBM Special Store(Beijing)",20001L,"Beijing");
         dao.update(vendor);
-        assertThat(dao.load(id, Vendor.class), equalTo(new Vendor(id,"IBM Special Store(Beijing)",20001L,"Beijing")));
+        assertThat(dao.load(id, Vendor.class), equalTo(Vendor.build()
+                .setValues(id,"IBM Special Store(Beijing)",20001L,"Beijing")));
 
         dao.delete(id, Vendor.class);
         assertNull(dao.load(id, Vendor.class));
@@ -74,11 +82,14 @@ public class JoinedSubClassTest {
     @Test
     public void testSaveAndDeleteForListParent() {
         Long id0 = 1L;
-        Supplier supplier0 = new Supplier(id0, "IBM", "distributor");
+        Supplier supplier0 = Supplier.build()
+                .setValues(id0, "IBM", "distributor");
         Long id1 = 2L;
-        Supplier supplier1 = new Supplier(id1, "Microsoft", "distributor");
+        Supplier supplier1 = Supplier.build()
+                .setValues(id1, "Microsoft", "distributor");
         Long id2 = 3L;
-        Supplier supplier2 = new Supplier(id2, "IBM Special Store(Beijing)", "vendor");
+        Supplier supplier2 = Supplier.build()
+                .setValues(id2, "IBM Special Store(Beijing)", "vendor");
 
         List<Long> ids = new ArrayList<>();
         ids.add(id0);
@@ -93,15 +104,16 @@ public class JoinedSubClassTest {
         dao.deleteForList(ids, Supplier.class);
         dao.insertOrUpdateForList(suppliers);
         assertThat(dao.loadForList(ids, Supplier.class), hasItems(
-                new Distributor(id0,"IBM",null,null,null),
-                new Distributor(id1,"Microsoft",null,null,null),
-                new Vendor(id2,"IBM Special Store(Beijing)",null,null)
+                Distributor.build().setValues(id0,"IBM",null,null,null),
+                Distributor.build().setValues(id1,"Microsoft",null,null,null),
+                Vendor.build().setValues(id2,"IBM Special Store(Beijing)",null,null)
         ));
 
         supplier0.setName("IBM China");
         supplier1.setSupplierType("vendor");
         Long id3 = 4L;
-        Supplier supplier3 = new Supplier(id3, "Microsoft Special Store(Beijing)", "vendor");
+        Supplier supplier3 = Supplier.build()
+                .setValues(id3, "Microsoft Special Store(Beijing)", "vendor");
 
         ids = new ArrayList<>();
         ids.add(id0);
@@ -115,9 +127,9 @@ public class JoinedSubClassTest {
 
         dao.insertOrUpdateForList(suppliers);
         assertThat(dao.loadForList(ids, Supplier.class), hasItems(
-                new Distributor(id0,"IBM China",null,null,null),
-                new Vendor(id1,"Microsoft",null,null),
-                new Vendor(id3,"Microsoft Special Store(Beijing)",null,null)
+                Distributor.build().setValues(id0,"IBM China",null,null,null),
+                Vendor.build().setValues(id1,"Microsoft",null,null),
+                Vendor.build().setValues(id3,"Microsoft Special Store(Beijing)",null,null)
         ));
 
         ids.add(id2);
@@ -127,11 +139,14 @@ public class JoinedSubClassTest {
     @Test
     public void testSaveAndDeleteForListChild() {
         Long id0 = 1L;
-        Supplier supplier0 = new Distributor(id0, "IBM", "International Business Machines Corporation", "USA", "IT Technology");
+        Supplier supplier0 = Distributor.build()
+                .setValues(id0, "IBM", "International Business Machines Corporation", "USA", "IT Technology");
         Long id1 = 2L;
-        Supplier supplier1 = new Distributor(id1, "Microsoft", "The Microsoft Technology Corporation", "USA", "IT Technology");
+        Supplier supplier1 = Distributor.build()
+                .setValues(id1, "Microsoft", "The Microsoft Technology Corporation", "USA", "IT Technology");
         Long id2 = 3L;
-        Supplier supplier2 = new Vendor(id2,"IBM Special Store(Beijing)",id0,"The Beijing Park, Beijing");
+        Supplier supplier2 = Vendor.build()
+                .setValues(id2,"IBM Special Store(Beijing)",id0,"The Beijing Park, Beijing");
 
         List<Long> ids = new ArrayList<>();
         ids.add(id0);
@@ -150,9 +165,11 @@ public class JoinedSubClassTest {
         ));
 
         supplier0.setName("IBM China");
-        supplier1 = new Vendor(id1,"Microsoft Special Store(Beijing)",id1,"The Happy Street, Beijing");
+        supplier1 = Vendor.build()
+                .setValues(id1,"Microsoft Special Store(Beijing)",id1,"The Happy Street, Beijing");
         Long id3 = 4L;
-        Supplier supplier3 = new Vendor(id3,"Microsoft Special Store(Shanghai)",id1,"The Chinese Mall, Shanghai");
+        Supplier supplier3 = Vendor.build()
+                .setValues(id3,"Microsoft Special Store(Shanghai)",id1,"The Chinese Mall, Shanghai");
 
         ids = new ArrayList<>();
         ids.add(id0);

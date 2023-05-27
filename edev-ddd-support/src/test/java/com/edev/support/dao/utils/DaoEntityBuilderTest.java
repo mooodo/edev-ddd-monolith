@@ -21,7 +21,7 @@ public class DaoEntityBuilderTest {
     @Test
     public void testBuildDaoEntity() {
         factory.initFactory("classpath:entity/product.xml");
-        Product product = new Product(1L,"Book",50D,"unit",null,null);
+        Product product = Product.build().setValues(1L,"Book",50D,"unit",null,null);
         DaoEntity daoEntity = DaoEntityBuilder.build(product);
         assertThat(daoEntity.getTableName(), equalTo("t_product"));
         assertThat(daoEntity.getColMap(), hasItems(

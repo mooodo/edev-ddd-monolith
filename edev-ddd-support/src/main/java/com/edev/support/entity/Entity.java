@@ -3,6 +3,7 @@ package com.edev.support.entity;
 import com.edev.support.exception.OrmException;
 import com.edev.support.utils.BeanUtils;
 import com.edev.support.utils.NameUtils;
+import lombok.Data;
 
 import java.io.Serializable;
 import java.lang.reflect.*;
@@ -10,27 +11,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+@Data
 public abstract class Entity<T extends Serializable> implements Serializable, Cloneable {
     private T id;
-
-    public T getId() {
-        return id;
-    }
-
-    public void setId(T id) {
-        this.id = id;
-    }
-
     private int level = 0;
-
-    public int getLevel() {
-        return level;
-    }
-
-    public void setLevel(int level) {
-        this.level = level;
-    }
-
     public static final int MAX_LEVEL = 2;
 
     /**

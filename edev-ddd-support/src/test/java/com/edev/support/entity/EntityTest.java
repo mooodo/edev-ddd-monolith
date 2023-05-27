@@ -1,6 +1,8 @@
 package com.edev.support.entity;
 
 import com.edev.support.utils.DateUtils;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import org.junit.Test;
 
 import java.util.Date;
@@ -9,9 +11,10 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertThat;
 
 public class EntityTest {
-
     @Test
     public void testSimpleEntity() {
+        @EqualsAndHashCode(callSuper = true)
+        @Data
         class Customer extends Entity<Long> {
             private Long id;
             private String name;
@@ -23,27 +26,7 @@ public class EntityTest {
                 this.birthdate = birthdate;
                 setAvailable(available);
             }
-            @Override
-            public Long getId() {
-                return id;
-            }
-            @Override
-            public void setId(Long id) {
-                this.id = id;
-            }
-            public String getName() {
-                return name;
-            }
-            public void setName(String name) {
-                this.name = name;
-            }
-            public Date getBirthdate() {
-                return birthdate;
-            }
-            public void setBirthdate(Date birthdate) {
-                this.birthdate = birthdate;
-            }
-            public Boolean isAvailable() {
+            public Boolean getAvailable() {
                 return available.equals("true");
             }
             public void setAvailable(Boolean available) {
@@ -86,46 +69,25 @@ public class EntityTest {
 
     @Test
     public void testSubClass() {
+        @Data
+        @EqualsAndHashCode(callSuper = true)
         class Customer extends Entity<Long> {
             private Long id;
             private String name;
             private Date birthdate;
+            public Customer() {}
             public Customer(Long id, String name, Date birthdate) {
                 this.id = id;
                 this.name = name;
                 this.birthdate = birthdate;
             }
-            @Override
-            public Long getId() {
-                return id;
-            }
-            @Override
-            public void setId(Long id) {
-                this.id = id;
-            }
-            public String getName() {
-                return name;
-            }
-            public void setName(String name) {
-                this.name = name;
-            }
-            public Date getBirthdate() {
-                return birthdate;
-            }
-            public void setBirthdate(Date birthdate) {
-                this.birthdate = birthdate;
-            }
         }
+        @EqualsAndHashCode(callSuper = true)
+        @Data
         class Vip extends Customer {
             private Integer coin;
             public Vip(Long id, String name, Date birthdate, Integer coin) {
                 super(id, name, birthdate);
-                this.coin = coin;
-            }
-            public Integer getCoin() {
-                return coin;
-            }
-            public void setCoin(Integer coin) {
                 this.coin = coin;
             }
         }
@@ -165,25 +127,13 @@ public class EntityTest {
     }
     @Test
     public void testExclude() {
+        @Data
+        @EqualsAndHashCode(callSuper = true, exclude = {"birthdate"})
         class Customer extends Entity<Long> {
             private Long id;
             private Date birthdate;
             public Customer(Long id, Date birthdate) {
                 this.id = id;
-                this.birthdate = birthdate;
-            }
-            @Override
-            public Long getId() {
-                return id;
-            }
-            @Override
-            public void setId(Long id) {
-                this.id = id;
-            }
-            public Date getBirthdate() {
-                return birthdate;
-            }
-            public void setBirthdate(Date birthdate) {
                 this.birthdate = birthdate;
             }
 

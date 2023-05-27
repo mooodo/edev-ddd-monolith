@@ -2,9 +2,13 @@ package com.edev.trade.customer.entity;
 
 import com.edev.support.entity.Entity;
 import com.edev.support.utils.DateUtils;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.util.Date;
 
+@EqualsAndHashCode(callSuper = true, exclude = {"operateTime"})
+@Data
 public class JournalAccount extends Entity<Long> {
     private Long id;
     private Long accountId;
@@ -12,56 +16,21 @@ public class JournalAccount extends Entity<Long> {
     private String operation;
     private Date operateTime;
 
-    public JournalAccount() {}
-
-    public JournalAccount(Long accountId, Double amount, String operation) {
-        this(null, accountId, amount, operation, null);
+    public static JournalAccount build() {
+        return new JournalAccount();
     }
 
-    public JournalAccount(Long id, Long accountId, Double amount, String operation, Date operateTime) {
+    public JournalAccount setValues(Long accountId, Double amount, String operation) {
+        return setValues(null, accountId, amount, operation, null);
+    }
+
+    public JournalAccount setValues(Long id, Long accountId, Double amount, String operation, Date operateTime) {
         setId(id);
         setAccountId(accountId);
         setAmount(amount);
         setOperation(operation);
         setOperateTime(operateTime);
-    }
-
-    @Override
-    public Long getId() {
-        return id;
-    }
-
-    @Override
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Long getAccountId() {
-        return accountId;
-    }
-
-    public void setAccountId(Long accountId) {
-        this.accountId = accountId;
-    }
-
-    public Double getAmount() {
-        return amount;
-    }
-
-    public void setAmount(Double amount) {
-        this.amount = amount;
-    }
-
-    public String getOperation() {
-        return operation;
-    }
-
-    public void setOperation(String operation) {
-        this.operation = operation;
-    }
-
-    public Date getOperateTime() {
-        return operateTime;
+        return this;
     }
 
     public void setOperateTime(Date operateTime) {
