@@ -1,60 +1,28 @@
 package com.edev.trade.inventory.entity;
 
 import com.edev.support.entity.Entity;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.util.Date;
 import java.util.Objects;
 
+@Data
+@EqualsAndHashCode(callSuper = true)
 public class Inventory extends Entity<Long> {
     private Long id;
     private Long quantity;
     private Date updateTime;
     private Product product;
 
-    public Inventory() {}
+    public static Inventory build() {
+        return new Inventory();
+    }
 
-    public Inventory(Long id, Long quantity, Date updateTime) {
+    public Inventory setValues(Long id, Long quantity, Date updateTime) {
         this.id = id;
         this.quantity = quantity;
         this.updateTime = updateTime;
-    }
-
-    @Override
-    public Long getId() {
-        return id;
-    }
-
-    @Override
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Long getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(Long quantity) {
-        this.quantity = quantity;
-    }
-
-    public Date getUpdateTime() {
-        return updateTime;
-    }
-
-    public void setUpdateTime(Date updateTime) {
-        this.updateTime = updateTime;
-    }
-
-    public Product getProduct() {
-        return product;
-    }
-
-    public void setProduct(Product product) {
-        this.product = product;
-    }
-
-    @Override
-    protected String[] exclude() {
-        return new String[]{"updateTime"};
+        return this;
     }
 }

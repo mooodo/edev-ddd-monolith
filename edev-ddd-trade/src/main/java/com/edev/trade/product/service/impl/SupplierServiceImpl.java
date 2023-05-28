@@ -5,6 +5,9 @@ import com.edev.support.exception.ValidException;
 import com.edev.trade.product.entity.Supplier;
 import com.edev.trade.product.service.SupplierService;
 
+import java.util.Collection;
+import java.util.List;
+
 public class SupplierServiceImpl implements SupplierService {
     private final BasicDao dao;
 
@@ -42,5 +45,21 @@ public class SupplierServiceImpl implements SupplierService {
     @Override
     public Supplier loadById(Long id) {
         return dao.load(id, Supplier.class);
+    }
+
+    @Override
+    public void saveAll(List<Supplier> suppliers) {
+        suppliers.forEach(this::valid);
+        dao.insertOrUpdateForList(suppliers);
+    }
+
+    @Override
+    public void deleteAll(List<Long> ids) {
+        dao.deleteForList(ids, Supplier.class);
+    }
+
+    @Override
+    public Collection<Supplier> loadAll(List<Long> ids) {
+        return dao.loadForList(ids, Supplier.class);
     }
 }

@@ -88,7 +88,7 @@ public class VipServiceImpl implements VipService {
     @Override
     public Double discount(Long customerId) {
         Vip vip = loadByCustomer(customerId);
-        if (vip==null|| !vip.isAvailable()) return 1D;
+        if (vip==null|| !vip.getAvailable()) return 1D;
         return discount(vip);
     }
 }

@@ -29,7 +29,7 @@ public class AccountAggServiceImpl implements AccountAggService {
         accountService.modify(account);
 
         JournalAccount journalAccount =
-                new JournalAccount(account.getId(), amount, "topUp");
+                JournalAccount.build().setValues(account.getId(), amount, "topUp");
         journalAccountService.addJournalAccount(journalAccount);
         return balance;
     }
@@ -49,7 +49,7 @@ public class AccountAggServiceImpl implements AccountAggService {
         accountService.modify(account);
 
         JournalAccount journalAccount =
-                new JournalAccount(account.getId(), amount, "payoff");
+                JournalAccount.build().setValues(account.getId(), amount, "payoff");
         journalAccountService.addJournalAccount(journalAccount);
         return balance;
     }
@@ -67,7 +67,7 @@ public class AccountAggServiceImpl implements AccountAggService {
         accountService.modify(account);
 
         JournalAccount journalAccount =
-                new JournalAccount(account.getId(), amount, "refund");
+                JournalAccount.build().setValues(account.getId(), amount, "refund");
         journalAccountService.addJournalAccount(journalAccount);
         return balance;
     }

@@ -1,16 +1,9 @@
-/* 
- * Created by 2018年9月9日
- */
 package com.edev.trade.product.entity;
 
 import com.edev.support.entity.Entity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-/**
- * The supplier entity
- * @author fangang
- */
 @EqualsAndHashCode(callSuper = true)
 @Data
 public class Supplier extends Entity<Long> {

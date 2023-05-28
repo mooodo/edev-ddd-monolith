@@ -1,8 +1,6 @@
 package com.edev.trade.inventory.web;
 
-import com.alibaba.fastjson.JSONObject;
 import com.edev.support.utils.JsonFile;
-import com.edev.trade.inventory.entity.Inventory;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

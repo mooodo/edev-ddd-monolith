@@ -1,7 +1,11 @@
 package com.edev.trade;
 
 import com.edev.support.dao.BasicDao;
+import com.edev.trade.authority.service.AuthorityService;
+import com.edev.trade.authority.service.RoleService;
 import com.edev.trade.authority.service.UserService;
+import com.edev.trade.authority.service.impl.AuthorityServiceImpl;
+import com.edev.trade.authority.service.impl.RoleServiceImpl;
 import com.edev.trade.authority.service.impl.UserServiceImpl;
 import com.edev.trade.customer.service.*;
 import com.edev.trade.customer.service.impl.*;
@@ -49,6 +53,14 @@ public class OrmConfig {
     @Bean
     public UserService user() {
         return new UserServiceImpl(repository);
+    }
+    @Bean
+    public RoleService role() {
+        return new RoleServiceImpl(repository);
+    }
+    @Bean
+    public AuthorityService authority() {
+        return new AuthorityServiceImpl(repository);
     }
     @Bean
     public InventoryService inventory() {

@@ -29,8 +29,8 @@ public class DiscountServiceImpl implements DiscountService {
     }
 
     @Override
-    public void create(Discount discount) {
-        dao.insert(discount);
+    public Long create(Discount discount) {
+        return dao.insert(discount);
     }
 
     @Override
@@ -39,7 +39,12 @@ public class DiscountServiceImpl implements DiscountService {
     }
 
     @Override
-    public Discount load(Long discountId) {
+    public void delete(Discount template) {
+        dao.delete(template);
+    }
+
+    @Override
+    public Discount loadById(Long discountId) {
         return dao.load(discountId, Discount.class);
     }
 
@@ -47,12 +52,12 @@ public class DiscountServiceImpl implements DiscountService {
     public Discount load(Discount template) {
         Collection<Discount> collection = dao.loadAll(template);
         if(collection==null||collection.isEmpty())
-            return new Discount();
+            return null;
         return collection.iterator().next();
     }
 
     @Override
-    public void delete(Long discountId) {
+    public void deleteById(Long discountId) {
         dao.delete(discountId, Discount.class);
     }
 

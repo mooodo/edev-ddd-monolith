@@ -26,13 +26,13 @@
         <property name="id" column="id" isPrimaryKey="true"/>
         <property name="name" column="name"/>
         <property name="available" column="available"/>
-        <!--
+        <!---->
         <join name="users" joinKey="authorityId" joinType="manyToMany" joinClassKey="userId"
               joinClass="com.edev.trade.authority.entity.UserGrantedAuthority"
               class="com.edev.trade.authority.entity.User"/>
         <join name="roles" joinKey="authorityId" joinType="manyToMany" joinClassKey="roleId"
               joinClass="com.edev.trade.authority.entity.RoleGrantedAuthority"
-              class="com.edev.trade.authority.entity.Role"/>-->
+              class="com.edev.trade.authority.entity.Role"/>
     </do>
     <do class="com.edev.trade.authority.entity.UserGrantedAuthority" tableName="t_user_granted_authority">
         <property name="id" column="id" isPrimaryKey="true"/>
