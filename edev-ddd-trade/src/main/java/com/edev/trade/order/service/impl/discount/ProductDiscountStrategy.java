@@ -23,6 +23,7 @@ public class ProductDiscountStrategy implements DiscountStrategy {
             template.setProductId(orderItem.getProductId());
             Discount discount = discountService.load(template);
             if(discount==null||discount.getDiscount()==null) return;
+            if(orderItem.getAmount()==null) return;
             Double amount = orderItem.getAmount() * discount.getDiscount();
             orderItem.setAmount(amount);
         });

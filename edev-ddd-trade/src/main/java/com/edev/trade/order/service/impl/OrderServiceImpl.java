@@ -30,17 +30,15 @@ public class OrderServiceImpl implements OrderService {
     private void setAmount(Order order) {
         if(order==null||order.getOrderItems()==null) return;
         order.getOrderItems().forEach(orderItem -> {
-            Double amount = orderItem.getAmount();
-            if(amount==null) amount = orderItem.getPrice() * orderItem.getQuantity();
-            orderItem.setAmount(amount);
+            if(orderItem.getAmount()==null) {
+                Double amount = orderItem.getPrice() * orderItem.getQuantity();
+                orderItem.setAmount(amount);
+            }
         });
     }
 
     private void discount(Order order) {
-        if(order==null||order.getOrderItems()==null) return;
-        order.getOrderItems().forEach(orderItem -> {
-            discountService.doDiscount(order);
-        });
+        if(order!=null) discountService.doDiscount(order);
     }
 
     private void sumOfAmount(Order order) {

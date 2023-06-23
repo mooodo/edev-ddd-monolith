@@ -57,7 +57,7 @@ public class DiscountMvcTest {
         String json = JsonFile.read("json/discount/discount0.json");
         String excepted = JsonFile.read("json/discount/excepted0.json");
         mvc.perform(get("/orm/discount/delete")
-                .param("discountId", id).param("discountType", "productDiscount")
+                .param("id", id).param("discountType", "productDiscount")
         ).andExpect(status().isOk());
         mvc.perform(post("/orm/discount/create")
                 .content(json).contentType(MediaType.APPLICATION_JSON)
@@ -70,7 +70,7 @@ public class DiscountMvcTest {
                 .content(json).contentType(MediaType.APPLICATION_JSON)
         ).andExpect(status().isOk());
         mvc.perform(get("/orm/discount/load")
-                .param("discountId", id).param("discountType", "productDiscount")
+                .param("id", id).param("discountType", "productDiscount")
         ).andExpect(status().isOk()).andExpect(content().string(""));
     }
 }

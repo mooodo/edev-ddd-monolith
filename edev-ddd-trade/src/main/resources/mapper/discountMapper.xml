@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.edev.trade.query.dao.SupplierMapper">
+<mapper namespace="com.edev.trade.query.dao.DiscountMapper">
     <sql id="select0">
-        select s.*, introduce, address, `range`, null position, null distributor_id
-        from t_supplier s join t_distributor d on s.id=d.id where 1 = 1
+        select id, `name`, begin_time, end_time, discount, discount_type, product_id,
+        null vip_type from t_product_discount where 1 = 1
     </sql>
 
     <sql id="select1">
-        select s.*, null introduce, null address, null `range`, position, distributor_id
-        from t_supplier s join t_vendor d on s.id=d.id where 1 = 1
+        select id, `name`, begin_time, end_time, discount, discount_type,
+        null product_id, vip_type from t_vip_discount where 1 = 1
     </sql>
 
     <sql id="conditions">
         <if test="id != '' and id != null">
-            and s.id in (${id})
+            and id in (${id})
         </if>
     </sql>
 

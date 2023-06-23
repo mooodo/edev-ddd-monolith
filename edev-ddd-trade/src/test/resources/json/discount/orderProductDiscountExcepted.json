@@ -1,0 +1,66 @@
+{
+  "id": 3,
+  "customerId": 10001,
+  "addressId": 1000100,
+  "amount": 16836.64,
+  "modifyTime": null,
+  "flag": "CREATE",
+  "customer": {
+    "id": 10001,
+    "name": "李秋水",
+    "gender": "女",
+    "birthdate": "1979-10-01 00:00:00",
+    "identification": "510110197910012312",
+    "phoneNumber": "13388990123"
+  },
+  "address": {
+    "id": 1000100,
+    "customerId": 10001,
+    "country": "中国",
+    "province": "湖北",
+    "city": "武汉",
+    "zone": "洪山区",
+    "address": "珞瑜路726号",
+    "phoneNumber": "13300224466"
+  },
+  "orderItems": [
+    {
+      "id": 31,
+      "orderId": 3,
+      "productId": 30005,
+      "quantity": 1,
+      "price": 8288.0,
+      "amount": 6630.4,
+      "product": {
+        "id": 30005,
+        "name": "微软（Microsoft）新Surface Pro 二合一平板电脑笔记本 12.3英寸（i5 8G内存 256G存储）",
+        "price": 8288.0,
+        "unit": "台",
+        "supplierId": 20005,
+        "classify": "笔记本电脑",
+        "image": "/static/img/product5.jpg",
+        "originalPrice": 8888.0,
+        "tip": "优惠"
+      }
+    },
+    {
+      "id": 32,
+      "orderId": 3,
+      "productId": 30007,
+      "quantity": 2,
+      "price": 5799.0,
+      "amount": 10206.24,
+      "product": {
+        "id": 30007,
+        "name": "华为 HUAWEI Mate 30E Pro 5G麒麟990E SoC芯片 双4000万徕卡电影影像 8GB+256GB青山黛全网通手机",
+        "price": 5799.0,
+        "unit": "台",
+        "supplierId": 20003,
+        "classify": "手机",
+        "image": "/static/img/HUAWEI_Mate_30E Pro.jpg",
+        "originalPrice": 6000.0,
+        "tip": "优惠"
+      }
+    }
+  ]
+}

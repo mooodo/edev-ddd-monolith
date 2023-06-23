@@ -2,7 +2,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.edev</groupId>
     <artifactId>edev-ddd-trade</artifactId>
-    <version>1.1.0-${maven.build.timestamp}</version>
+    <version>1.1.1-${maven.build.timestamp}</version>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -28,7 +28,7 @@
         <dependency>
             <groupId>com.edev</groupId>
             <artifactId>edev-ddd-support</artifactId>
-            <version>1.1.0</version>
+            <version>1.1.1</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>

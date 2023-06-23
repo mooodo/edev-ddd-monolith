@@ -37,11 +37,11 @@ public class Vip extends Entity<Long> {
     }
 
     public Boolean getAvailable() {
-        return "1".equals(available);
+        return "Y".equals(available);
     }
 
     public void setAvailable(Boolean available) {
-        this.available = available ? "1" : "0";
+        this.available = available ? "Y" : "N";
     }
 
     public Double discount() {

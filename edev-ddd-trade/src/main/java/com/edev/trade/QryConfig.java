@@ -71,4 +71,59 @@ public class QryConfig {
         return new AutofillQueryServiceImpl(
                 supplierQryDao(), basicDaoWithCache);
     }
+    @Bean
+    public QueryDao distributorQryDao() {
+        return new QueryDaoMybastisImplForDdd(
+                "com.edev.trade.product.entity.Distributor",
+                "com.edev.trade.query.dao.DistributorMapper");
+    }
+    @Bean
+    public QueryService distributorQry() {
+        return new AutofillQueryServiceImpl(
+                distributorQryDao(), basicDaoWithCache);
+    }
+    @Bean
+    public QueryDao vendorQryDao() {
+        return new QueryDaoMybastisImplForDdd(
+                "com.edev.trade.product.entity.Vendor",
+                "com.edev.trade.query.dao.VendorMapper");
+    }
+    @Bean
+    public QueryService vendorQry() {
+        return new AutofillQueryServiceImpl(
+                vendorQryDao(), basicDaoWithCache);
+    }
+    @Bean
+    public QueryDao discountQryDao() {
+        return new QueryDaoMybastisImplForDdd(
+                "com.edev.trade.order.entity.Discount",
+                "com.edev.trade.query.dao.DiscountMapper");
+    }
+    @Bean
+    public QueryService discountQry() {
+        return new AutofillQueryServiceImpl(
+                discountQryDao(), basicDaoWithCache);
+    }
+    @Bean
+    public QueryDao productDiscountQryDao() {
+        return new QueryDaoMybastisImplForDdd(
+                "com.edev.trade.order.entity.ProductDiscount",
+                "com.edev.trade.query.dao.ProductDiscountMapper");
+    }
+    @Bean
+    public QueryService productDiscountQry() {
+        return new AutofillQueryServiceImpl(
+                productDiscountQryDao(), basicDaoWithCache);
+    }
+    @Bean
+    public QueryDao vipDiscountQryDao() {
+        return new QueryDaoMybastisImplForDdd(
+                "com.edev.trade.order.entity.VipDiscount",
+                "com.edev.trade.query.dao.VipDiscountMapper");
+    }
+    @Bean
+    public QueryService vipDiscountQry() {
+        return new AutofillQueryServiceImpl(
+                vipDiscountQryDao(), basicDaoWithCache);
+    }
 }

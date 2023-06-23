@@ -29,7 +29,8 @@ public class VipDiscountStrategy implements DiscountStrategy {
         List<OrderItem> orderItems = order.getOrderItems();
         if(orderItems==null||orderItems.isEmpty()) return;
         orderItems.forEach(orderItem -> {
-            Double amount = order.getAmount() * discount.getDiscount();
+            if(orderItem.getAmount()==null) return;
+            Double amount = orderItem.getAmount() * discount.getDiscount();
             orderItem.setAmount(amount);
         });
     }
