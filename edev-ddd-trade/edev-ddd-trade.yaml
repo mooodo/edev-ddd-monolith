@@ -30,6 +30,13 @@ spec:
       - name: edev-ddd-trade
         image: repository:5000/edev-ddd-trade:<VERSION>
         imagePullPolicy: Always
+        resources:
+          limits:
+            cpu: 500m
+            memory: 1000Mi
+          requests:
+            cpu: 100m
+            memory: 300Mi
 ---
 kind: Service
 apiVersion: v1
@@ -39,11 +46,9 @@ metadata:
   name: edev-ddd-trade
   namespace: default
 spec:
-  type: NodePort
   ports:
   - port: 8800
     targetPort: 8800
-    nodePort: 31800
   selector:
     app: edev-ddd-trade
 ---
