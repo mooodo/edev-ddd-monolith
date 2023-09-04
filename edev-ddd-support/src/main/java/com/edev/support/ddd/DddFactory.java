@@ -76,7 +76,7 @@ public class DddFactory {
             Class<?> clazz = (Class<?>)pt.getRawType();
             Type ata = pt.getActualTypeArguments()[0];
             return (clazz.equals(List.class) || clazz.equals(Set.class)) &&
-                    (isEntity((Class<?>) ata));
+                    ((ata instanceof Class)&&isEntity((Class<?>) ata));
         }
         return false;
     }
