@@ -4,10 +4,7 @@ import org.junit.Test;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Type;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.hasItems;
@@ -99,5 +96,29 @@ public class DowncastHelperTest {
         List<String> list = Arrays.asList("Jack","Mary","John");
         Object value = helper.downcast(type, list);
         assertThat((Set<String>)value, hasItems("Jack","Mary","John"));
+    }
+
+    @Test
+    public void testListOfMap() throws NoSuchFieldException {
+        class Test {
+            public List<Map<String, Integer>> listOfMap;
+        }
+        Test test = new Test();
+        Field field = test.getClass().getField("listOfMap");
+        Type type = field.getGenericType();
+        List<Map<String, Object>> list = new ArrayList<>();
+
+        Map<String, Object> map0 = new HashMap<>();
+        map0.put("id", 1);
+        map0.put("name", "Jack");
+        list.add(map0);
+
+        Map<String, Object> map1 = new HashMap<>();
+        map1.put("id", 1);
+        map1.put("name", "Mary");
+        list.add(map1);
+
+        Object value = helper.downcast(type, list);
+        assertThat((List<Map<String, Object>>)value, hasItems(map0, map1));
     }
 }

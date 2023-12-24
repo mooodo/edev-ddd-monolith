@@ -27,7 +27,7 @@ public class DddFactory {
     }
 
     public <E extends Entity<S>,S extends Serializable> Class<E> getClazz(String className) {
-        if(className==null||"".equals(className)) throw new DddException("The class name is null!");
+        if(className==null|| className.isEmpty()) throw new DddException("The class name is null!");
         return (Class<E>)BeanUtils.getClazz(className);
     }
 

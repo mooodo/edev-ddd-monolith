@@ -15,29 +15,20 @@ public class ManyToOneForJoin<E extends Entity<S>, S extends Serializable> exten
 
     @Override
     public void insertValue(@NotNull E entity) {
-        if(!join.isAggregation()) return;
-        String name = join.getName();
-        Entity<?> value = (Entity<?>) entity.getValue(name);
-        if(value==null) return;
-        dao.insert(value);
+        //no aggregation for many-to-one relation
+        return;
     }
 
     @Override
     public void updateValue(@NotNull E entity) {
-        if(!join.isAggregation()) return;
-        String name = join.getName();
-        Entity<?> value = (Entity<?>) entity.getValue(name);
-        if(value==null) deleteValue(entity);
-        dao.insertOrUpdate(value);
+        //no aggregation for many-to-one relation
+        return;
     }
 
     @Override
     public void deleteValue(@NotNull E entity) {
-        if(!join.isAggregation()) return;
-        String joinKey = join.getJoinKey();
-        S id = (S) entity.getValue(joinKey);
-        if(id==null) return;
-        dao.delete(id, getClazz());
+        //no aggregation for many-to-one relation
+        return;
     }
 
     @Override

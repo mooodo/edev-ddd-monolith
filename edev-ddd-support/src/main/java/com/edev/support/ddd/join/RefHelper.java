@@ -6,7 +6,7 @@ import com.edev.support.dsl.DomainObjectFactory;
 import com.edev.support.dsl.Ref;
 import com.edev.support.entity.Entity;
 import com.edev.support.utils.BeanUtils;
-import org.springframework.context.ApplicationContext;
+import com.edev.support.utils.SpringHelper;
 
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
@@ -14,8 +14,8 @@ import java.lang.reflect.Method;
 import java.util.*;
 
 public class RefHelper<E extends Entity<S>, S extends Serializable> {
-    private final ApplicationContext context;
-    public RefHelper(ApplicationContext context) { this.context = context; }
+    private final SpringHelper springHelper;
+    public RefHelper(SpringHelper springHelper) { this.springHelper = springHelper; }
     private void doWithRefs(@NotNull E entity, @NotNull Callback callback) {
         DomainObject dObj = DomainObjectFactory.getDomainObject(entity.getClass());
         dObj.getRefs().forEach(callback::apply);
@@ -32,7 +32,7 @@ public class RefHelper<E extends Entity<S>, S extends Serializable> {
     public void setRefs(E entity) {
         doWithRefs(entity, ref -> {
             String bean = ref.getBean();
-            Object service = BeanUtils.getService(bean, context);
+            Object service = springHelper.getService(bean);
             String methodName = ref.getMethod();
             Method method = BeanUtils.getMethod(service, methodName);
             S id;
@@ -64,7 +64,7 @@ public class RefHelper<E extends Entity<S>, S extends Serializable> {
     public void setRefForList(Collection<E> list) {
         doWithRefsForList(list, ref -> {
             String bean = ref.getBean();
-            Object service = BeanUtils.getService(bean, context);
+            Object service = springHelper.getService(bean);
             String methodName = ref.getListMethod();
             Method method = BeanUtils.getMethod(service, methodName);
             if("oneToOne".equals(ref.getRefType())) {

@@ -14,8 +14,6 @@ import java.util.Objects;
 @Data
 public abstract class Entity<T extends Serializable> implements Serializable, Cloneable {
     private T id;
-    private int level = 0;
-    public static final int MAX_LEVEL = 2;
 
     /**
      * get all fields, include the entity and its parents private, protected and public fields
@@ -214,7 +212,7 @@ public abstract class Entity<T extends Serializable> implements Serializable, Cl
      * 1) is instance of same class;
      * 2) each of properties contain same data,
      * instead of them is a same instance.
-     * All of it's children can use this method to compare each other,
+     * All subclasses can use this method to compare each other,
      * especially when test.
      */
     @Override
@@ -237,7 +235,7 @@ public abstract class Entity<T extends Serializable> implements Serializable, Cl
 
     private void dealWithFields(Fallback fallback) {
         Field[] fields = getFields(this.getClass());
-        if(fields==null||fields.length==0) return;
+        if(fields==null) return;
         for (Field field : fields) {
             String name = field.getName();
             if ("serialVersionUID".equals(name) || "this$0".equals(name)) continue;

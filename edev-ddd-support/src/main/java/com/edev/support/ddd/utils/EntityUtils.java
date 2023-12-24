@@ -69,7 +69,7 @@ public class EntityUtils {
      */
     public static boolean hasSubClass(DomainObject dObj) {
         String subClassType = dObj.getSubClassType();
-        return subClassType!=null&&!subClassType.equals("");
+        return subClassType!=null&&!subClassType.isEmpty();
     }
 
     /**

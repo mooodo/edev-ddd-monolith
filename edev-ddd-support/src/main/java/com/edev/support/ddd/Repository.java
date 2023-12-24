@@ -5,8 +5,8 @@ import com.edev.support.dao.impl.DecoratorDao;
 import com.edev.support.ddd.join.JoinHelper;
 import com.edev.support.ddd.join.RefHelper;
 import com.edev.support.entity.Entity;
+import com.edev.support.utils.SpringHelper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.validation.constraints.NotNull;
@@ -17,7 +17,7 @@ import java.util.Map;
 
 public class Repository extends DecoratorDao implements BasicDao {
     @Autowired
-    private ApplicationContext context;
+    private SpringHelper springHelper;
 
     public Repository(BasicDao dao) {
         super(dao);
@@ -61,9 +61,10 @@ public class Repository extends DecoratorDao implements BasicDao {
 
     @Override
     @Transactional
-    public <E extends Entity<S>, S extends Serializable> void delete(@NotNull E entity) {
-        super.delete(entity);
-        deleteWithJoin(entity);
+    public <E extends Entity<S>, S extends Serializable> void delete(@NotNull E template) {
+        Collection<E> entities = super.loadAll(template);
+        entities.forEach(this::deleteWithJoin);
+        super.delete(template);
     }
 
     @Override
@@ -105,7 +106,7 @@ public class Repository extends DecoratorDao implements BasicDao {
         E entity = super.load(id, clazz);
         if(entity==null||Repository.isNotJoin()) return entity;
         (new JoinHelper<E,S>(this)).setJoins(entity);
-        (new RefHelper<E,S>(context)).setRefs(entity);
+        (new RefHelper<E,S>(springHelper)).setRefs(entity);
         return entity;
     }
 
@@ -116,7 +117,7 @@ public class Repository extends DecoratorDao implements BasicDao {
         if(collection==null||collection.isEmpty()||Repository.isNotJoin())
             return collection;
         (new JoinHelper<E,S>(this)).setJoinForList(collection);
-        (new RefHelper<E,S>(context)).setRefForList(collection);
+        (new RefHelper<E,S>(springHelper)).setRefForList(collection);
         return collection;
     }
 
@@ -126,7 +127,7 @@ public class Repository extends DecoratorDao implements BasicDao {
         if(collection==null||collection.isEmpty()||Repository.isNotJoin())
             return collection;
         (new JoinHelper<E,S>(this)).setJoinForList(collection);
-        (new RefHelper<E,S>(context)).setRefForList(collection);
+        (new RefHelper<E,S>(springHelper)).setRefForList(collection);
         return collection;
     }
 
@@ -137,7 +138,7 @@ public class Repository extends DecoratorDao implements BasicDao {
         if(collection==null||collection.isEmpty()||Repository.isNotJoin())
             return collection;
         (new JoinHelper<E,S>(this)).setJoinForList(collection);
-        (new RefHelper<E,S>(context)).setRefForList(collection);
+        (new RefHelper<E,S>(springHelper)).setRefForList(collection);
         return collection;
     }
 

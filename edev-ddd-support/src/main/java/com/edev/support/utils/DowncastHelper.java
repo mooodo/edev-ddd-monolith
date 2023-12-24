@@ -6,8 +6,17 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.*;
 
+/**
+ * The utilities for downcast object to its type
+ */
 @Component
 public class DowncastHelper {
+    /**
+     * downcast the object to the type
+     * @param type the type
+     * @param value the object
+     * @return the value downcast to the type
+     */
     public Object downcast(Type type, Object value) {
         if(value==null) return null;
         if(type instanceof Class)
@@ -36,14 +45,14 @@ public class DowncastHelper {
     }
 
     /**
-     * downcast the Object to it should be, such as {@code List<String>}
+     * downcast the Object which have templates, such as {@code List<String>}
      * @param type the type of the object
      * @param value the value of the object
      * @return the downcast value
      */
     private Object downcastWithParameterizedType(Type type, Object value) {
-        ParameterizedType pt = (ParameterizedType)type;
-        Class<?> clazz = (Class<?>)pt.getRawType();
+        ParameterizedType pt = (ParameterizedType) type;
+        Class<?> clazz = (Class<?>) pt.getRawType();
         if(List.class.isAssignableFrom(clazz)||Set.class.isAssignableFrom(clazz))
             return downcastWithSetOrList(pt, value);
         return value;
@@ -70,19 +79,19 @@ public class DowncastHelper {
     /**
      * convert list of String to Collection<T>
      * @param list the list
-     * @param clazz the class
-     * @param instance the instance
+     * @param clazz the raw type such as List or Set
+     * @param doConvert the function how to convert each of members
      * @return Collection<T>
      */
     private <T> Collection<T> convert(List<?> list, Class<?> clazz,
-                                            NewInstance<T> instance) {
+                                            DoConvert<T> doConvert) {
         Collection<T> c = (clazz.equals(List.class)) ? new ArrayList<>() : new HashSet<>();
-        for(Object obj : list) c.add(instance.apply(obj));
+        for(Object obj : list) c.add(doConvert.apply(obj));
         return c;
     }
 
     @FunctionalInterface
-    interface NewInstance<T> {
+    interface DoConvert<T> {
         T apply(Object s);
     }
 }

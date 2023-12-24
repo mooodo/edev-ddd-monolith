@@ -16,7 +16,7 @@
               joinClass="com.edev.trade.authority.entity.RoleGrantedAuthority"
               class="com.edev.trade.authority.entity.Authority"/>
     </do>
-    <do class="com.edev.trade.authority.entity.UserRole" tableName="t_user_role">
+    <do class="com.edev.trade.authority.entity.UserGrantedRole" tableName="t_user_role">
         <property name="id" column="id" isPrimaryKey="true"/>
         <property name="available" column="available"/>
         <property name="userId" column="user_id"/>

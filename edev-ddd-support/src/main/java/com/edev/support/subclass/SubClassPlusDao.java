@@ -6,6 +6,7 @@ import com.edev.support.ddd.utils.EntityUtils;
 import com.edev.support.entity.Entity;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
@@ -21,8 +22,7 @@ public class SubClassPlusDao extends DecoratorDao implements BasicDao {
     public SubClassPlusDao(BasicDao dao) {
         super(dao);
     }
-    public <S extends Serializable> boolean hasSubClass(Entity<S> entity) {
-        if(entity==null) return false;
+    public <S extends Serializable> boolean hasSubClass(@NotNull Entity<S> entity) {
         return hasSubClass(entity.getClass());
     }
 

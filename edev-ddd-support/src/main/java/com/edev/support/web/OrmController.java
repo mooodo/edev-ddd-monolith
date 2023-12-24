@@ -4,8 +4,8 @@ import com.edev.support.ddd.DddFactory;
 import com.edev.support.entity.Entity;
 import com.edev.support.utils.BeanUtils;
 import com.edev.support.utils.DowncastHelper;
+import com.edev.support.utils.SpringHelper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -20,7 +20,7 @@ import java.util.Map;
 @RestController
 public class OrmController extends AbstractController {
     @Autowired
-    private ApplicationContext applicationContext;
+    private SpringHelper springHelper;
     @Autowired
     private DddFactory dddFactory;
     @Autowired
@@ -30,7 +30,7 @@ public class OrmController extends AbstractController {
                           @PathVariable("method") String methodName,
                           @RequestBody(required = false) Map<String, Object> map,
                           HttpServletRequest request) {
-        Object service = BeanUtils.getService(beanName, applicationContext);
+        Object service = springHelper.getService(beanName);
         Method method = BeanUtils.getMethod(service, methodName);
         Map<String, Object> json = mergeDataToJson(map, request);
         Object[] args = getArguments(method, json);
@@ -63,9 +63,9 @@ public class OrmController extends AbstractController {
     public Object list(@PathVariable("bean") String beanName,
                        @PathVariable("method") String methodName,
                        @RequestBody List<Object> list) {
-        Object service = BeanUtils.getService(beanName, applicationContext);
+        Object service = springHelper.getService(beanName);
         Method method = BeanUtils.getMethod(service, methodName);
-        Object[] args = getArguments(method, list);
+        Object[] args = getArgumentsForList(method, list);
         return BeanUtils.invoke(service, method, args);
     }
 
@@ -104,7 +104,7 @@ public class OrmController extends AbstractController {
     }
 
     private <E extends Entity<S>, S extends Serializable>
-            Object[] getArguments(Method method, List<Object> list) {
+            Object[] getArgumentsForList(Method method, List<Object> list) {
         if(list==null||list.isEmpty()) return new Object[]{};
         Parameter[] parameters = method.getParameters();
         if(parameters.length!=1)

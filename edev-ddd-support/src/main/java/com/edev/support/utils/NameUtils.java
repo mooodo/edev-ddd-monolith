@@ -1,5 +1,8 @@
 package com.edev.support.utils;
 
+/**
+ * The utilities for the name convert
+ */
 public class NameUtils {
     private NameUtils() {}
     /**

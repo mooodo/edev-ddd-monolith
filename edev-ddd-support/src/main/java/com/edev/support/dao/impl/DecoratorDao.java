@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * The decorator for BasicDao, that others can extend all kinds of functions for BasicDao.
+ * The decorator for BasicDao, that it's subclass can extend all kinds of functions for BasicDao.
  * @author fangang
  * @see com.edev.support.cache.CacheEntityDao
  * @see com.edev.support.ddd.Repository

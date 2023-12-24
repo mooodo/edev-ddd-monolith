@@ -9,16 +9,18 @@ import com.edev.support.dsl.DomainObjectFactory;
 import com.edev.support.entity.Entity;
 import com.edev.support.entity.ResultSet;
 import com.edev.support.query.impl.QueryServiceImpl;
+import com.edev.support.utils.SpringHelper;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
 
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Map;
 
+@Slf4j
 public class AutofillQueryServiceImpl extends QueryServiceImpl {
     @Autowired
-    private ApplicationContext context;
+    private SpringHelper springHelper;
     @Autowired
     private DddFactory dddFactory;
     private BasicDao autofillDao;
@@ -26,12 +28,6 @@ public class AutofillQueryServiceImpl extends QueryServiceImpl {
     public AutofillQueryServiceImpl(QueryDao queryDao, BasicDao autofillDao) {
         super(queryDao);
         this.autofillDao = autofillDao;
-    }
-    public BasicDao getAutofillDao() {
-        return autofillDao;
-    }
-    public void setAutofillDao(BasicDao dao) {
-        this.autofillDao = dao;
     }
 
     @Override
@@ -59,6 +55,6 @@ public class AutofillQueryServiceImpl extends QueryServiceImpl {
     }
 
     private <E extends Entity<S>, S extends Serializable> void autofillRef(Collection<E> list) {
-        (new RefHelper<E,S>(context)).setRefForList(list);
+        (new RefHelper<E,S>(springHelper)).setRefForList(list);
     }
 }

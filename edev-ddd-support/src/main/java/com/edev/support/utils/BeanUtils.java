@@ -1,17 +1,23 @@
 package com.edev.support.utils;
 
 import com.edev.support.exception.OrmException;
-import org.springframework.beans.BeansException;
-import org.springframework.beans.factory.NoSuchBeanDefinitionException;
-import org.springframework.context.ApplicationContext;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 
+/**
+ * The utilities for the object reflect
+ */
 public class BeanUtils {
     private BeanUtils() {}
+
+    /**
+     * get class according to its class name
+     * @param className the class name
+     * @return the class
+     */
     public static Class<?> getClazz(String className) {
         try {
             return Class.forName(className);
@@ -20,6 +26,12 @@ public class BeanUtils {
         }
     }
 
+    /**
+     * build the bean according to its class
+     * @param clazz the class
+     * @return the bean
+     * @param <T> the class
+     */
     public static <T> T createBean(Class<T> clazz) {
         try {
             return clazz.newInstance();
@@ -70,6 +82,13 @@ public class BeanUtils {
         }
     }
 
+    /**
+     * get the object's method according to its method name and size of parameters
+     * @param obj the object
+     * @param methodName the method name
+     * @param sizeOfParameters size of parameters
+     * @return the method
+     */
     public static Method getMethod(Object obj, String methodName, int sizeOfParameters) {
         if(methodName==null||methodName.isEmpty())
             throw new OrmException("The method name is empty!");
@@ -81,18 +100,13 @@ public class BeanUtils {
         return target;
     }
 
-    public static Object getService(String beanName, ApplicationContext applicationContext) {
-        if (beanName == null || beanName.isEmpty())
-            throw new OrmException("The bean name is empty!");
-        try {
-            return applicationContext.getBean(beanName);
-        } catch (NoSuchBeanDefinitionException e) {
-            throw new OrmException("No such bean definition in the spring context!", e);
-        } catch (BeansException e) {
-            throw new OrmException("error when get the bean[%s]", beanName);
-        }
-    }
-
+    /**
+     * get the object's method according to its method name.
+     * If you get more methods with same name, return the first one.
+     * @param service the service
+     * @param methodName the method name
+     * @return the method
+     */
     public static Method getMethod(Object service, String methodName) {
         if(methodName==null||methodName.isEmpty())
             throw new OrmException("The method name is empty!");
@@ -105,6 +119,13 @@ public class BeanUtils {
         throw new OrmException("No such method[%s] in the service[%s]", methodName, service.getClass().getName());
     }
 
+    /**
+     * invoke the object's method using reflect.
+     * @param service the service
+     * @param method the method
+     * @param args the arguments
+     * @return the return value
+     */
     public static Object invoke(Object service, Method method, Object...args) {
         try {
             if(args==null||args.length==0) return method.invoke(service);
