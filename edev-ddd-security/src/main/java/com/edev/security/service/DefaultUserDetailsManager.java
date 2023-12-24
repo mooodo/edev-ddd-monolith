@@ -37,7 +37,7 @@ public class DefaultUserDetailsManager implements UserDetailsManager {
     }
 
     @Override
-    //@PreAuthorize("hasAuthority('removeUser')")
+    @PreAuthorize("hasAuthority('removeUser')")
     public void removeUser(String username) {
         if(username==null) return;
         User template = User.build();
