@@ -4,9 +4,16 @@
         <property name="id" column="id" isPrimaryKey="true"/>
         <property name="name" column="name"/>
         <property name="password" column="password"/>
+        <property name="accountExpired" column="account_expired"/>
+        <property name="accountLocked" column="account_locked"/>
+        <property name="credentialsExpired" column="credentials_expired"/>
+        <property name="disabled" column="disabled"/>
         <join name="authorities" joinKey="userId" joinType="manyToMany" joinClassKey="authorityId"
               joinClass="com.edev.trade.authority.entity.UserGrantedAuthority"
               class="com.edev.trade.authority.entity.Authority"/>
+        <join name="roles" joinKey="userId" joinType="manyToMany" joinClassKey="roleId"
+              joinClass="com.edev.trade.authority.entity.UserGrantedRole"
+              class="com.edev.trade.authority.entity.Role"/>
     </do>
     <do class="com.edev.trade.authority.entity.Role" tableName="t_role">
         <property name="id" column="id" isPrimaryKey="true"/>
@@ -15,8 +22,11 @@
         <join name="authorities" joinKey="roleId" joinType="manyToMany" joinClassKey="authorityId"
               joinClass="com.edev.trade.authority.entity.RoleGrantedAuthority"
               class="com.edev.trade.authority.entity.Authority"/>
+        <join name="users" joinKey="roleId" joinType="manyToMany" joinClassKey="userId"
+              joinClass="com.edev.trade.authority.entity.UserGrantedRole"
+              class="com.edev.trade.authority.entity.User"/>
     </do>
-    <do class="com.edev.trade.authority.entity.UserRole" tableName="t_user_role">
+    <do class="com.edev.trade.authority.entity.UserGrantedRole" tableName="t_user_granted_role">
         <property name="id" column="id" isPrimaryKey="true"/>
         <property name="available" column="available"/>
         <property name="userId" column="user_id"/>
@@ -25,7 +35,7 @@
     <do class="com.edev.trade.authority.entity.Authority" tableName="t_authority">
         <property name="id" column="id" isPrimaryKey="true"/>
         <property name="name" column="name"/>
-        <property name="available" column="available"/>
+        <property name="authenticated" column="authenticated"/>
         <!---->
         <join name="users" joinKey="authorityId" joinType="manyToMany" joinClassKey="userId"
               joinClass="com.edev.trade.authority.entity.UserGrantedAuthority"

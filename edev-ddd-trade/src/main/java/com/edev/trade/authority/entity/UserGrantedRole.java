@@ -6,7 +6,7 @@ import lombok.EqualsAndHashCode;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class UserRole extends Entity<Long> {
+public class UserGrantedRole extends Entity<Long> {
     private Long id;
     private String available;
     private Long userId;

@@ -48,6 +48,15 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public User loadByName(String userName) {
+        User template = User.build();
+        template.setName(userName);
+        Collection<User> users = dao.loadAll(template);
+        if(users==null||users.isEmpty()) return null;
+        return users.iterator().next();
+    }
+
+    @Override
     public void saveAll(List<User> users) {
         users.forEach(this::validUser);
         dao.insertOrUpdateForList(users);
