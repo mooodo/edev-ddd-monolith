@@ -1,0 +1,61 @@
+spring:
+  application:
+    name: ddd-sercurity
+  profiles:
+    active: dev
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+mybatis:
+  mapperLocations: classpath*:mapper/*Mapper.xml
+edev:
+  security:
+    passwordEncoder: bcrypt
+logging:
+  level:
+    com.edev.security: INFO
+    com.edev.support: INFO
+    com.edev.security.query.dao: DEBUG
+    com.edev.support.dao: DEBUG
+---
+spring:
+  profiles: dev
+  datasource:
+    url: jdbc:mysql://master:32306/edevAuthority?useUnicode=true&characterEncoding=UTF-8&serverTimezone=GMT%2B8
+    username: auth
+    password: auth1234
+    type: com.alibaba.druid.pool.DruidDataSource
+  redis:
+    database: 0
+    host: master
+    port: 31379
+    password:
+    pool:
+      maxActive: 200
+      maxWait: -1
+      maxIdel: 10
+      minIdel: 0
+    timeout: 1000
+server:
+  port: 8800
+---
+spring:
+  profiles: docker
+  datasource:
+    url: jdbc:mysql://mysql:3306/edevAuthority?useUnicode=true&characterEncoding=UTF-8&serverTimezone=GMT%2B8
+    username: auth
+    password: auth1234
+    type: com.alibaba.druid.pool.DruidDataSource
+  redis:
+    database: 0
+    host: redis
+    port: 6379
+    password:
+    pool:
+      maxActive: 200
+      maxWait: -1
+      maxIdel: 10
+      minIdel: 0
+    timeout: 1000
+server:
+  port: ${SERVICE_PORT:8800}
