@@ -1,7 +1,7 @@
 package com.edev.trade.customer.web;
 
 import com.edev.support.web.OrmController;
-import com.edev.trade.customer.service.AccountAggService;
+import com.edev.trade.customer.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -32,7 +32,7 @@ public class AccountController {
     }
 
     @Autowired
-    private AccountAggService service;
+    private AccountService service;
     @GetMapping("topUp")
     public Double topUp(Long id, Double amount) {
         return service.topUp(id, amount);

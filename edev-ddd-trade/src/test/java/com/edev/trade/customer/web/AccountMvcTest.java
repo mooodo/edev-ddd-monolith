@@ -35,7 +35,7 @@ public class AccountMvcTest {
                 .param("id", id)
         ).andExpect(status().isOk()).andExpect(content().json(excepted0));
 
-        mvc.perform(get("/account/topUp")
+        mvc.perform(get("/orm/account/topUp")
                 .param("id", id).param("amount", "1000")
         ).andExpect(status().isOk()).andExpect(content().string("11000.0"));
         String excepted1 = JsonFile.read("json/account/excepted1.json");
@@ -43,7 +43,7 @@ public class AccountMvcTest {
                 .param("id", id)
         ).andExpect(status().isOk()).andExpect(content().json(excepted1));
 
-        mvc.perform(get("/account/payoff")
+        mvc.perform(get("/orm/account/payoff")
                 .param("id", id).param("amount", "1000")
         ).andExpect(status().isOk()).andExpect(content().string("10000.0"));
         mvc.perform(get("/orm/account/get")
