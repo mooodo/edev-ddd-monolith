@@ -4,6 +4,7 @@ import com.edev.support.ddd.DddFactory;
 import com.edev.support.entity.Entity;
 import com.edev.support.utils.BeanUtils;
 import com.edev.support.utils.DowncastHelper;
+import com.edev.support.utils.ParameterHelper;
 import com.edev.support.utils.SpringHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -75,9 +76,9 @@ public class OrmController extends AbstractController {
 
     private <E extends Entity<S>, S extends Serializable>
             Object[] getArguments(Method method, Map<String, Object> json) {
-        //There is no parameter to use
+        //There is no parameter to be used from json
         if(json==null||json.isEmpty()) return new Object[]{};
-        Parameter[] parameters = method.getParameters();
+        Parameter[] parameters = ParameterHelper.build(method).getParameters();
         //The method has no parameter
         if(parameters.length == 0) return new Object[]{};
 
