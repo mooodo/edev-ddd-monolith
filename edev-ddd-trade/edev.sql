@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50635
 File Encoding         : 65001
 
-Date: 2023-06-23 21:15:34
+Date: 2024-01-01 21:17:46
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -39,7 +39,7 @@ INSERT INTO `t_account` VALUES ('1000501', '10005', '100000.00', '2022-03-31 02:
 INSERT INTO `t_account` VALUES ('1000601', '10006', '100000.00', '2022-03-31 02:51:49', null);
 INSERT INTO `t_account` VALUES ('1000701', '10007', '100000.00', '2022-03-31 02:51:49', null);
 INSERT INTO `t_account` VALUES ('1000801', '10008', '100000.00', '2022-03-31 02:51:49', null);
-INSERT INTO `t_account` VALUES ('1000901', '10009', '846184.00', '2022-03-31 02:51:49', '2022-12-09 16:41:27');
+INSERT INTO `t_account` VALUES ('1000901', '10009', '846184.00', '2022-03-31 02:51:49', '2023-12-26 14:47:35');
 INSERT INTO `t_account` VALUES ('1001201', '10012', '100000.00', '2022-03-31 02:51:49', null);
 INSERT INTO `t_account` VALUES ('1001301', '10013', '100000.00', '2022-03-31 02:51:49', null);
 INSERT INTO `t_account` VALUES ('1001401', '10014', '100000.00', '2022-03-31 02:51:49', null);
@@ -156,10 +156,10 @@ CREATE TABLE `t_inventory` (
 -- ----------------------------
 -- Records of t_inventory
 -- ----------------------------
-INSERT INTO `t_inventory` VALUES ('30001', '9978', '2022-12-09 16:41:27');
+INSERT INTO `t_inventory` VALUES ('30001', '9978', '2023-12-26 14:47:35');
 INSERT INTO `t_inventory` VALUES ('30002', '10000', '2022-03-31 02:40:46');
 INSERT INTO `t_inventory` VALUES ('30003', '10000', '2022-03-31 02:40:46');
-INSERT INTO `t_inventory` VALUES ('30004', '9974', '2022-12-09 16:41:27');
+INSERT INTO `t_inventory` VALUES ('30004', '9974', '2023-12-26 14:47:35');
 INSERT INTO `t_inventory` VALUES ('30005', '10000', '2022-03-31 02:40:46');
 INSERT INTO `t_inventory` VALUES ('30006', '10000', '2022-03-31 02:40:46');
 INSERT INTO `t_inventory` VALUES ('30007', '10000', '2022-03-31 02:40:46');
@@ -179,99 +179,11 @@ CREATE TABLE `t_journal_account` (
   `operation` varchar(50) DEFAULT NULL,
   `operate_time` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=166 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=213 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of t_journal_account
 -- ----------------------------
-INSERT INTO `t_journal_account` VALUES ('1', '1', '1000.00', 'topUp', '2022-12-02 01:07:51');
-INSERT INTO `t_journal_account` VALUES ('2', '1', '1000.00', 'payoff', '2022-12-02 01:07:51');
-INSERT INTO `t_journal_account` VALUES ('4', '1000901', '5916.00', 'payoff', '2022-12-02 17:19:06');
-INSERT INTO `t_journal_account` VALUES ('5', '1000901', '5916.00', 'payoff', '2022-12-02 18:46:50');
-INSERT INTO `t_journal_account` VALUES ('6', '1000901', '5916.00', 'refund', '2022-12-02 20:09:11');
-INSERT INTO `t_journal_account` VALUES ('9', '1000901', '5916.00', 'refund', '2022-12-02 20:23:31');
-INSERT INTO `t_journal_account` VALUES ('10', '1000901', '5916.00', 'payoff', '2022-12-02 20:29:12');
-INSERT INTO `t_journal_account` VALUES ('11', '1000901', '5916.00', 'refund', '2022-12-02 20:33:09');
-INSERT INTO `t_journal_account` VALUES ('17', '1', '1000.00', 'topUp', '2022-12-03 13:30:45');
-INSERT INTO `t_journal_account` VALUES ('18', '1', '1000.00', 'payoff', '2022-12-03 13:30:46');
-INSERT INTO `t_journal_account` VALUES ('19', '1', '1000.00', 'topUp', '2022-12-03 13:31:38');
-INSERT INTO `t_journal_account` VALUES ('20', '1', '1000.00', 'payoff', '2022-12-03 13:31:39');
-INSERT INTO `t_journal_account` VALUES ('22', '1', '1000.00', 'topUp', '2022-12-03 13:37:12');
-INSERT INTO `t_journal_account` VALUES ('23', '1', '1000.00', 'payoff', '2022-12-03 13:37:13');
-INSERT INTO `t_journal_account` VALUES ('25', '1', '1000.00', 'topUp', '2022-12-03 13:39:25');
-INSERT INTO `t_journal_account` VALUES ('26', '1', '1000.00', 'payoff', '2022-12-03 13:39:26');
-INSERT INTO `t_journal_account` VALUES ('29', '1', '1000.00', 'topUp', '2022-12-04 04:53:15');
-INSERT INTO `t_journal_account` VALUES ('30', '1', '1000.00', 'payoff', '2022-12-04 04:53:15');
-INSERT INTO `t_journal_account` VALUES ('32', '1', '1000.00', 'topUp', '2022-12-04 05:08:04');
-INSERT INTO `t_journal_account` VALUES ('33', '1', '1000.00', 'payoff', '2022-12-04 05:08:04');
-INSERT INTO `t_journal_account` VALUES ('34', '1', '1000.00', 'topUp', '2022-12-07 21:38:46');
-INSERT INTO `t_journal_account` VALUES ('35', '1', '1000.00', 'payoff', '2022-12-07 21:38:46');
-INSERT INTO `t_journal_account` VALUES ('37', '1', '1000.00', 'topUp', '2022-12-08 11:52:49');
-INSERT INTO `t_journal_account` VALUES ('38', '1', '1000.00', 'payoff', '2022-12-08 11:52:49');
-INSERT INTO `t_journal_account` VALUES ('40', '1', '1000.00', 'topUp', '2022-12-09 15:09:53');
-INSERT INTO `t_journal_account` VALUES ('41', '1', '1000.00', 'payoff', '2022-12-09 15:09:53');
-INSERT INTO `t_journal_account` VALUES ('43', '1', '1000.00', 'topUp', '2022-12-09 15:50:17');
-INSERT INTO `t_journal_account` VALUES ('44', '1', '1000.00', 'payoff', '2022-12-09 15:50:17');
-INSERT INTO `t_journal_account` VALUES ('46', '1', '1000.00', 'topUp', '2022-12-09 15:57:37');
-INSERT INTO `t_journal_account` VALUES ('47', '1', '1000.00', 'payoff', '2022-12-09 15:57:37');
-INSERT INTO `t_journal_account` VALUES ('48', '1000901', '5916.00', 'payoff', '2022-12-09 16:39:42');
-INSERT INTO `t_journal_account` VALUES ('49', '1000901', '5916.00', 'refund', '2022-12-09 16:41:27');
-INSERT INTO `t_journal_account` VALUES ('50', null, '5000.00', 'payoff', null);
-INSERT INTO `t_journal_account` VALUES ('51', null, '3000.00', 'payoff', null);
-INSERT INTO `t_journal_account` VALUES ('52', null, '5000.00', 'test', null);
-INSERT INTO `t_journal_account` VALUES ('53', null, '3000.00', 'test', null);
-INSERT INTO `t_journal_account` VALUES ('66', '1', '1000.00', 'topUp', '2023-01-31 01:28:39');
-INSERT INTO `t_journal_account` VALUES ('67', '1', '1000.00', 'payoff', '2023-01-31 01:28:40');
-INSERT INTO `t_journal_account` VALUES ('68', '1', '1000.00', 'topUp', '2023-01-31 01:30:29');
-INSERT INTO `t_journal_account` VALUES ('69', '1', '1000.00', 'payoff', '2023-01-31 01:30:29');
-INSERT INTO `t_journal_account` VALUES ('70', '1', '1000.00', 'topUp', '2023-01-31 01:32:53');
-INSERT INTO `t_journal_account` VALUES ('71', '1', '1000.00', 'payoff', '2023-01-31 01:32:53');
-INSERT INTO `t_journal_account` VALUES ('72', '1', '1000.00', 'topUp', '2023-01-31 01:43:46');
-INSERT INTO `t_journal_account` VALUES ('73', '1', '1000.00', 'payoff', '2023-01-31 01:43:47');
-INSERT INTO `t_journal_account` VALUES ('74', '1', '1000.00', 'topUp', '2023-01-31 01:46:57');
-INSERT INTO `t_journal_account` VALUES ('75', '1', '1000.00', 'payoff', '2023-01-31 01:46:57');
-INSERT INTO `t_journal_account` VALUES ('76', '1', '1000.00', 'topUp', '2023-01-31 09:27:11');
-INSERT INTO `t_journal_account` VALUES ('77', '1', '1000.00', 'payoff', '2023-01-31 09:27:11');
-INSERT INTO `t_journal_account` VALUES ('80', '1', '1000.00', 'topUp', '2023-01-31 11:30:46');
-INSERT INTO `t_journal_account` VALUES ('81', '1', '1000.00', 'payoff', '2023-01-31 11:30:46');
-INSERT INTO `t_journal_account` VALUES ('82', '1', '1000.00', 'topUp', '2023-01-31 18:35:08');
-INSERT INTO `t_journal_account` VALUES ('83', '1', '1000.00', 'payoff', '2023-01-31 18:35:09');
-INSERT INTO `t_journal_account` VALUES ('84', '1', '1000.00', 'topUp', '2023-02-01 22:57:41');
-INSERT INTO `t_journal_account` VALUES ('85', '1', '1000.00', 'payoff', '2023-02-01 22:59:10');
-INSERT INTO `t_journal_account` VALUES ('86', '1', '1000.00', 'topUp', '2023-02-01 23:02:00');
-INSERT INTO `t_journal_account` VALUES ('87', '1', '1000.00', 'payoff', '2023-02-01 23:02:01');
-INSERT INTO `t_journal_account` VALUES ('94', '1', '1000.00', 'topUp', '2023-02-02 11:42:28');
-INSERT INTO `t_journal_account` VALUES ('95', '1', '1000.00', 'payoff', '2023-02-02 11:42:28');
-INSERT INTO `t_journal_account` VALUES ('97', '1', '1000.00', 'topUp', '2023-02-02 11:47:16');
-INSERT INTO `t_journal_account` VALUES ('98', '1', '1000.00', 'payoff', '2023-02-02 11:47:16');
-INSERT INTO `t_journal_account` VALUES ('100', '1', '1000.00', 'topUp', '2023-02-07 11:08:33');
-INSERT INTO `t_journal_account` VALUES ('101', '1', '1000.00', 'payoff', '2023-02-07 11:09:49');
-INSERT INTO `t_journal_account` VALUES ('108', '1', '1000.00', 'topUp', '2023-02-20 21:04:55');
-INSERT INTO `t_journal_account` VALUES ('109', '1', '1000.00', 'payoff', '2023-02-20 21:05:00');
-INSERT INTO `t_journal_account` VALUES ('111', '1', '1000.00', 'topUp', '2023-02-20 21:15:59');
-INSERT INTO `t_journal_account` VALUES ('112', '1', '1000.00', 'payoff', '2023-02-20 21:15:59');
-INSERT INTO `t_journal_account` VALUES ('117', '1', '1000.00', 'topUp', '2023-02-20 21:45:44');
-INSERT INTO `t_journal_account` VALUES ('118', '1', '1000.00', 'payoff', '2023-02-20 21:45:44');
-INSERT INTO `t_journal_account` VALUES ('123', '1', '1000.00', 'topUp', '2023-02-20 23:36:58');
-INSERT INTO `t_journal_account` VALUES ('124', '1', '1000.00', 'payoff', '2023-02-20 23:36:59');
-INSERT INTO `t_journal_account` VALUES ('129', '1', '1000.00', 'topUp', '2023-02-20 23:40:43');
-INSERT INTO `t_journal_account` VALUES ('130', '1', '1000.00', 'payoff', '2023-02-20 23:40:43');
-INSERT INTO `t_journal_account` VALUES ('131', '1', '1000.00', 'topUp', '2023-02-21 11:24:19');
-INSERT INTO `t_journal_account` VALUES ('132', '1', '1000.00', 'payoff', '2023-02-21 11:24:20');
-INSERT INTO `t_journal_account` VALUES ('135', '1', '1000.00', 'topUp', '2023-02-21 11:27:35');
-INSERT INTO `t_journal_account` VALUES ('136', '1', '1000.00', 'payoff', '2023-02-21 11:27:35');
-INSERT INTO `t_journal_account` VALUES ('140', '1', '1000.00', 'topUp', '2023-02-21 14:21:04');
-INSERT INTO `t_journal_account` VALUES ('141', '1', '1000.00', 'payoff', '2023-02-21 14:21:04');
-INSERT INTO `t_journal_account` VALUES ('145', '1', '1000.00', 'topUp', '2023-05-21 20:17:51');
-INSERT INTO `t_journal_account` VALUES ('146', '1', '1000.00', 'payoff', '2023-05-21 20:17:51');
-INSERT INTO `t_journal_account` VALUES ('147', '1', '1000.00', 'topUp', '2023-05-22 09:45:41');
-INSERT INTO `t_journal_account` VALUES ('148', '1', '1000.00', 'payoff', '2023-05-22 09:45:41');
-INSERT INTO `t_journal_account` VALUES ('150', '1', '1000.00', 'topUp', '2023-05-22 10:06:51');
-INSERT INTO `t_journal_account` VALUES ('151', '1', '1000.00', 'payoff', '2023-05-22 10:06:51');
-INSERT INTO `t_journal_account` VALUES ('154', '1', '1000.00', 'topUp', '2023-05-22 10:33:28');
-INSERT INTO `t_journal_account` VALUES ('155', '1', '1000.00', 'payoff', '2023-05-22 10:33:28');
-INSERT INTO `t_journal_account` VALUES ('158', '1', '1000.00', 'topUp', '2023-05-28 07:26:56');
-INSERT INTO `t_journal_account` VALUES ('159', '1', '1000.00', 'payoff', '2023-05-28 07:26:57');
 
 -- ----------------------------
 -- Table structure for t_order
@@ -463,6 +375,7 @@ CREATE TABLE `t_role` (
 -- ----------------------------
 -- Records of t_role
 -- ----------------------------
+INSERT INTO `t_role` VALUES ('20001', 'admin', null);
 
 -- ----------------------------
 -- Table structure for t_role_granted_authority
@@ -474,11 +387,14 @@ CREATE TABLE `t_role_granted_authority` (
   `role_id` int(20) NOT NULL,
   `authority_id` int(20) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of t_role_granted_authority
 -- ----------------------------
+INSERT INTO `t_role_granted_authority` VALUES ('1', 'T', '20001', '50001');
+INSERT INTO `t_role_granted_authority` VALUES ('2', 'T', '20001', '50002');
+INSERT INTO `t_role_granted_authority` VALUES ('3', 'T', '20001', '50003');
 
 -- ----------------------------
 -- Table structure for t_supplier
@@ -514,17 +430,18 @@ CREATE TABLE `t_user` (
   `id` int(20) NOT NULL,
   `name` varchar(100) DEFAULT NULL,
   `password` varchar(255) DEFAULT NULL,
-  `user_type` varchar(20) DEFAULT NULL,
-  `expired` int(1) DEFAULT NULL,
-  `locked` int(1) DEFAULT NULL,
+  `account_expired` int(1) DEFAULT NULL,
+  `account_locked` int(1) DEFAULT NULL,
   `credentials_expired` int(1) DEFAULT NULL,
-  `disable` int(1) DEFAULT NULL,
+  `disabled` int(1) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of t_user
 -- ----------------------------
+INSERT INTO `t_user` VALUES ('10001', 'admin', '{bcrypt}$2a$10$HcTS5oCLzLlwHdXx9wYGHOX2QPAJ40jWhWRCGHrSnZnVXNPdv7DAy', '0', '0', '0', '0');
+INSERT INTO `t_user` VALUES ('10002', 'guest', '{bcrypt}$2a$10$dXJ3SW6G7P50lGmMkkmwe.20cQQubK3.HZWzG3YB1tlRy.fqvM/BG', '0', '0', '0', '0');
 
 -- ----------------------------
 -- Table structure for t_user_granted_authority
@@ -537,27 +454,31 @@ CREATE TABLE `t_user_granted_authority` (
   `authority_id` int(20) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `idx_user_granted_authority` (`user_id`,`authority_id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=47 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of t_user_granted_authority
 -- ----------------------------
+INSERT INTO `t_user_granted_authority` VALUES ('7', 'T', '10001', '50001');
+INSERT INTO `t_user_granted_authority` VALUES ('8', 'T', '10001', '50002');
+INSERT INTO `t_user_granted_authority` VALUES ('9', 'T', '10002', '50001');
 
 -- ----------------------------
--- Table structure for t_user_role
+-- Table structure for t_user_granted_role
 -- ----------------------------
-DROP TABLE IF EXISTS `t_user_role`;
-CREATE TABLE `t_user_role` (
+DROP TABLE IF EXISTS `t_user_granted_role`;
+CREATE TABLE `t_user_granted_role` (
   `id` int(20) NOT NULL AUTO_INCREMENT,
   `available` char(1) DEFAULT 'T',
   `user_id` int(20) NOT NULL,
   `role_id` int(20) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
 
 -- ----------------------------
--- Records of t_user_role
+-- Records of t_user_granted_role
 -- ----------------------------
+INSERT INTO `t_user_granted_role` VALUES ('3', 'T', '10001', '20001');
 
 -- ----------------------------
 -- Table structure for t_vendor
