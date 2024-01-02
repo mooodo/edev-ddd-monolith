@@ -508,6 +508,107 @@ listMethod配置的方法名，是查询多个订单时进行的批量补填所�
 **注意**：远程补填时，所有的关联关系（如一对一、多对一、一对多等关系）都是由数据提供方（即service-customer）实现，
 数据接收方在这里仅仅是对关联类型的声明，并不负责具体实现。
 
+### 用DSL表示领域对象的多对多关系
+在领域对象之间，除了一对一、多对一、一对多关系，还有多对多关系。与前面三种关系不同的是，多对多关系比较复杂，
+无法实现直接的关联，因此需要在关系之间增加一个关联类，将多对多关系变为两个多对一关系或一对多关系。
+因此，多对多关系的设计实现有两种方式：
+
+譬如：用户User与权限Authority是一个多对多关系，因此在它们之间增加了一个关联类UserGrantedAuthority，
+来记录每个用户所分配的权限。这样，在数据库设计时，设计了t_user, t_authority, t_user_granted_authority三个表。
+基于以上的设计，有两种设计方案：
+
+#### 方案一：变成两个多对一关系
+在该方案中，分别设计User, Authority, UserGrantedAuthority三个领域对象。其中，
+UserGrantedAuthority对User、UserGrantedAuthority对Authority是两个多对一关系，其设计如下：
+```java
+@Data
+public class UserGrantedAuthority extends Entity<Long> {
+    private Long id;
+    private String available;
+    private Long userId;
+    private Long authorityId;
+    private User user;
+    private Authority authority;
+}
+```
+按照这样的思路去配置DSL。接着，在Service中分别去完成对User, Authority, UserGrantedAuthority这三者的增删改操作。
+其中，对UserGrantedAuthority的增删改操作，实质上就是对用户的授权操作。
+
+采用了该方案，虽然能够很好地实现多对多关系，但用户要查询他的所有授权，或者权限要查询分配的所有用户，编码都会比较麻烦。
+
+#### 方案二：变成两个一对多关系
+在该方案中，在设计User, Authority, UserGrantedAuthority三个领域对象时，
+是User对UserGrantedAuthority、Authority对UserGrantedAuthority这两个一对多关系。设计如下：
+```java
+@Data
+public class User extends Entity<Long> {
+    private Long id;
+    private String name;
+    private String password;
+    private int accountExpired;
+    private int accountLocked;
+    private int credentialsExpired;
+    private int disabled;
+    private List<Authority> authorities = new ArrayList<>();
+}
+
+@Data
+public class Authority extends Entity<Long> {
+    private Long id;
+    private String name;
+    private String authenticated;
+    private List<User> users = new ArrayList<>();
+}
+
+@Data
+public class UserGrantedAuthority extends Entity<Long> {
+    private Long id;
+    private String available;
+    private Long userId;
+    private Long authorityId;
+}
+
+```
+
+然后，在DSL中将其配置如下：
+```xml
+<dobjs>
+   <do class="com.edev.trade.authority.entity.User" tableName="t_user">
+      <property name="id" column="id" isPrimaryKey="true"/>
+      <property name="name" column="name"/>
+      <property name="password" column="password"/>
+      <property name="accountExpired" column="account_expired"/>
+      <property name="accountLocked" column="account_locked"/>
+      <property name="credentialsExpired" column="credentials_expired"/>
+      <property name="disabled" column="disabled"/>
+      <join name="authorities" joinKey="userId" joinType="manyToMany" joinClassKey="authorityId"
+            joinClass="com.edev.trade.authority.entity.UserGrantedAuthority"
+            class="com.edev.trade.authority.entity.Authority"/>
+   </do>
+   <do class="com.edev.trade.authority.entity.Authority" tableName="t_authority">
+      <property name="id" column="id" isPrimaryKey="true"/>
+      <property name="name" column="name"/>
+      <property name="authenticated" column="authenticated"/>
+      <join name="users" joinKey="authorityId" joinType="manyToMany" joinClassKey="userId"
+            joinClass="com.edev.trade.authority.entity.UserGrantedAuthority"
+            class="com.edev.trade.authority.entity.User"/>
+   </do>
+   <do class="com.edev.trade.authority.entity.UserGrantedAuthority" tableName="t_user_granted_authority">
+      <property name="id" column="id" isPrimaryKey="true"/>
+      <property name="available" column="available"/>
+      <property name="userId" column="user_id"/>
+      <property name="authorityId" column="authority_id"/>
+   </do>
+</dobjs>
+```
+在以上配置中，joinKey是与关联类的关联字段，joinClassKey是关联类与被关联对象的关联字段，
+joinClass是关联类。通过以上的配置，当查询User时，将同时查询其授权的Authority；
+当需要给User授权时，直接往authorities属性添加权限就可以了。
+这样，在保存User时，将同时保存他的授权到t_user_granted_authority表中。
+
+因此，采用该方案以后，开发人员只需要完成以上配置，简单地对User和Authority进行增删改查操作就可以了，
+很多细节都通过低代码平台在后台完成了。
+
 ### 用DSL表示领域对象的聚合关系
 聚合关系是DDD独创的一个设计，它将真实世界中那些整体与部分的关系，用整体来封装部分。这样，当订单与订单明细定义为聚合
 关系时，以往DDD的设计需要单独为订单增加一个仓库，详细编码实现如何在保存订单表的同时，保存订单明细表，并将其设计在
