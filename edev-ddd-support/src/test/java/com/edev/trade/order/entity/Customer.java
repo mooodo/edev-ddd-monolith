@@ -47,9 +47,4 @@ public class Customer extends Entity<Long> {
 		String birthdateStr = identification.substring(6,14);
 		this.birthdate = DateUtils.getDate(birthdateStr, "yyyyMMdd");
 	}
-
-	@Override
-	protected String[] exclude() {
-		return new String[]{"birthdate"};
-	}
 }

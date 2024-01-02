@@ -49,9 +49,4 @@ public class Vip extends Entity<Long> {
         this.available = available ? "1" : "0";
     }
 
-    @Override
-    protected String[] exclude() {
-        return new String[]{"createTime","updateTime"};
-    }
-
 }

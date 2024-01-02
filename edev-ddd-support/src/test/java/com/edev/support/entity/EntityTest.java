@@ -136,11 +136,6 @@ public class EntityTest {
                 this.id = id;
                 this.birthdate = birthdate;
             }
-
-            @Override
-            protected String[] exclude() {
-                return new String[]{"birthdate"};
-            }
         }
         Customer customer0 = new Customer(1L,null);
         Customer customer1 = new Customer(1L,DateUtils.getNow());

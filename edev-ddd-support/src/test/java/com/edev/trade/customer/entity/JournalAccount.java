@@ -36,9 +36,4 @@ public class JournalAccount extends Entity<Long> {
     public void setOperateTime(Date operateTime) {
         this.operateTime = operateTime==null ? DateUtils.getNow() : operateTime;
     }
-
-    @Override
-    protected String[] exclude() {
-        return new String[]{"operateTime"};
-    }
 }

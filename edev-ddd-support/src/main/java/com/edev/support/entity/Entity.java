@@ -7,9 +7,6 @@ import lombok.Data;
 
 import java.io.Serializable;
 import java.lang.reflect.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
 
 @Data
 public abstract class Entity<T extends Serializable> implements Serializable, Cloneable {
@@ -191,78 +188,6 @@ public abstract class Entity<T extends Serializable> implements Serializable, Cl
         } catch (IllegalAccessException e) {
             throw new OrmException("Illegal access the method[entity:%s, method:%s]", e, this.getClass().getName(), methodName);
         }
-    }
-
-    /**
-     * exclude these columns to do equals
-     * @return the string array like this: new String[]("col1","col2");
-     */
-    protected String[] exclude() {
-        return new String[0];
-    }
-
-    private boolean isExclude(String fieldName) {
-        for(int i=0; i< exclude().length; i++)
-            if(exclude()[i].equals(fieldName)) return true;
-        return false;
-    }
-
-    /**
-     * override the method that it is true when both of objects:
-     * 1) is instance of same class;
-     * 2) each of properties contain same data,
-     * instead of them is a same instance.
-     * All subclasses can use this method to compare each other,
-     * especially when test.
-     */
-    @Override
-    public boolean equals(Object obj) {
-        if(obj==null) return false;
-        if(!(this.getClass().equals(obj.getClass()))) return false;
-
-        Entity<?> target = (Entity<?>) obj;
-        Field[] fields = getFields(this.getClass());
-        for (Field field : fields) {
-            String fieldName = field.getName();
-            if(isExclude(fieldName)) continue;
-            Object sourceValue = getValue(fieldName);
-            Object targetValue = target.getValue(fieldName);
-            if (sourceValue == null && targetValue != null) return false;
-            if (sourceValue != null && !sourceValue.equals(targetValue)) return false;
-        }
-        return true;
-    }
-
-    private void dealWithFields(Fallback fallback) {
-        Field[] fields = getFields(this.getClass());
-        if(fields==null) return;
-        for (Field field : fields) {
-            String name = field.getName();
-            if ("serialVersionUID".equals(name) || "this$0".equals(name)) continue;
-            fallback.apply(name);
-        }
-    }
-    @FunctionalInterface
-    private interface Fallback {
-        void apply(String fieldName);
-    }
-
-    @Override
-    public String toString() {
-        StringBuilder buffer = new StringBuilder("{");
-        dealWithFields(fieldName -> {
-            Object value = this.getValue(fieldName);
-            buffer.append(fieldName).append(":").append(value).append(", ");
-        });
-        if(buffer.length()==1) return "{}";
-        return buffer.substring(0, buffer.length()-2)+"}";
-    }
-
-    @Override
-    public int hashCode() {
-        List<Object> list = new ArrayList<>();
-        dealWithFields(fieldName -> list.add(this.getValue(fieldName)));
-        return Objects.hash(list.toArray());
     }
 
     /**

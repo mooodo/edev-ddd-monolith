@@ -58,9 +58,4 @@ public class Order extends Entity<Long> {
 		if(this.orderItems==null) this.orderItems = new ArrayList<>();
 		this.orderItems.add(orderItem);
 	}
-
-	@Override
-	protected String[] exclude() {
-		return new String[]{"orderTime", "modifyTime"};
-	}
 }
