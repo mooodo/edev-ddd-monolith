@@ -2,8 +2,6 @@ package com.edev.trade.order.web;
 
 import com.edev.support.web.OrmController;
 import com.edev.support.web.QueryController;
-import com.edev.trade.order.entity.Order;
-import com.edev.trade.order.service.OrderAggService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -45,14 +43,12 @@ public class OrderController {
         return queryController.queryByGet(QRY_BEAN, request);
     }
 
-    @Autowired
-    private OrderAggService service;
     @PostMapping("placeOrder")
-    public Long placeOrder(@RequestBody Order order) {
-        return service.placeOrder(order);
+    public Object placeOrder(@RequestBody Map<String, Object> json) {
+        return ormController.doPost("orderAgg", "placeOrder", json);
     }
     @GetMapping("returnGoods")
-    public void returnGoods(Long orderId) {
-        service.returnGoods(orderId);
+    public void returnGoods(HttpServletRequest request) {
+        ormController.doGet("orderAgg", "returnGoods", request);
     }
 }
