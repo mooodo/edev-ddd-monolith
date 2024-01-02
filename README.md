@@ -322,7 +322,7 @@ public class OrderController {
 
     @Autowired
     private QueryController queryController;
-    private static final String QRY_BEAN = "productQry";
+    private static final String QRY_BEAN = "orderQry";
 
     @PostMapping("query")
     public Object query(@RequestBody Map<String, Object> json) {
