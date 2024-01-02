@@ -6,6 +6,7 @@
 edev-ddd-monolith   采用低代码平台编写的单体应用
 * edev-ddd-support    支持DDD领域驱动设计的低代码平台
 * edev-ddd-trade      采用低代码平台编写的业务操作系统
+* edev-ddd-security   采用低代码平台编写的用户认证授权
 * edev-ddd-analysis   采用低代码平台编写的查询分析系统
 edev-service-trade  采用低代码平台编写的微服务系统 for eureka
 edev-alibaba-trade  采用低代码平台编写的微服务系统 for nacos
