@@ -483,6 +483,31 @@ public class Order extends Entity<Long> {
 在该DSL中，customer, address需要调用远程接口来获取数据。这时，将标签改为ref标签，bean是远程调用在自己本地的
 Feign接口，method是查询一条记录时的调用方法，listMethod是查询多条记录时的调用方法。
 
+譬如，在service-order这个微服务中，为了实现对service-customer的远程调用，首先在自己的本地编写一个service-customer的Feign接口：
+```java
+@Service
+@FeignClient(value = "service-customer", fallback = CustomerServiceImpl.class)
+public interface CustomerService {
+    @GetMapping("orm/customer/load")
+    Customer load(@RequestParam Long customerId);
+
+    @PostMapping("list/customer/loadAll")
+    List<Customer> loadAll(@RequestBody List<Long> customerIds);
+
+    @GetMapping("orm/customer/loadAddress")
+    Address loadAddress(@RequestParam Long addressId);
+
+    @PostMapping("list/customer/loadAddresses")
+    List<Address> loadAddresses(@RequestBody List<Long> addressIds);
+}
+```
+在DSL的ref标签中，bean就是这个接口的完整路径，refKey是关联字段，refType是关联类型。
+method配置的方法，是查询一个订单时补填customer远程调用的方法，如`load(customerId)`；
+listMethod配置的方法名，是查询多个订单时进行的批量补填所远程调用的方法，如`loadAll(customerIds)`。
+
+**注意**：远程补填时，所有的关联关系（如一对一、多对一、一对多等关系）都是由数据提供方（即service-customer）实现，
+数据接收方在这里仅仅是对关联类型的声明，并不负责具体实现。
+
 ### 用DSL表示领域对象的聚合关系
 聚合关系是DDD独创的一个设计，它将真实世界中那些整体与部分的关系，用整体来封装部分。这样，当订单与订单明细定义为聚合
 关系时，以往DDD的设计需要单独为订单增加一个仓库，详细编码实现如何在保存订单表的同时，保存订单明细表，并将其设计在
@@ -827,7 +852,7 @@ isDiscriminator="true"。在subclass标签中依次罗列出所有子类。接�
 会根据标识字段决定，到底存储到哪张表中。查询时，如果指定了子类，就查询子类对应的表；如果没有指定子类，将在
 所有子类的表中进行遍历。
 
-**注意**：在DSL中配置各个子类的时候，建议将所有父类的字段都配置上。这样，在单独查询某个子类时，不必依赖父类。
+**注意**：在DSL中配置各个子类的时候，要将所有父类的字段都配置上，因为该方案父类的字段都在各个子类对应的表中。
 
 #### 方案3：父类一张表，子类分别有各自的表
 再譬如，供应商supplier通过继承分为分销商distributor和零售商vendor，在程序中首先将该继承关系体现在领域对象中：
@@ -883,5 +908,6 @@ isDiscriminator="true"。在subclass标签中依次罗列出所有子类。接�
 各个子类对应的表。这样，在存储数据时，每条记录父类的字段被存储在父类的表中，接着再把子类的字段存储在各自子类的表中。
 当需要查询时，每条记录都先查询父类的表，然后根据标识字段各自去查询子类的表进行补填，形成完整的领域对象。
 
-**注意**：在DSL中配置各个子类的时候，建议将所有父类的字段都配置上。这样，在单独查询某个子类时，不必依赖父类。
+**注意**：在DSL中配置各个子类的时候，建议将所有父类的字段都配置在子类中，并且加入到子类对应的表中。
+这样，在单独查询某个子类时，不必依赖其父类。
 
