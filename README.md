@@ -11,6 +11,7 @@ edev-ddd-monolith   采用低代码平台编写的单体应用
 edev-service-trade  采用低代码平台编写的微服务系统 for eureka
 edev-alibaba-trade  采用低代码平台编写的微服务系统 for nacos
 edev-consul-trade   采用低代码平台编写的微服务系统 for consul
+vue-ddd-trade       采用VUE编写的DDD前端节目
 ```
 为什么需要这样的低代码平台呢？因为DDD发展了这么多年，最大的难题是落地实际项目困难，代码编写量巨大。
 正因为如此，使得DDD落地阻力巨大，困难重重，始终不能发挥出DDD应有的作用。
@@ -169,9 +170,123 @@ edev-consul-trade   采用低代码平台编写的微服务系统 for consul
 
 怎么能解决这个问题呢？有两个方面的思路：
 1) 改变以往软件开发的思路，给前端与后端的开发人员制订一个规范：前端Json与后台领域对象的设计必须一致，都统一于领域模型。
-也就是说，领域模型如何设计，前端Json与后台领域对象就怎么设计。这样，从前端Json到后台领域对象的转换就变得简化
+也就是说，领域模型如何设计，前端Json与后台领域对象就怎么设计。这样，从前端Json到后台领域对象的转换就变得简化，譬如：
+
+```vue
+<template>
+  <div>
+    <Dialog ref="d1"
+        :title="'用户档案详情'"
+        :dialogStyle="{width:'390px',height:'380px'}"
+        :modal="true"
+        :draggable="true">
+      <div style="margin-bottom: 10px;height: 85%;">
+        <Tabs>
+          <TabPanel :title="'基本信息'" style="height: 254px;">
+            <Form :model="customer" class="submit-form">
+              <div class="form-item">
+                <Label for="id" align="top">用户编号：</Label>
+                <TextBox inputId="id" v-model="customer.id"></TextBox>
+              </div>
+              <div class="form-item">
+                <Label for="name" align="top">姓名：</Label>
+                <TextBox inputId="name" v-model="customer.name" iconCls="icon-man"></TextBox>
+              </div>
+              <div class="form-item">
+                <Label for="gender" align="top">性别：</Label>
+                <ComboBox inputId="gender" :data="genders" v-model="customer.gender"
+                 :editable="false" :panelStyle="{height:'auto'}">
+                </ComboBox>
+              </div>
+              <div class="form-item">
+                <Label for="birthdate" align="top">出生日期：</Label>
+                <DateBox inputId="birthdate" v-model="customer.birthdate" format="yyyy-MM-dd"></DateBox>
+              </div>
+              <div class="form-item">
+                <Label for="identification" align="top">身份证：</Label>
+                <TextBox inputId="identification" v-model="customer.identification"></TextBox>
+              </div>
+              <div class="form-item">
+                <Label for="phoneNumber" align="top">电话号码：</Label>
+                <TextBox inputId="phoneNumber" v-model="customer.phoneNumber"></TextBox>
+              </div>
+            </Form>
+          </TabPanel>
+          <TabPanel :title="'用户地址'" style="height: 254px;">
+            <DataGrid :data="customer.addresses" style="height: 100%;width: 700px;"
+              :clickToEdit="true" selectionMode="cell" editMode="cell">
+              <GridColumn field="country.name" title="国家" :editable="true">
+                <template slot="body" slot-scope="scope">
+                  {{scope.row.country.name}}
+                </template>
+              </GridColumn>
+              <GridColumn field="province.name" title="省份" :editable="true">
+                <template slot="body" slot-scope="scope">
+                  {{scope.row.province.name}}
+                </template>
+              </GridColumn>
+              <GridColumn field="city.name" title="地市" :editable="true">
+                <template slot="body" slot-scope="scope">
+                  {{scope.row.city.name}}
+                </template>
+              </GridColumn>
+              <GridColumn field="zone.name" title="乡镇" :editable="true">
+                <template slot="body" slot-scope="scope">
+                  {{scope.row.zone.name}}
+                </template>
+              </GridColumn>
+              <GridColumn field="address" title="街道" :editable="true" width="300px"></GridColumn>
+              <GridColumn field="phoneNumber" title="电话" :editable="true" width="100px"></GridColumn>
+            </DataGrid>
+          </TabPanel>
+        </Tabs>
+      </div>
+      <div class="dialog-button" style="border-width: 0px;">
+        <LinkButton style="width:80px" @click="register(customer)">注册</LinkButton>
+        <LinkButton style="width:80px" @click="modify(customer)">修改</LinkButton>
+        <LinkButton style="width:80px" @click="delete(customer)">删除</LinkButton>
+        <LinkButton style="width:80px" @click="closeWindow()">关闭</LinkButton>
+      </div>
+    </Dialog>
+  </div>
+</template>
+```
+以上是采用vue绘制的前端，里面有个customer模型，与后台的用户对象对应。这样，在提交时就直接形成json对象提交后台了：
+
+```
+    register(customer) {
+      this.$axios({
+        url: this.$data.profix + '/orm/customer/register',
+        method: 'post',
+        data: customer
+      }).then(rep => {
+        this.$messager.alert({
+          title: 'Save',
+          icon: 'info',
+          msg: '数据保存成功！'
+        })
+        this.closeWindow()
+      }).catch(err => {
+        this.$messager.alert({
+          title: 'Error',
+          icon: 'error',
+          msg: '数据保存失败！'
+        })
+        console.info(err)
+      })
+    },
+```
+
 2) 在低代码平台中设计一个统一的Controller（增删改用OrmController、查询用QueryController），所有的前端都统一
 请求该Controller。这样，该Controller就会通过反射，将Json直接转换为领域对象，进而完成后续的业务操作。
+
+在这个过程中低代码平台完成了一个非常重要的工作，就是数据类型的转换。大家知道，从前端传送数据到后台，
+所有的数据类型都统一成了String类型，但后台在处理这些数据时，需要将其还原成应有的类型，如Integer, Long, Date等。
+那么低代码平台怎么知道要转换成哪个类型呢？依据你调用的那个方法进行反射。这里可能有三种情况：
+
+1) 数据是普通类型，如Integer, Long, Date, Double等，则根据调用的方法中的参数进行反射，获得要转换的数据类型
+2) 数据是领域对象，则通过DSL查找是哪个领域对象，里面都有哪些属性，都是什么类型，一个一个从json中查找，并转换成应有的类型
+3) 数据是List或Set，这时还要通过反射找到它的模板，将其转换成诸如`List<Long>`或`Set<Customer>`这样的格式
 
 有了以上的思路，开发人员就不用再编写那么多Controller和DTO，简化DDD的编码，降低日后变更的成本。
 
@@ -666,6 +781,8 @@ isDiscriminator="true"。在subclass标签中依次罗列出所有子类。接�
 会根据标识字段决定，到底存储到哪张表中。查询时，如果指定了子类，就查询子类对应的表；如果没有指定子类，将在
 所有子类的表中进行遍历。
 
+**注意：**在DSL中配置各个子类的时候，建议将所有父类的字段都配置上。这样，在单独查询某个子类时，不必依赖父类。
+
 #### 方案3：父类一张表，子类分别有各自的表
 再譬如，供应商supplier通过继承分为分销商distributor和零售商vendor，在程序中首先将该继承关系体现在领域对象中：
 ```java
@@ -719,3 +836,6 @@ isDiscriminator="true"。在subclass标签中依次罗列出所有子类。接�
 在父类supplier的配置中，tableName对应父类的表；子类distributor与vendor的配置中，tableName依次配置
 各个子类对应的表。这样，在存储数据时，每条记录父类的字段被存储在父类的表中，接着再把子类的字段存储在各自子类的表中。
 当需要查询时，每条记录都先查询父类的表，然后根据标识字段各自去查询子类的表进行补填，形成完整的领域对象。
+
+**注意：**在DSL中配置各个子类的时候，建议将所有父类的字段都配置上。这样，在单独查询某个子类时，不必依赖父类。
+
