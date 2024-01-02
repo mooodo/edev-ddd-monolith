@@ -282,13 +282,59 @@ vue-ddd-trade       采用VUE编写的DDD前端节目
 
 在这个过程中低代码平台完成了一个非常重要的工作，就是数据类型的转换。大家知道，从前端传送数据到后台，
 所有的数据类型都统一成了String类型，但后台在处理这些数据时，需要将其还原成应有的类型，如Integer, Long, Date等。
-那么低代码平台怎么知道要转换成哪个类型呢？依据你调用的那个方法进行反射。这里可能有三种情况：
+那么低代码平台怎么知道要转换成哪个类型呢？依据你调用的那个方法进行反射，这里可能有三种情况：
 
 1) 数据是普通类型，如Integer, Long, Date, Double等，则根据调用的方法中的参数进行反射，获得要转换的数据类型
 2) 数据是领域对象，则通过DSL查找是哪个领域对象，里面都有哪些属性，都是什么类型，一个一个从json中查找，并转换成应有的类型
 3) 数据是List或Set，这时还要通过反射找到它的模板，将其转换成诸如`List<Long>`或`Set<Customer>`这样的格式
 
 有了以上的思路，开发人员就不用再编写那么多Controller和DTO，简化DDD的编码，降低日后变更的成本。
+但不得不承认，使用统一的Controller确实存在着一些争议，譬如要使用类似swagger的API识别工具识别前后端接口时，
+得到的所有接口都变成了`orm/{bean}/{method}`。这时不得不选择为每个功能编写Controller，但这时的Controller可以简化成这样：
+
+```java
+@RestController
+@RequestMapping("order")
+public class OrderController {
+    @Autowired
+    private OrmController ormController;
+    private static final String BEAN = "order";
+
+    @PostMapping("create")
+    public Object create(@RequestBody Map<String, Object> json) {
+        return ormController.doPost(BEAN, "create", json);
+    }
+
+    @PostMapping("modify")
+    public void modify(@RequestBody Map<String, Object> json) {
+        ormController.doPost(BEAN, "modify", json);
+    }
+
+    @GetMapping("delete")
+    public void delete(HttpServletRequest request) {
+        ormController.doGet(BEAN, "delete", request);
+    }
+
+    @GetMapping("load")
+    public Object load(HttpServletRequest request) {
+        return ormController.doGet(BEAN, "load", request);
+    }
+
+    @Autowired
+    private QueryController queryController;
+    private static final String QRY_BEAN = "productQry";
+
+    @PostMapping("query")
+    public Object query(@RequestBody Map<String, Object> json) {
+        return queryController.queryByPost(QRY_BEAN, json);
+    }
+
+    @GetMapping("query")
+    public Object query(HttpServletRequest request) {
+        return queryController.queryByGet(QRY_BEAN, request);
+    }
+}
+```
 
 ### 用DSL实现领域对象持久化
 以往的DDD开发，当业务在Service中完成操作，最终要持久化领域对象，将其保存到数据库时，需要为每一个功能设计一个仓库
@@ -781,7 +827,7 @@ isDiscriminator="true"。在subclass标签中依次罗列出所有子类。接�
 会根据标识字段决定，到底存储到哪张表中。查询时，如果指定了子类，就查询子类对应的表；如果没有指定子类，将在
 所有子类的表中进行遍历。
 
-**注意：**在DSL中配置各个子类的时候，建议将所有父类的字段都配置上。这样，在单独查询某个子类时，不必依赖父类。
+**注意**：在DSL中配置各个子类的时候，建议将所有父类的字段都配置上。这样，在单独查询某个子类时，不必依赖父类。
 
 #### 方案3：父类一张表，子类分别有各自的表
 再譬如，供应商supplier通过继承分为分销商distributor和零售商vendor，在程序中首先将该继承关系体现在领域对象中：
@@ -837,5 +883,5 @@ isDiscriminator="true"。在subclass标签中依次罗列出所有子类。接�
 各个子类对应的表。这样，在存储数据时，每条记录父类的字段被存储在父类的表中，接着再把子类的字段存储在各自子类的表中。
 当需要查询时，每条记录都先查询父类的表，然后根据标识字段各自去查询子类的表进行补填，形成完整的领域对象。
 
-**注意：**在DSL中配置各个子类的时候，建议将所有父类的字段都配置上。这样，在单独查询某个子类时，不必依赖父类。
+**注意**：在DSL中配置各个子类的时候，建议将所有父类的字段都配置上。这样，在单独查询某个子类时，不必依赖父类。
 
