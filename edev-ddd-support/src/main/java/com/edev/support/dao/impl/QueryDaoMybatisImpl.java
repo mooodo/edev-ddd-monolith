@@ -4,6 +4,8 @@
 package com.edev.support.dao.impl;
 
 import com.edev.support.dao.QueryDao;
+import lombok.Getter;
+import lombok.Setter;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,24 +20,9 @@ import java.util.Map;
 public class QueryDaoMybatisImpl implements QueryDao {
 	@Autowired
 	private SqlSessionFactory sqlSessionFactory;
+	@Setter @Getter
 	private String sqlMapper;
-
-	public QueryDaoMybatisImpl() {}
 	public QueryDaoMybatisImpl(String sqlMapper) {
-		this.sqlMapper = sqlMapper;
-	}
-
-	/**
-	 * @return the sqlMapper
-	 */
-	public String getSqlMapper() {
-		return sqlMapper;
-	}
-
-	/**
-	 * @param sqlMapper the sqlMapper to set
-	 */
-	public void setSqlMapper(String sqlMapper) {
 		this.sqlMapper = sqlMapper;
 	}
 

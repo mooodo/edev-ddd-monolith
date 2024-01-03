@@ -7,7 +7,7 @@ import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
 @ComponentScan(basePackages = "com.edev")
-@MapperScan("com.edev.support.dao")
+@MapperScan({"com.edev.support.dao","com.edev.trade.query.dao"})
 public class TradeApplication {
     public static void main(String[] args) {
         SpringApplication.run(TradeApplication.class, args);

@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50635
 File Encoding         : 65001
 
-Date: 2024-01-01 21:17:46
+Date: 2024-01-03 13:34:45
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -179,11 +179,17 @@ CREATE TABLE `t_journal_account` (
   `operation` varchar(50) DEFAULT NULL,
   `operate_time` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=213 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=227 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of t_journal_account
 -- ----------------------------
+INSERT INTO `t_journal_account` VALUES ('217', '1', '1000.00', 'topUp', '2024-01-02 21:08:14');
+INSERT INTO `t_journal_account` VALUES ('218', '1', '1000.00', 'payoff', '2024-01-02 21:08:14');
+INSERT INTO `t_journal_account` VALUES ('220', '1', '1000.00', 'topUp', '2024-01-02 21:21:33');
+INSERT INTO `t_journal_account` VALUES ('221', '1', '1000.00', 'payoff', '2024-01-02 21:21:33');
+INSERT INTO `t_journal_account` VALUES ('223', null, '5000.00', 'test', null);
+INSERT INTO `t_journal_account` VALUES ('224', null, '3000.00', 'test', null);
 
 -- ----------------------------
 -- Table structure for t_order
@@ -454,7 +460,7 @@ CREATE TABLE `t_user_granted_authority` (
   `authority_id` int(20) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `idx_user_granted_authority` (`user_id`,`authority_id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=50 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of t_user_granted_authority
@@ -498,6 +504,7 @@ CREATE TABLE `t_vendor` (
 INSERT INTO `t_vendor` VALUES ('40001', '华为专卖店（西直门店）', '北京市西城区西直门', '20003');
 INSERT INTO `t_vendor` VALUES ('40002', '华为专卖店（中关村店）', '北京市海淀区中关村南路', '20003');
 INSERT INTO `t_vendor` VALUES ('40003', '苹果专卖店（望京店）', '北京市朝阳区望京西', '20004');
+INSERT INTO `t_vendor` VALUES ('40004', 'IMB专卖店（建国门店）', '北京市朝阳区建国门', '20001');
 
 -- ----------------------------
 -- Table structure for t_vip
