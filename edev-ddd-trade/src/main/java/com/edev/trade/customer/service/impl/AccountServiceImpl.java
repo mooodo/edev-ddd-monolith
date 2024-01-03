@@ -20,6 +20,7 @@ public class AccountServiceImpl implements AccountService {
 
     private void validAccount(Account account) {
         if(account.getId()==null) throw new ValidException("The id is null");
+        if(account.getCustomerId()==null) throw new ValidException("The customer id is null");
     }
 
     @Override
