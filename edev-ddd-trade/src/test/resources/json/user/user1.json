@@ -1,0 +1,7 @@
+{
+  "id": 1, "name": "Mary Ann", "password": "321",
+  "authorities": [
+    {"id": 50001},
+    {"id": 50003}
+  ]
+}

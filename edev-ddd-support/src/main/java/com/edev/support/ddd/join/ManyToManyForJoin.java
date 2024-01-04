@@ -47,7 +47,6 @@ public class ManyToManyForJoin<E extends Entity<S>, S extends Serializable> exte
     @Transactional
     public void updateValue(@NotNull E entity) {
         Collection<Entity<S>> collection = createJoinObjects(entity);
-        if(collection.isEmpty()) return;
 
         String joinKey = join.getJoinKey();
         String joinClassKey = join.getJoinClassKey();

@@ -126,4 +126,15 @@ public class QryConfig {
         return new AutofillQueryServiceImpl(
                 vipDiscountQryDao(), basicDaoWithCache);
     }
+    @Bean
+    public QueryDao userQryDao() {
+        return new QueryDaoMybastisImplForDdd(
+                "com.edev.trade.authority.entity.User",
+                "com.edev.trade.query.dao.UserMapper");
+    }
+    @Bean
+    public QueryService userQry() {
+        return new AutofillQueryServiceImpl(
+                userQryDao(), basicDaoWithCache);
+    }
 }

@@ -27,7 +27,7 @@ public class Authority extends Entity<Long> {
         return this;
     }
 
-    public boolean isAuthenticated() {
+    public boolean getAuthenticated() {
         return "T".equals(authenticated);
     }
 

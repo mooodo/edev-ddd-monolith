@@ -9,10 +9,10 @@ public interface UserService {
     Long register(User user);
     void modify(User user);
     void deleteById(Long userId);
-    void delete(User user);
+    void delete(User template);
     User load(Long userId);
     User loadByName(String userName);
     void saveAll(List<User> users);
-    void deleteAll(List<Long> ids);
-    Collection<User> loadAll(List<Long> ids);
+    void deleteAll(List<Long> userIds);
+    Collection<User> loadAll(List<Long> userIds);
 }

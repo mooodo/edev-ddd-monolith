@@ -1,0 +1,15 @@
+[
+  {
+    "id": 1, "name": "Mary", "password": "123",
+    "authorities": [
+      {"id": 50001},
+      {"id": 50002}
+    ]
+  },
+  {
+    "id": 2, "name": "Jack", "password": "4444",
+    "roles": [
+      {"id": 20001}
+    ]
+  }
+]

@@ -1,0 +1,20 @@
+{
+  "id": 1,
+  "name": "Mary Ann",
+  "password": "321",
+  "accountExpired": false,
+  "accountLocked": false,
+  "credentialsExpired": false,
+  "disabled": false,
+  "authorities": [
+    {
+      "id": 50001,
+      "name": "registerUser"
+    },
+    {
+      "id": 50003,
+      "name": "removeUser"
+    }
+  ],
+  "roles": []
+}

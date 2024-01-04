@@ -6,10 +6,10 @@ import com.edev.support.ddd.join.JoinHelper;
 import com.edev.support.ddd.join.RefHelper;
 import com.edev.support.entity.Entity;
 import com.edev.support.utils.SpringHelper;
+import lombok.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
@@ -24,7 +24,7 @@ public class Repository extends DecoratorDao implements BasicDao {
     }
     @Override
     @Transactional
-    public <E extends Entity<S>, S extends Serializable> S insert(@NotNull E entity) {
+    public <E extends Entity<S>, S extends Serializable> S insert(@NonNull E entity) {
         S id = super.insert(entity);
         JoinHelper<E,S> joinHelper = new JoinHelper<>(getDao());
         if(joinHelper.hasJoinAndAggregation(entity))
@@ -32,7 +32,7 @@ public class Repository extends DecoratorDao implements BasicDao {
         return id;
     }
 
-    private <E extends Entity<S>, S extends Serializable> void updateWithJoin(@NotNull E entity) {
+    private <E extends Entity<S>, S extends Serializable> void updateWithJoin(@NonNull E entity) {
         JoinHelper<E,S> joinHelper = new JoinHelper<>(getDao());
         if(joinHelper.hasJoinAndAggregation(entity))
             joinHelper.updateJoins(entity);
@@ -40,20 +40,20 @@ public class Repository extends DecoratorDao implements BasicDao {
 
     @Override
     @Transactional
-    public <E extends Entity<S>, S extends Serializable> void update(@NotNull E entity) {
+    public <E extends Entity<S>, S extends Serializable> void update(@NonNull E entity) {
         super.update(entity);
         updateWithJoin(entity);
     }
 
     @Override
     @Transactional
-    public <E extends Entity<S>, S extends Serializable> S insertOrUpdate(@NotNull E entity) {
+    public <E extends Entity<S>, S extends Serializable> S insertOrUpdate(@NonNull E entity) {
         S id = super.insertOrUpdate(entity);
         updateWithJoin(entity);
         return id;
     }
 
-    private <E extends Entity<S>, S extends Serializable> void deleteWithJoin(@NotNull E entity) {
+    private <E extends Entity<S>, S extends Serializable> void deleteWithJoin(@NonNull E entity) {
         JoinHelper<E,S> joinHelper = new JoinHelper<>(getDao());
         if(joinHelper.hasJoinAndAggregation(entity))
             joinHelper.deleteJoins(entity);
@@ -61,7 +61,7 @@ public class Repository extends DecoratorDao implements BasicDao {
 
     @Override
     @Transactional
-    public <E extends Entity<S>, S extends Serializable> void delete(@NotNull E template) {
+    public <E extends Entity<S>, S extends Serializable> void delete(@NonNull E template) {
         Collection<E> entities = super.loadAll(template);
         entities.forEach(this::deleteWithJoin);
         super.delete(template);
@@ -70,28 +70,28 @@ public class Repository extends DecoratorDao implements BasicDao {
     @Override
     @Transactional
     public <E extends Entity<S>, S extends Serializable, C extends Collection<E>>
-            void insertOrUpdateForList(@NotNull C list) {
+            void insertOrUpdateForList(@NonNull C list) {
         list.forEach(this::insertOrUpdate);
     }
 
     @Override
     @Transactional
     public <E extends Entity<S>, S extends Serializable, C extends Collection<E>>
-        void deleteForList(@NotNull C list) {
+        void deleteForList(@NonNull C list) {
         list.forEach(this::delete);
     }
 
     @Override
     @Transactional
     public <E extends Entity<S>, S extends Serializable>
-        void deleteForList(@NotNull Collection<S> ids, @NotNull Class<E> clazz) {
+        void deleteForList(@NonNull Collection<S> ids, @NonNull Class<E> clazz) {
         ids.forEach(id->delete(id,clazz));
     }
 
     @Override
     @Transactional
     public <E extends Entity<S>, S extends Serializable>
-            void delete(@NotNull S id, @NotNull Class<E> clazz) {
+            void delete(@NonNull S id, @NonNull Class<E> clazz) {
         JoinHelper<E,S> joinHelper = new JoinHelper<>(getDao());
         if(joinHelper.hasJoinAndAggregation(clazz)) {
             E entity = this.load(id, clazz);
@@ -102,7 +102,7 @@ public class Repository extends DecoratorDao implements BasicDao {
 
     @Override
     public <E extends Entity<S>, S extends Serializable>
-            E load(@NotNull S id, @NotNull Class<E> clazz) {
+            E load(@NonNull S id, @NonNull Class<E> clazz) {
         E entity = super.load(id, clazz);
         if(entity==null||Repository.isNotJoin()) return entity;
         (new JoinHelper<E,S>(this)).setJoins(entity);
@@ -112,7 +112,7 @@ public class Repository extends DecoratorDao implements BasicDao {
 
     @Override
     public <E extends Entity<S>, S extends Serializable>
-            Collection<E> loadForList(@NotNull Collection<S> ids, @NotNull Class<E> clazz) {
+            Collection<E> loadForList(@NonNull Collection<S> ids, @NonNull Class<E> clazz) {
         Collection<E> collection = super.loadForList(ids, clazz);
         if(collection==null||collection.isEmpty()||Repository.isNotJoin())
             return collection;
@@ -122,7 +122,7 @@ public class Repository extends DecoratorDao implements BasicDao {
     }
 
     @Override
-    public <E extends Entity<S>, S extends Serializable> Collection<E> loadAll(@NotNull E template) {
+    public <E extends Entity<S>, S extends Serializable> Collection<E> loadAll(@NonNull E template) {
         Collection<E> collection = super.loadAll(template);
         if(collection==null||collection.isEmpty()||Repository.isNotJoin())
             return collection;
@@ -133,7 +133,7 @@ public class Repository extends DecoratorDao implements BasicDao {
 
     @Override
     public <E extends Entity<S>, S extends Serializable>
-            Collection<E> loadAll(@NotNull List<Map<Object, Object>> colMap, @NotNull Class<E> clazz) {
+            Collection<E> loadAll(@NonNull List<Map<Object, Object>> colMap, @NonNull Class<E> clazz) {
         Collection<E> collection = super.loadAll(colMap, clazz);
         if(collection==null||collection.isEmpty()||Repository.isNotJoin())
             return collection;

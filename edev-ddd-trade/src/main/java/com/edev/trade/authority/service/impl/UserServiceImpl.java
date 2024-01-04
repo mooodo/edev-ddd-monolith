@@ -38,8 +38,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void delete(User user) {
-        dao.delete(user);
+    public void delete(User template) {
+        dao.delete(template);
     }
 
     @Override
@@ -63,12 +63,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void deleteAll(List<Long> ids) {
-        dao.deleteForList(ids, User.class);
+    public void deleteAll(List<Long> userIds) {
+        dao.deleteForList(userIds, User.class);
     }
 
     @Override
-    public Collection<User> loadAll(List<Long> ids) {
-        return dao.loadForList(ids, User.class);
+    public Collection<User> loadAll(List<Long> userIds) {
+        return dao.loadForList(userIds, User.class);
     }
 }

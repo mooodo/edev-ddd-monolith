@@ -12,7 +12,7 @@ public class UserGrantedAuthority extends Entity<Long> {
     private Long userId;
     private Long authorityId;
 
-    public Boolean isAvailable() {
+    public Boolean getAvailable() {
         return "Y".equals(available);
     }
 
