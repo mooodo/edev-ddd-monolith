@@ -1,0 +1,77 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: vue-configmap
+  namespace: default
+  labels:
+    app: edev-ddd-vue
+data:
+  default.conf: |-
+    server {
+      listen       80;
+      server_name  localhost;
+
+      location / {
+          root   /app;
+          index  index.html index.htm;
+      }
+
+      location /api {
+        add_header 'Access-Control-Allow-Origin' '*';
+        rewrite /api/(.*) /$1 break;
+        proxy_pass http://edev-ddd-trade:8800;
+      }
+
+      error_page   500 502 503 504  /50x.html;
+      location = /50x.html {
+          root   /usr/share/nginx/html;
+      }
+    }
+---
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  labels:
+    app: edev-ddd-vue
+  name: edev-ddd-vue
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: edev-ddd-vue
+  template:
+    metadata:
+      name: edev-ddd-vue
+      labels:
+        app: edev-ddd-vue
+    spec:
+      containers:
+      - name: edev-ddd-vue
+        image: repository:5000/edev-ddd-vue
+        imagePullPolicy: Always
+        volumeMounts:
+        - name: config
+          mountPath: /etc/nginx/conf.d/default.conf
+          subPath: default.conf
+      volumes:
+      - name: config
+        configMap:
+          name: vue-configmap
+          items:
+          - key: default.conf
+            path: default.conf
+---
+kind: Service
+apiVersion: v1
+metadata:
+  labels:
+    app: edev-ddd-vue
+  name: edev-ddd-vue
+  namespace: default
+spec:
+  ports:
+  - port: 80
+    targetPort: 80
+  selector:
+    app: edev-ddd-vue
