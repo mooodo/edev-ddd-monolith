@@ -14,4 +14,5 @@ public interface SupplierService {
     void saveAll(List<Supplier> suppliers);
     void deleteAll(List<Long> ids);
     Collection<Supplier> loadAll(List<Long> ids);
+    Collection<Supplier> getAll();
 }

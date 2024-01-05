@@ -62,4 +62,9 @@ public class SupplierServiceImpl implements SupplierService {
     public Collection<Supplier> loadAll(List<Long> ids) {
         return dao.loadForList(ids, Supplier.class);
     }
+
+    @Override
+    public Collection<Supplier> getAll() {
+        return dao.loadAll(Supplier.build());
+    }
 }

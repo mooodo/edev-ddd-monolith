@@ -8,6 +8,7 @@ import java.util.List;
 public interface CustomerService {
     Long register(Customer customer);
     void modify(Customer customer);
+    void save(Customer customer);
     void delete(Long customerId);
     Customer load(Long customerId);
     void saveAll(List<Customer> customers);
