@@ -8,10 +8,11 @@ edev-ddd-monolith   采用低代码平台编写的单体应用
 * edev-ddd-trade      采用低代码平台编写的业务操作系统
 * edev-ddd-security   采用低代码平台编写的用户认证授权
 * edev-ddd-analysis   采用低代码平台编写的查询分析系统
+* edev-ddd-vue        采用VUE编写的DDD前端 for edev-ddd-trade
 edev-service-trade  采用低代码平台编写的微服务系统 for eureka
 edev-alibaba-trade  采用低代码平台编写的微服务系统 for nacos
 edev-consul-trade   采用低代码平台编写的微服务系统 for consul
-vue-ddd-trade       采用VUE编写的DDD前端节目
+vue-ddd-trade       采用VUE编写的DDD前端 for 微服务
 ```
 为什么需要这样的低代码平台呢？因为DDD发展了这么多年，最大的难题是落地实际项目困难，代码编写量巨大。
 正因为如此，使得DDD落地阻力巨大，困难重重，始终不能发挥出DDD应有的作用。
