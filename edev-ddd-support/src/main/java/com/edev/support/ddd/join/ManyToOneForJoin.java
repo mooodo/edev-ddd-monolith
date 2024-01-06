@@ -1,6 +1,7 @@
 package com.edev.support.ddd.join;
 
 import com.edev.support.dao.BasicDao;
+import com.edev.support.ddd.DddException;
 import com.edev.support.dsl.Join;
 import com.edev.support.entity.Entity;
 
@@ -15,20 +16,17 @@ public class ManyToOneForJoin<E extends Entity<S>, S extends Serializable> exten
 
     @Override
     public void insertValue(@NotNull E entity) {
-        //no aggregation for many-to-one relation
-        return;
+        throw new DddException("no aggregation for many-to-one relation! Check your design.");
     }
 
     @Override
     public void updateValue(@NotNull E entity) {
-        //no aggregation for many-to-one relation
-        return;
+        throw new DddException("no aggregation for many-to-one relation! Check your design.");
     }
 
     @Override
     public void deleteValue(@NotNull E entity) {
-        //no aggregation for many-to-one relation
-        return;
+        throw new DddException("no aggregation for many-to-one relation! Check your design.");
     }
 
     @Override
