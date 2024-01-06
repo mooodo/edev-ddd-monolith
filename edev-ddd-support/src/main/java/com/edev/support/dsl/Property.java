@@ -2,8 +2,6 @@ package com.edev.support.dsl;
 
 import lombok.Data;
 
-import java.util.Objects;
-
 @Data
 public class Property {
     private String name = "";

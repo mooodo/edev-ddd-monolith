@@ -48,7 +48,6 @@ public class EntityUtils {
      */
     public static boolean hasSubClass(Class<?> clazz) {
         if(!isEntity(clazz)) return false;
-        //if(hasSubClass(clazz.getSuperclass())) return true;
         return hasSubClass(clazz.getName());
     }
 

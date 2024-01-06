@@ -1,5 +1,6 @@
 package com.edev.support.utils;
 
+import com.edev.support.exception.OrmException;
 import lombok.Getter;
 
 import java.lang.reflect.Method;
@@ -23,7 +24,8 @@ public class ParameterHelper {
                         .getMethod(method.getName(),method.getParameterTypes())
                         .getParameters();
             } catch (NoSuchMethodException e) {
-                throw new RuntimeException(e);
+                throw new OrmException("no such method[class:%s, method:%s, parameters:%s]",
+                        method.getDeclaringClass(),method.getName(),method.getParameterTypes());
             }
         } else {
             return method.getParameters();

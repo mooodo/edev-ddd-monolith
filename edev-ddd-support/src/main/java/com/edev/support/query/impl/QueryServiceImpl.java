@@ -78,11 +78,11 @@ public class QueryServiceImpl implements QueryService {
 		Object size = params.get("size");
 		Object count = params.get("count");
 		
-		long cnt = (count==null) ? queryDao.count(params) : new Long(count.toString());
+		long cnt = (count==null) ? queryDao.count(params) : Long.getLong(count.toString());
 		resultSet.setCount(cnt);
 		
 		if( size==null ) return;
-		int p = (page==null)? 0 : new Integer(page.toString());
+		int p = (page==null)? 0 : Integer.getInteger(page.toString());
 		int s = Integer.parseInt(size.toString());
 		int firstRow = p * s;
 		params.put("page", p);

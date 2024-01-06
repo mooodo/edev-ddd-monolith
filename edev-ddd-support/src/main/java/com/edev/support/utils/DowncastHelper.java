@@ -30,11 +30,11 @@ public class DowncastHelper {
         if(clazz.equals(String.class)) return value;
 
         String str = value.toString();
-        if(clazz.equals(Long.class)||clazz.equals(long.class)) return new Long(str);
-        if(clazz.equals(Integer.class)||clazz.equals(int.class)) return new Integer(str);
-        if(clazz.equals(Double.class)||clazz.equals(double.class)) return new Double(str);
-        if(clazz.equals(Float.class)||clazz.equals(float.class)) return new Float(str);
-        if(clazz.equals(Short.class)||clazz.equals(short.class)) return new Short(str);
+        if(clazz.equals(Long.class)||clazz.equals(long.class)) return Long.getLong(str);
+        if(clazz.equals(Integer.class)||clazz.equals(int.class)) return Integer.getInteger(str);
+        if(clazz.equals(Double.class)||clazz.equals(double.class)) return Double.valueOf(str);
+        if(clazz.equals(Float.class)||clazz.equals(float.class)) return Float.valueOf(str);
+        if(clazz.equals(Short.class)||clazz.equals(short.class)) return Short.valueOf(str);
 
         if(clazz.equals(Date.class)&&str.length()==10) return DateUtils.getDate(str,"yyyy-MM-dd");
         if(clazz.equals(Date.class)&&str.length()==19) return DateUtils.getDate(str,"yyyy-MM-dd HH:mm:ss");

@@ -198,10 +198,9 @@ public abstract class Entity<T extends Serializable> implements Serializable, Cl
         Field[] fields = this.getFields(getClass());
         for(Field field : fields) {
             String fieldName = field.getName();
-            if(!entity.hasField(entity.getClass(), fieldName)) continue;
-            Object value = entity.getValue(fieldName);
-            if(value==null) continue;
-            this.setValue(fieldName, value);
+            if(!entity.hasField(entity.getClass(), fieldName)
+                    ||entity.getValue(fieldName)==null) continue;
+            this.setValue(fieldName, entity.getValue(fieldName));
         }
     }
 
