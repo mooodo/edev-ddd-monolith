@@ -14,6 +14,7 @@ public class VipDiscount extends Discount {
         return new VipDiscount();
     }
 
+    @Override
     public VipDiscount setValues(Long id, String name, Date beginTime, Date endTime,
                                  Double discount, String vipType) {
         super.setValues(id, name, beginTime, endTime, discount, "vipDiscount");

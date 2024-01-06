@@ -1,7 +1,6 @@
 package com.edev.trade.customer.entity;
 
 import com.edev.support.entity.Entity;
-import com.edev.support.utils.DateUtils;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 

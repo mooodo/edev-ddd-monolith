@@ -7,6 +7,7 @@ import com.edev.trade.inventory.service.InventoryService;
 import com.edev.trade.order.entity.Order;
 import com.edev.trade.order.service.OrderService;
 import com.edev.trade.order.service.OrderAggService;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,8 +15,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service("orderAgg")
+@Slf4j
 public class OrderAggServiceImpl implements OrderAggService {
-    private final static Log log = LogFactory.getLog(OrderAggServiceImpl.class);
     @Autowired
     private OrderService orderService;
     @Autowired

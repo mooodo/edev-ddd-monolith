@@ -1,7 +1,6 @@
 package com.edev.trade.order.service.impl;
 
 import com.edev.support.dao.BasicDao;
-import com.edev.support.exception.ValidException;
 import com.edev.trade.order.entity.Discount;
 import com.edev.trade.order.entity.Order;
 import com.edev.trade.order.service.DiscountService;
