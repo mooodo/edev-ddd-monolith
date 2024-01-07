@@ -3,6 +3,10 @@
  */
 package com.edev.support.xml;
 
+import lombok.Getter;
+import lombok.NonNull;
+import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.w3c.dom.Document;
@@ -57,46 +61,19 @@ import java.io.InputStream;
  * </pre>
  * @author fangang
  */
+@Getter @Setter
+@Slf4j
 public abstract class XmlBuildFactoryTemplate {
-	private static final Log log = LogFactory.getLog("FactoryBuilder");
 	private boolean validating = false;
 	private boolean namespaceAware = false;
 	private String[] paths;
 	protected Class<?> clazz;
-	
-	/**
-	 * @return the namespaceAware
-	 */
-	public boolean isNamespaceAware() {
-		return namespaceAware;
-	}
-
-	/**
-	 * @param namespaceAware the namespaceAware to set
-	 */
-	public void setNamespaceAware(boolean namespaceAware) {
-		this.namespaceAware = namespaceAware;
-	}
-
-	/**
-	 * @return the validating
-	 */
-	public boolean isValidating() {
-		return validating;
-	}
-
-	/**
-	 * @param validating the validating to set
-	 */
-	public void setValidating(boolean validating) {
-		this.validating = validating;
-	}
 
 	/**
 	 * initialize a factory with path
 	 * @param path the path to read xml file
 	 */
-	public void initFactory(String path){
+	public void initFactory(@NonNull String path){
 		initFactory(path.split(","));
 	}
 	
@@ -104,7 +81,7 @@ public abstract class XmlBuildFactoryTemplate {
 	 * initialize a factory with list of paths
 	 * @param paths the list of paths to read xml files.
 	 */
-	public void initFactory(String... paths) {
+	public void initFactory(@NonNull String... paths) {
 		this.paths = paths;
 		boolean success;
 		ResourceLoader loader;

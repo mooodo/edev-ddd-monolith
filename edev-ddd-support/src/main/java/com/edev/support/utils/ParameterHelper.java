@@ -2,6 +2,7 @@ package com.edev.support.utils;
 
 import com.edev.support.exception.OrmException;
 import lombok.Getter;
+import lombok.NonNull;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
@@ -9,10 +10,10 @@ import java.lang.reflect.Parameter;
 @Getter
 public class ParameterHelper {
     private final Method method;
-    public ParameterHelper(Method method) {
+    public ParameterHelper(@NonNull Method method) {
         this.method = method;
     }
-    public static ParameterHelper build(Method method) {
+    public static ParameterHelper build(@NonNull Method method) {
         return new ParameterHelper(method);
     }
 

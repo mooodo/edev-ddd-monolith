@@ -6,6 +6,7 @@ import com.edev.support.utils.BeanUtils;
 import com.edev.support.utils.DowncastHelper;
 import com.edev.support.utils.ParameterHelper;
 import com.edev.support.utils.SpringHelper;
+import lombok.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -45,7 +46,7 @@ public class OrmController extends AbstractController {
      * @param json the json that submit with
      * @return the returned value of the method after called
      */
-    public Object doPost(String beanName, String methodName, Map<String, Object> json) {
+    public Object doPost(@NonNull String beanName, @NonNull String methodName, Map<String, Object> json) {
         return perform(beanName, methodName, json, null);
     }
 
@@ -56,7 +57,7 @@ public class OrmController extends AbstractController {
      * @param request the http servlet request that get data from client
      * @return the returned value of the method after called
      */
-    public Object doGet(String beanName, String methodName, HttpServletRequest request) {
+    public Object doGet(@NonNull String beanName, @NonNull String methodName, @NonNull HttpServletRequest request) {
         return perform(beanName, methodName, null, request);
     }
 
@@ -70,12 +71,12 @@ public class OrmController extends AbstractController {
         return BeanUtils.invoke(service, method, args);
     }
 
-    public Object doList(String beanName, String methodName, List<Object> list) {
+    public Object doList(@NonNull String beanName, @NonNull String methodName, List<Object> list) {
         return list(beanName, methodName, list);
     }
 
     private <E extends Entity<S>, S extends Serializable>
-            Object[] getArguments(Method method, Map<String, Object> json) {
+            Object[] getArguments(@NonNull Method method, Map<String, Object> json) {
         //There is no parameter to be used from json
         if(json==null||json.isEmpty()) return new Object[]{};
         Parameter[] parameters = ParameterHelper.build(method).getParameters();
@@ -105,7 +106,7 @@ public class OrmController extends AbstractController {
     }
 
     private <E extends Entity<S>, S extends Serializable>
-            Object[] getArgumentsForList(Method method, List<Object> list) {
+            Object[] getArgumentsForList(@NonNull Method method, List<Object> list) {
         if(list==null||list.isEmpty()) return new Object[]{};
         Parameter[] parameters = method.getParameters();
         if(parameters.length!=1)

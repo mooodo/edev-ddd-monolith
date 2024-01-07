@@ -3,30 +3,16 @@
  */
 package com.edev.support.xml;
 
+import lombok.Getter;
+import lombok.Setter;
+
 /**
  * @author fangang
  */
+@Getter
+@Setter
 public abstract class AbstractResourceLoader implements ResourceLoader {
 	private Filter filter = null;
-
-	/**
-	 * @return the file filter, default the xml file filter.
-	 */
-	@Override
-	public Filter getFilter() {
-		if(filter==null){
-			filter = fileName -> fileName.endsWith(".xml") || fileName.endsWith(".XML");
-		}
-		return filter;
-	}
-
-	/**
-	 * @param filter the filter
-	 */
-	@Override
-	public void setFilter(Filter filter) {
-		this.filter = filter;
-	}
 
 	@Override
 	public boolean loadResource(ResourceCallBack callback, String... paths) {

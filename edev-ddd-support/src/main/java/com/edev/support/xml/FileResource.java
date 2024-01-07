@@ -3,10 +3,13 @@
  */
 package com.edev.support.xml;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,21 +17,10 @@ import java.util.List;
  * search and read file with java.io.File
  * @author fangang
  */
+@Setter @Getter
 public class FileResource implements Resource, ResourcePath {
 	private File file;
 	private Filter filter = null;
-	/**
-	 * @return the file
-	 */
-	public File getFile() {
-		return file;
-	}
-	/**
-	 * @param file the file to set
-	 */
-	public void setFile(File file) {
-		this.file = file;
-	}
 	/**
 	 * Default constructor
 	 */
@@ -56,11 +48,11 @@ public class FileResource implements Resource, ResourcePath {
 		if(filter!=null&&!filter.isSatisfied(file.getName())){
 			return null;
 		}
-		return new FileInputStream(file);
+		return Files.newInputStream(file.toPath());
 	}
 	
 	/**
-	 * get all of the files in the path with the method <code>File.listFiles()</code>
+	 * get all files in the path with the method <code>File.listFiles()</code>
 	 * @return Resource[]
 	 */
 	public Resource[] getResources() throws IOException {

@@ -33,7 +33,7 @@ public class BeanUtils {
      * @return the bean
      * @param <T> the class
      */
-    public static <T> T createBean(Class<T> clazz) {
+    public static <T> T createBean(@NonNull Class<T> clazz) {
         try {
             return clazz.newInstance();
         } catch (InstantiationException e) {
@@ -49,7 +49,7 @@ public class BeanUtils {
      * @param fieldName the field name
      * @param value the value of the field
      */
-    public static void setValue(Object obj, String fieldName, Object value) {
+    public static void setValue(@NonNull Object obj, @NonNull String fieldName, Object value) {
         try {
             Field field = obj.getClass().getDeclaredField(fieldName);
             boolean isAccessible = field.isAccessible();
@@ -68,7 +68,7 @@ public class BeanUtils {
      * @param fieldName the field name
      * @return the value of the field
      */
-    public static Object getValue(Object obj, String fieldName) {
+    public static Object getValue(@NonNull Object obj, @NonNull String fieldName) {
         try {
             Field field = obj.getClass().getDeclaredField(fieldName);
             boolean isAccessible = field.isAccessible();
@@ -90,9 +90,7 @@ public class BeanUtils {
      * @param sizeOfParameters size of parameters
      * @return the method
      */
-    public static Method getMethod(Object obj, String methodName, int sizeOfParameters) {
-        if(methodName==null||methodName.isEmpty())
-            throw new OrmException("The method name is empty!");
+    public static Method getMethod(@NonNull Object obj, @NonNull String methodName, int sizeOfParameters) {
         Method target = null;
         for(Method method : obj.getClass().getMethods())
             if(method.getName().equals(methodName) &&
@@ -108,9 +106,7 @@ public class BeanUtils {
      * @param methodName the method name
      * @return the method
      */
-    public static Method getMethod(Object service, String methodName) {
-        if(methodName==null||methodName.isEmpty())
-            throw new OrmException("The method name is empty!");
+    public static Method getMethod(@NonNull Object service, @NonNull String methodName) {
         Method[] allOfMethods = service.getClass().getDeclaredMethods();
         Method rtn = null;
         for(Method method : allOfMethods) {
@@ -127,7 +123,7 @@ public class BeanUtils {
      * @param args the arguments
      * @return the return value
      */
-    public static Object invoke(Object service, Method method, Object...args) {
+    public static Object invoke(@NonNull Object service, @NonNull Method method, Object...args) {
         try {
             if(args==null||args.length==0) return method.invoke(service);
             else return method.invoke(service, args);

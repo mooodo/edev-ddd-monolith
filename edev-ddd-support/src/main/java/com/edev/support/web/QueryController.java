@@ -3,6 +3,7 @@ package com.edev.support.web;
 import com.edev.support.entity.ResultSet;
 import com.edev.support.query.QueryService;
 import com.edev.support.utils.SpringHelper;
+import lombok.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,7 +30,7 @@ public class QueryController extends AbstractController {
      * @param params the parameters the query need
      * @return the result set after query
      */
-    public ResultSet queryByPost(String beanName, Map<String, Object> params) {
+    public ResultSet queryByPost(@NonNull String beanName, Map<String, Object> params) {
         return query(beanName, params, null);
     }
 
@@ -39,7 +40,7 @@ public class QueryController extends AbstractController {
      * @param request the http servlet request
      * @return the result set after query
      */
-    public ResultSet queryByGet(String beanName, HttpServletRequest request) {
+    public ResultSet queryByGet(@NonNull String beanName, @NonNull HttpServletRequest request) {
         return query(beanName, null, request);
     }
 

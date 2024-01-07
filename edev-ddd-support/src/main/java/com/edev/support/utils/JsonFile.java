@@ -4,13 +4,14 @@ import com.edev.support.exception.OrmException;
 import com.edev.support.xml.FileResourceLoader;
 import com.edev.support.xml.ResourceLoader;
 import com.edev.support.xml.UrlResourceLoader;
+import lombok.NonNull;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 
 public class JsonFile {
     private JsonFile() {}
-    public static String read(String file) {
+    public static String read(@NonNull String file) {
         StringBuilder buffer = new StringBuilder();
         boolean success;
         ResourceLoader loader;

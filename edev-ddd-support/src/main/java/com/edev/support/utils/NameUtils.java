@@ -1,5 +1,7 @@
 package com.edev.support.utils;
 
+import lombok.NonNull;
+
 /**
  * The utilities for the name convert
  */
@@ -10,14 +12,14 @@ public class NameUtils {
      * @param name the name
      * @return came-case styled name
      */
-    public static String convertToCamelCase(String name) {
+    public static String convertToCamelCase(@NonNull String name) {
         while (name.contains("_")) {
             name = underlineChange(name);
         }
         return name;
     }
 
-    private static String underlineChange(String name) {
+    private static String underlineChange(@NonNull String name) {
         int index = name.indexOf("_");
         String prefix = name.substring(0, index);
         String first = name.substring(index+1, index+2).toUpperCase();
@@ -30,7 +32,7 @@ public class NameUtils {
      * @param name the name
      * @return underline styled name
      */
-    public static String convertToUnderline(String name) {
+    public static String convertToUnderline(@NonNull String name) {
         StringBuilder result = new StringBuilder();
         char[] chars = name.toCharArray();
         for(char c : chars)
@@ -44,7 +46,7 @@ public class NameUtils {
      * @param name the name
      * @return first-letter-upper name
      */
-    public static String convertToFirstUpperCase(String name) {
+    public static String convertToFirstUpperCase(@NonNull String name) {
         char[] chars = name.toCharArray();
         chars[0] -= 32;
         return String.valueOf(chars);

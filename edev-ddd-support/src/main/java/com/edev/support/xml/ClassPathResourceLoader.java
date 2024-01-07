@@ -3,8 +3,8 @@
  */
 package com.edev.support.xml;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import lombok.NonNull;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 
@@ -15,9 +15,9 @@ import java.io.InputStream;
  * load resources with class local path.
  * @author fangang
  */
-public class ClassPathResourceLoader 
+@Slf4j
+public class ClassPathResourceLoader
 						extends AbstractResourceLoader implements ResourceLoader {
-	private static final Log log = LogFactory.getLog(ClassPathResourceLoader.class);
 	private Class<?> clazz = this.getClass();
 	
 	public ClassPathResourceLoader() { super(); }
@@ -29,10 +29,9 @@ public class ClassPathResourceLoader
 		if(clazz!=null) this.clazz = clazz;
 	}
 	@Override
-	public boolean loadResource(ResourceCallBack callback, String path) {
+	public boolean loadResource(@NonNull ResourceCallBack callback, @NonNull String path) {
 		try {
 			Resource resource = new ClassPathResource(path, clazz);
-			log.debug(resource);
 			InputStream is = resource.getInputStream();
 			callback.apply(is);
 		} catch (IOException e) {

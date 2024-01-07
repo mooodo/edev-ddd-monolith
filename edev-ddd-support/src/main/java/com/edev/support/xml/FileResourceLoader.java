@@ -3,6 +3,8 @@
  */
 package com.edev.support.xml;
 
+import lombok.NonNull;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -15,7 +17,7 @@ public class FileResourceLoader
 					extends AbstractResourceLoader implements ResourceLoader {
 
 	@Override
-	public boolean loadResource(ResourceCallBack callback, String path) {
+	public boolean loadResource(@NonNull ResourceCallBack callback, @NonNull String path) {
 		try {
 			FileResource loader = new FileResource(new File(path));
 			loader.setFilter(this.getFilter());
