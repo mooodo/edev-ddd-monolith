@@ -1,0 +1,28 @@
+node {
+    def parent = 'edev-ddd-monolith'
+    def app = 'edev-ddd-vue'
+    stage('拉取代码') {
+        git "https://gitee.com/mooodo/${parent}.git"
+    }
+    stage('编译测试') {
+        sh """
+        cd ${app}
+        npm install
+        npm run build
+        """
+    }
+    stage('制作镜像') {
+        sh "/var/jenkins_home/docker.sh ${app}"
+        sh """
+        cd ${app}
+        docker build -t repository:5000/${app} .
+        docker push repository:5000/${app}
+        """
+    }
+    stage('云端部署') {
+        sh """
+        cd ${app}
+        kubectl apply -f ${app}.yaml
+        """
+    }
+}
