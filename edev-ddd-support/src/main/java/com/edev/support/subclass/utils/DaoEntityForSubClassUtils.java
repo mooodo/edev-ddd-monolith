@@ -27,7 +27,7 @@ public class DaoEntityForSubClassUtils {
         //set the columns of subclass into daoEntity
         SubClass subClass = getSubClass(dObj, child.getClass());
         List<Property> properties = subClass.getProperties();
-        DaoEntity.setProperties(daoEntity, child, properties);
+        daoEntity.setProperties(child, properties);
         return daoEntity;
     }
 

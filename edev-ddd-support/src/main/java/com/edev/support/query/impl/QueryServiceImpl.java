@@ -82,7 +82,7 @@ public class QueryServiceImpl implements QueryService {
 		resultSet.setCount(cnt);
 		
 		if( size==null ) return;
-		int p = (page==null)? 0 : Integer.getInteger(page.toString());
+		int p = (page==null)? 0 : Integer.parseInt(page.toString());
 		int s = Integer.parseInt(size.toString());
 		int firstRow = p * s;
 		params.put("page", p);

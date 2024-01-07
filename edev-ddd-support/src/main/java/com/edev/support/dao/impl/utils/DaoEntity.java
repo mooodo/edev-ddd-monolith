@@ -23,7 +23,7 @@ public class DaoEntity {
 	private List<Map<Object, Object>> pkMap = new ArrayList<>();
 	public void addColMap(Map<Object, Object> colMap) { this.colMap.add(colMap); }
 	public void addPkMap(Map<Object, Object> pkMap) { this.pkMap.add(pkMap); }
-	public static void setProperties(DaoEntity daoEntity, Entity<?> entity, List<Property> properties) {
+	public void setProperties(Entity<?> entity, List<Property> properties) {
 		for(Property property : properties) {
 			String name = property.getName();
 			String column = property.getColumn();
@@ -33,9 +33,9 @@ public class DaoEntity {
 			Map<Object, Object> map = new HashMap<>();
 			map.put(KEY, column);
 			map.put(VALUE, value);
-			daoEntity.addColMap(map);
+			this.addColMap(map);
 
-			if(property.isPrimaryKey()) daoEntity.addPkMap(map);
+			if(property.isPrimaryKey()) this.addPkMap(map);
 		}
 	}
 }

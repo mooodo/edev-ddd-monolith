@@ -1,5 +1,8 @@
 package com.edev.support.utils;
 
+import com.edev.support.utils.downcast.DowncastValue;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
 import java.lang.reflect.ParameterizedType;
@@ -11,6 +14,8 @@ import java.util.*;
  */
 @Component
 public class DowncastHelper {
+    @Autowired
+    private ApplicationContext applicationContext;
     /**
      * downcast the object to the type
      * @param type the type
@@ -18,7 +23,7 @@ public class DowncastHelper {
      * @return the value downcast to the type
      */
     public Object downcast(Type type, Object value) {
-        if(value==null) return null;
+        if(type==null||value==null) return value;
         if(type instanceof Class)
             return downcastWithSimpleClass(type, value);
         else if(type instanceof ParameterizedType)
@@ -26,21 +31,13 @@ public class DowncastHelper {
         return null;
     }
     private Object downcastWithSimpleClass(Type type, Object value) {
+        if(type==null||value==null) return value;
         Class<?> clazz = (Class<?>)type;
-        if(clazz.equals(String.class)) return value;
-
-        String str = value.toString();
-        if(clazz.equals(Long.class)||clazz.equals(long.class)) return Long.getLong(str);
-        if(clazz.equals(Integer.class)||clazz.equals(int.class)) return Integer.getInteger(str);
-        if(clazz.equals(Double.class)||clazz.equals(double.class)) return Double.valueOf(str);
-        if(clazz.equals(Float.class)||clazz.equals(float.class)) return Float.valueOf(str);
-        if(clazz.equals(Short.class)||clazz.equals(short.class)) return Short.valueOf(str);
-
-        if(clazz.equals(Date.class)&&str.length()==10) return DateUtils.getDate(str,"yyyy-MM-dd");
-        if(clazz.equals(Date.class)&&str.length()==19) return DateUtils.getDate(str,"yyyy-MM-dd HH:mm:ss");
-        if(clazz.equals(Date.class)&&str.length()==28) return DateUtils.getDate(str,"EEE MMM dd HH:mm:ss zzz yyyy");
-        if(clazz.equals(Date.class)&&str.length()==24) return DateUtils.getDateForUTC(str);
-
+        Map<String, DowncastValue> map = applicationContext.getBeansOfType(DowncastValue.class);
+        if(map==null&&map.isEmpty()) return value;
+        for (DowncastValue downcastValue : map.values())
+            if(downcastValue.isAvailable(clazz))
+                return downcastValue.downcast(value);
         return value;
     }
 

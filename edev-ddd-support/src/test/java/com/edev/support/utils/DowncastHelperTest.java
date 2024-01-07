@@ -1,6 +1,11 @@
 package com.edev.support.utils;
 
+import com.edev.trade.TradeApplication;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Type;
@@ -8,10 +13,20 @@ import java.util.*;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.hasItems;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
 
+@RunWith(SpringRunner.class)
+@SpringBootTest(classes = TradeApplication.class)
 public class DowncastHelperTest {
-    private final DowncastHelper helper = new DowncastHelper();
+    @Autowired
+    private DowncastHelper helper;
+    @Test
+    public void testNull() {
+        Object value = "1";
+        assertThat(helper.downcast(null, value), equalTo(value));
+        assertThat(helper.downcast(Integer.class, null), equalTo(null));
+    }
 
     @Test
     public void testLong() {

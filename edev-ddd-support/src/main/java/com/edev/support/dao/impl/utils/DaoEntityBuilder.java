@@ -34,24 +34,8 @@ public class DaoEntityBuilder {
     public static DaoEntity build(Entity<?> entity, DomainObject dObj) {
         DaoEntity daoEntity = new DaoEntity();
         daoEntity.setTableName(dObj.getTable());
-        setProperties(daoEntity, entity, dObj.getProperties());
+        daoEntity.setProperties(entity, dObj.getProperties());
         return daoEntity;
-    }
-
-    private static void setProperties(DaoEntity daoEntity, Entity<?> entity, List<Property> properties) {
-        for(Property property : properties) {
-            String name = property.getName();
-            String column = property.getColumn();
-            Object value = entity.getValue(name);
-
-            if(value==null) continue;
-            Map<Object, Object> map = new HashMap<>();
-            map.put(KEY, column);
-            map.put(VALUE, value);
-            daoEntity.addColMap(map);
-
-            if(property.isPrimaryKey()) daoEntity.addPkMap(map);
-        }
     }
 
     /**

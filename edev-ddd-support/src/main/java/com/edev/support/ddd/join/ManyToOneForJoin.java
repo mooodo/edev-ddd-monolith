@@ -16,17 +16,20 @@ public class ManyToOneForJoin<E extends Entity<S>, S extends Serializable> exten
 
     @Override
     public void insertValue(@NotNull E entity) {
-        throw new DddException("no aggregation for many-to-one relation! Check your design.");
+        if(!join.isAggregation()) return;
+        throw new DddException("no aggregation for many-to-one relation! Check your design: %s", entity);
     }
 
     @Override
     public void updateValue(@NotNull E entity) {
-        throw new DddException("no aggregation for many-to-one relation! Check your design.");
+        if(!join.isAggregation()) return;
+        throw new DddException("no aggregation for many-to-one relation! Check your design: %s", entity);
     }
 
     @Override
     public void deleteValue(@NotNull E entity) {
-        throw new DddException("no aggregation for many-to-one relation! Check your design.");
+        if(!join.isAggregation()) return;
+        throw new DddException("no aggregation for many-to-one relation! Check your design: %s", entity);
     }
 
     @Override
