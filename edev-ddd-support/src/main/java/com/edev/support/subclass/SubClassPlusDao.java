@@ -50,7 +50,7 @@ public class SubClassPlusDao extends DecoratorDao implements BasicDao {
 
     @Override
     public <E extends Entity<S>, S extends Serializable, C extends Collection<E>> void insertOrUpdateForList(@NonNull C list) {
-        if(list==null||list.isEmpty()) return;
+        if(list.isEmpty()) return;
         E entity = list.iterator().next();
         if(!hasSubClass(entity)) super.insertOrUpdateForList(list);
         else subClassFactory.chooseSubClass(entity.getClass()).insertOrUpdateForList(list);
