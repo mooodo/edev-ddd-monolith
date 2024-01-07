@@ -13,6 +13,7 @@ import javax.validation.constraints.NotNull;
 import java.util.List;
 
 public class DaoEntityForSubClassUtils {
+    private DaoEntityForSubClassUtils() {}
     /**
      * read and decode the data of entity, and build the daoEntity.
      * And then set the columns of subclass into daoEntity.

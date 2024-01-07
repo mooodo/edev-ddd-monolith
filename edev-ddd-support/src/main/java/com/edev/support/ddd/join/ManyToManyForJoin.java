@@ -119,15 +119,4 @@ public class ManyToManyForJoin<E extends Entity<S>, S extends Serializable> exte
             entity.setValue(join.getName(), collection);
         });
     }
-
-    private Map<S, List<Entity<S>>> sortEntitiesByJoinKey(Collection<Entity<S>> valueList) {
-        String joinKey = join.getJoinKey();
-        Map<S, List<Entity<S>>> sortEntities = new HashMap<>();
-        valueList.forEach(entity -> {
-            S id = (S)entity.getValue(joinKey);
-            if(sortEntities.get(id)==null) sortEntities.put(id, new ArrayList<>());
-            sortEntities.get(id).add(entity);
-        });
-        return sortEntities;
-    }
 }

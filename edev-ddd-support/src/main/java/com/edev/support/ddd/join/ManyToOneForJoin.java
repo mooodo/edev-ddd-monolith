@@ -5,7 +5,6 @@ import com.edev.support.ddd.DddException;
 import com.edev.support.dsl.Join;
 import com.edev.support.entity.Entity;
 
-import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.*;
 
@@ -15,25 +14,28 @@ public class ManyToOneForJoin<E extends Entity<S>, S extends Serializable> exten
     }
 
     @Override
-    public void insertValue(@NotNull E entity) {
-        if(!join.isAggregation()) return;
+    public void insertValue(E entity) {
+        haveNoAggregation(entity);
+    }
+
+    @Override
+    public void updateValue(E entity) {
+        haveNoAggregation(entity);
+    }
+
+    @Override
+    public void deleteValue(E entity) {
+        haveNoAggregation(entity);
+    }
+
+    private void haveNoAggregation(E entity) {
+        if(entity==null||!join.isAggregation()) return;
         throw new DddException("no aggregation for many-to-one relation! Check your design: %s", entity);
     }
 
     @Override
-    public void updateValue(@NotNull E entity) {
-        if(!join.isAggregation()) return;
-        throw new DddException("no aggregation for many-to-one relation! Check your design: %s", entity);
-    }
-
-    @Override
-    public void deleteValue(@NotNull E entity) {
-        if(!join.isAggregation()) return;
-        throw new DddException("no aggregation for many-to-one relation! Check your design: %s", entity);
-    }
-
-    @Override
-    public void setValue(@NotNull E entity) {
+    public void setValue(E entity) {
+        if(entity==null) return;
         String joinKey = join.getJoinKey();
         S id = (S) entity.getValue(joinKey);
         if(id==null) return;

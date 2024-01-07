@@ -9,6 +9,7 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 
 public class JsonFile {
+    private JsonFile() {}
     public static String read(String file) {
         StringBuilder buffer = new StringBuilder();
         boolean success;

@@ -16,6 +16,7 @@ import java.io.Serializable;
 import java.util.List;
 
 public class SubClassUtils {
+    private SubClassUtils() {}
     /**
      * get dsl of the subclass
      * @param dObj the dsl of the parent class

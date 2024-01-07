@@ -9,6 +9,7 @@ import com.edev.support.utils.BeanUtils;
 
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.util.*;
 
 public abstract class AbstractRelation<E extends Entity<S>, S extends Serializable> implements Relation<E,S> {
     protected Join join;
@@ -28,5 +29,15 @@ public abstract class AbstractRelation<E extends Entity<S>, S extends Serializab
         if(!Entity.class.isAssignableFrom(clazz))
             throw new DddException("The class is not an entity: ["+join.getClazz()+"]");
         return (Class<Entity<S>>) clazz;
+    }
+    protected Map<S, List<Entity<S>>> sortEntitiesByJoinKey(Collection<Entity<S>> valueList) {
+        String joinKey = join.getJoinKey();
+        Map<S, List<Entity<S>>> sortEntities = new HashMap<>();
+        valueList.forEach(entity -> {
+            S id = (S)entity.getValue(joinKey);
+            if(sortEntities.get(id)==null) sortEntities.put(id, new ArrayList<>());
+            sortEntities.get(id).add(entity);
+        });
+        return sortEntities;
     }
 }

@@ -12,7 +12,7 @@ import java.util.Collection;
 import java.util.List;
 
 public class EntityUtils {
-
+    private EntityUtils() {}
     /**
      * whether the class is an entity
      * @param clazz the class

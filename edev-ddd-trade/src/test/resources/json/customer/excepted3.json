@@ -2,7 +2,7 @@
   "id": 2,
   "name": "Mike",
   "gender": "male",
-  "birthdate": "2000-03-05 00:00:00",
+  "birthdate": "2000-03-05",
   "identification": "100101200003052314",
   "phoneNumber": "13456567878",
   "addresses": [

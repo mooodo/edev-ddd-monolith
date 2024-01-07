@@ -34,7 +34,7 @@ public class DowncastHelper {
         if(type==null||value==null) return value;
         Class<?> clazz = (Class<?>)type;
         Map<String, DowncastValue> map = applicationContext.getBeansOfType(DowncastValue.class);
-        if(map==null&&map.isEmpty()) return value;
+        if(map==null||map.isEmpty()) return value;
         for (DowncastValue downcastValue : map.values())
             if(downcastValue.isAvailable(clazz))
                 return downcastValue.downcast(value);

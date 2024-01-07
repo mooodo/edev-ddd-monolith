@@ -2,7 +2,6 @@ package com.edev.support.dao.impl.utils;
 
 import com.edev.support.dsl.DomainObject;
 import com.edev.support.dsl.DomainObjectFactory;
-import com.edev.support.dsl.Property;
 import com.edev.support.entity.Entity;
 import com.edev.support.exception.OrmException;
 import com.edev.support.utils.BeanUtils;
