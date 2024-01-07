@@ -5,12 +5,14 @@ package com.edev.support.dao.impl;
 
 import com.edev.support.dao.QueryDao;
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.Setter;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -22,12 +24,13 @@ public class QueryDaoMybatisImpl implements QueryDao {
 	private SqlSessionFactory sqlSessionFactory;
 	@Setter @Getter
 	private String sqlMapper;
-	public QueryDaoMybatisImpl(String sqlMapper) {
+	public QueryDaoMybatisImpl(@NonNull String sqlMapper) {
 		this.sqlMapper = sqlMapper;
 	}
 
 	@Override
 	public Collection<?> query(Map<String, Object> params) {
+		if(params==null) params = new HashMap<>();
 		try (SqlSession sqlSession = sqlSessionFactory.openSession()) {
 			return sqlSession.selectList(sqlMapper + ".query", params);
 		}
@@ -35,6 +38,7 @@ public class QueryDaoMybatisImpl implements QueryDao {
 
 	@Override
 	public long count(Map<String, Object> params) {
+		if(params==null) params = new HashMap<>();
 		try (SqlSession sqlSession = sqlSessionFactory.openSession()) {
 			return sqlSession.selectOne(sqlMapper + ".count", params);
 		}
@@ -42,6 +46,7 @@ public class QueryDaoMybatisImpl implements QueryDao {
 
 	@Override
 	public Map<String, Object> aggregate(Map<String, Object> params) {
+		if(params==null) params = new HashMap<>();
 		Map<String, String> aggregation = (Map<String, String>)params.get("aggregation");
 		if(aggregation==null||aggregation.isEmpty()) return null;
 		

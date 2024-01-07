@@ -7,9 +7,9 @@ import com.edev.support.ddd.utils.EntityUtils;
 import com.edev.support.dsl.DomainObject;
 import com.edev.support.entity.Entity;
 import com.edev.support.subclass.utils.SubClassUtils;
+import lombok.NonNull;
 import org.springframework.stereotype.Component;
 
-import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -19,25 +19,25 @@ import java.util.Map;
 @Component()
 public class UnionSubClass extends AbstractSubClass implements SubClassDao {
     @Override
-    public boolean available(@NotNull DomainObject dObj) {
+    public boolean available(@NonNull DomainObject dObj) {
         return dObj.getSubClassType().equalsIgnoreCase("union");
     }
 
     @Override
-    public <E extends Entity<S>, S extends Serializable> S insert(@NotNull E entity) {
+    public <E extends Entity<S>, S extends Serializable> S insert(@NonNull E entity) {
         E childEntity = SubClassUtils.isParent(entity) ? SubClassUtils.createSubClassByParent(entity) : entity;
         DaoEntity daoEntity = DaoEntityBuilder.build(childEntity);
         return daoExecutor.insert(daoEntity, entity);
     }
 
     @Override
-    public <E extends Entity<S>, S extends Serializable> void update(@NotNull E entity) {
+    public <E extends Entity<S>, S extends Serializable> void update(@NonNull E entity) {
         E childEntity = SubClassUtils.isParent(entity) ? SubClassUtils.createSubClassByParent(entity) : entity;
         updateForChild(childEntity);
     }
 
     @Override
-    public <E extends Entity<S>, S extends Serializable> S insertOrUpdate(@NotNull E entity) {
+    public <E extends Entity<S>, S extends Serializable> S insertOrUpdate(@NonNull E entity) {
         E child = SubClassUtils.isParent(entity) ? SubClassUtils.createSubClassByParent(entity) : entity;
         E old = child.getId()==null ? null : load(child.getId(), EntityUtils.getSuperclass(child));
         if(old == null) insert(child);
@@ -46,19 +46,19 @@ public class UnionSubClass extends AbstractSubClass implements SubClassDao {
     }
 
     @Override
-    public <E extends Entity<S>, S extends Serializable> void delete(@NotNull E entity) {
-        deleteChildTable(entity);
+    public <E extends Entity<S>, S extends Serializable> void delete(@NonNull E template) {
+        deleteChildTable(template);
     }
 
     @Override
     public <E extends Entity<S>, S extends Serializable>
-            void deleteForList(@NotNull Collection<S> ids, @NotNull Class<E> clazz) {
+            void deleteForList(@NonNull Collection<S> ids, @NonNull Class<E> clazz) {
         deleteChildTableForList(ids, clazz);
     }
 
     @Override
     public <E extends Entity<S>, S extends Serializable>
-            Collection<E> loadForList(@NotNull Collection<S> ids, @NotNull Class<E> clazz) {
+            Collection<E> loadForList(@NonNull Collection<S> ids, @NonNull Class<E> clazz) {
         if(SubClassUtils.isParent(clazz)) {
             Collection<E> collection = new ArrayList<>();
             SubClassUtils.doForEachSubClass(clazz, subClass -> collection.addAll(super.loadForList(ids, subClass)));
@@ -69,7 +69,7 @@ public class UnionSubClass extends AbstractSubClass implements SubClassDao {
 
     @Override
     public <E extends Entity<S>, S extends Serializable>
-            Collection<E> loadAll(@NotNull E template) {
+            Collection<E> loadAll(@NonNull E template) {
         if(SubClassUtils.isParent(template)) {
             Object value = SubClassUtils.getValueOfDiscriminator(template);
             if(value!=null) {
@@ -90,7 +90,7 @@ public class UnionSubClass extends AbstractSubClass implements SubClassDao {
 
     @Override
     public <E extends Entity<S>, S extends Serializable>
-            Collection<E> loadAll(@NotNull List<Map<Object, Object>> colMap, @NotNull Class<E> clazz) {
+            Collection<E> loadAll(@NonNull List<Map<Object, Object>> colMap, @NonNull Class<E> clazz) {
         if(SubClassUtils.isParent(clazz)) {
             Collection<E> entities = new ArrayList<>();
             SubClassUtils.doForEachSubClass(clazz,subClass ->

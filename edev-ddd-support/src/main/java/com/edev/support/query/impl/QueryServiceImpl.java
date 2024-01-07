@@ -6,6 +6,9 @@ package com.edev.support.query.impl;
 import com.edev.support.dao.QueryDao;
 import com.edev.support.entity.ResultSet;
 import com.edev.support.query.QueryService;
+import lombok.Getter;
+import lombok.NonNull;
+import lombok.Setter;
 
 import java.util.Collection;
 import java.util.Map;
@@ -14,26 +17,14 @@ import java.util.Map;
  * The implement of the generic query service.
  * @author fangang
  */
+@Getter
+@Setter
 public class QueryServiceImpl implements QueryService {
 	private QueryDao queryDao;
 	public QueryServiceImpl() {}
-	public QueryServiceImpl(QueryDao queryDao) {
+	public QueryServiceImpl(@NonNull QueryDao queryDao) {
 		this.queryDao = queryDao;
 	}
-	/**
-	 * @return the queryDao
-	 */
-	public QueryDao getQueryDao() {
-		return queryDao;
-	}
-
-	/**
-	 * @param queryDao the queryDao to set
-	 */
-	public void setQueryDao(QueryDao queryDao) {
-		this.queryDao = queryDao;
-	}
-
 	@Override
 	public ResultSet query(Map<String, Object> params) {
 		ResultSet resultSet = new ResultSet();

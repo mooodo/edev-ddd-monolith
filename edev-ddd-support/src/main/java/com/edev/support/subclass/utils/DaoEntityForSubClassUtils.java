@@ -8,8 +8,8 @@ import com.edev.support.dsl.Property;
 import com.edev.support.dsl.SubClass;
 import com.edev.support.entity.Entity;
 import com.edev.support.subclass.exception.SubClassNotExistsException;
+import lombok.NonNull;
 
-import javax.validation.constraints.NotNull;
 import java.util.List;
 
 public class DaoEntityForSubClassUtils {
@@ -21,7 +21,7 @@ public class DaoEntityForSubClassUtils {
      * @param child the child entity
      * @return the daoEntity
      */
-    public static DaoEntity buildWithEntityAndItsSubClass(@NotNull Entity<?> child) {
+    public static DaoEntity buildWithEntityAndItsSubClass(@NonNull Entity<?> child) {
         DomainObject dObj = DomainObjectFactory.getDomainObject(child.getClass().getSuperclass());
         DaoEntity daoEntity = DaoEntityBuilder.build(child, dObj);
 
@@ -38,7 +38,7 @@ public class DaoEntityForSubClassUtils {
      * @param subClazz the class of the subclass
      * @return the dsl of the subclass
      */
-    private static SubClass getSubClass(@NotNull DomainObject dObj, @NotNull Class<?> subClazz) {
+    private static SubClass getSubClass(@NonNull DomainObject dObj, @NonNull Class<?> subClazz) {
         List<SubClass> subClasses = dObj.getSubClasses();
         for(SubClass subClass : subClasses)
             if(subClass.getClazz().equals(subClazz.getName()))
@@ -51,7 +51,7 @@ public class DaoEntityForSubClassUtils {
      * @param child the child entity
      * @return the daoEntity for parent
      */
-    public static DaoEntity buildForParent(@NotNull Entity<?> child) {
+    public static DaoEntity buildForParent(@NonNull Entity<?> child) {
         DomainObject dObj = DomainObjectFactory.getDomainObject(child.getClass().getSuperclass());
         return DaoEntityBuilder.build(child, dObj);
     }

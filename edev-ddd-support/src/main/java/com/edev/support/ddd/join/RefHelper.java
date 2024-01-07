@@ -7,6 +7,7 @@ import com.edev.support.dsl.Ref;
 import com.edev.support.entity.Entity;
 import com.edev.support.utils.BeanUtils;
 import com.edev.support.utils.SpringHelper;
+import lombok.NonNull;
 
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
@@ -15,8 +16,8 @@ import java.util.*;
 
 public class RefHelper<E extends Entity<S>, S extends Serializable> {
     private final SpringHelper springHelper;
-    public RefHelper(SpringHelper springHelper) { this.springHelper = springHelper; }
-    private void doWithRefs(@NotNull E entity, @NotNull Callback callback) {
+    public RefHelper(@NonNull SpringHelper springHelper) { this.springHelper = springHelper; }
+    private void doWithRefs(@NonNull E entity, @NonNull Callback callback) {
         DomainObject dObj = DomainObjectFactory.getDomainObject(entity.getClass());
         dObj.getRefs().forEach(callback::apply);
     }
@@ -30,6 +31,7 @@ public class RefHelper<E extends Entity<S>, S extends Serializable> {
      * @param entity the entity
      */
     public void setRefs(E entity) {
+        if(entity==null) return;
         doWithRefs(entity, ref -> {
             String bean = ref.getBean();
             Object service = springHelper.getService(bean);
@@ -62,6 +64,7 @@ public class RefHelper<E extends Entity<S>, S extends Serializable> {
      * @param list the list of entities
      */
     public void setRefForList(Collection<E> list) {
+        if(list==null||list.isEmpty()) return;
         doWithRefsForList(list, ref -> {
             String bean = ref.getBean();
             Object service = springHelper.getService(bean);

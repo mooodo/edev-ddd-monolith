@@ -1,6 +1,7 @@
 package com.edev.support.utils;
 
 import com.edev.support.exception.OrmException;
+import lombok.NonNull;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -18,7 +19,7 @@ public class BeanUtils {
      * @param className the class name
      * @return the class
      */
-    public static Class<?> getClazz(String className) {
+    public static Class<?> getClazz(@NonNull String className) {
         try {
             return Class.forName(className);
         } catch (ClassNotFoundException e) {

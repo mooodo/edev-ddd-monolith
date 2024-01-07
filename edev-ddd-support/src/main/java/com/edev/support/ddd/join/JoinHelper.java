@@ -7,8 +7,8 @@ import com.edev.support.dsl.DomainObject;
 import com.edev.support.dsl.DomainObjectFactory;
 import com.edev.support.dsl.Join;
 import com.edev.support.entity.Entity;
+import lombok.NonNull;
 
-import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Collection;
 
@@ -19,7 +19,7 @@ public class JoinHelper<E extends Entity<S>, S extends Serializable> {
         this.dao = dao;
     }
 
-    private void doWithJoins(@NotNull E entity, @NotNull Callback callback) {
+    private void doWithJoins(@NonNull E entity, @NonNull Callback callback) {
         DomainObject dObj = DomainObjectFactory.getDomainObject(entity.getClass());
         dObj.getJoins().forEach(callback::apply);
     }
@@ -28,7 +28,7 @@ public class JoinHelper<E extends Entity<S>, S extends Serializable> {
         void apply(Join join);
     }
 
-    private Relation<E,S> getRelation(@NotNull Join join) {
+    private Relation<E,S> getRelation(@NonNull Join join) {
         String joinType = join.getJoinType();
         switch (joinType) {
             case "oneToOne":
@@ -93,7 +93,7 @@ public class JoinHelper<E extends Entity<S>, S extends Serializable> {
      * @param clazz the class of entity
      * @return true, if the entity has a join which is aggregation
      */
-    public boolean hasJoinAndAggregation(@NotNull Class<E> clazz) {
+    public boolean hasJoinAndAggregation(@NonNull Class<E> clazz) {
         DomainObject dObj = DomainObjectFactory.getDomainObject(clazz);
         for(Join join : dObj.getJoins())
             if(join.isAggregation()||join.getJoinType().equals("manyToMany")) return true;
@@ -105,7 +105,7 @@ public class JoinHelper<E extends Entity<S>, S extends Serializable> {
      * @param entity the entity
      * @return true, if the entity has a join which is aggregation
      */
-    public boolean hasJoinAndAggregation(@NotNull E entity) {
+    public boolean hasJoinAndAggregation(@NonNull E entity) {
         return hasJoinAndAggregation(EntityUtils.getClass(entity));
     }
 

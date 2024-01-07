@@ -4,6 +4,7 @@ import com.edev.support.dao.QueryDao;
 import com.edev.support.dao.impl.QueryDaoMybatisImpl;
 import com.edev.support.entity.Entity;
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -16,7 +17,7 @@ public class QueryDaoMybastisImplForDdd extends QueryDaoMybatisImpl implements Q
     private DddFactory dddFactory;
     @Getter @Setter
     private String entityClass;
-    public QueryDaoMybastisImplForDdd(String entityClass, String sqlMapper) {
+    public QueryDaoMybastisImplForDdd(@NonNull String entityClass, @NonNull String sqlMapper) {
         super(sqlMapper);
         this.entityClass = entityClass;
     }

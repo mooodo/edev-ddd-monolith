@@ -13,11 +13,11 @@ import com.edev.support.dsl.SubClass;
 import com.edev.support.entity.Entity;
 import com.edev.support.subclass.utils.SubClassUtils;
 import com.edev.support.utils.NameUtils;
+import lombok.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.ArrayList;
@@ -40,7 +40,7 @@ public abstract class AbstractSubClass implements SubClassDao {
      * @return the created entity
      */
     @Override
-    public <E extends Entity<S>, S extends Serializable> E createEntityByJson(Class<E> clazz, Map<String, Object> json) {
+    public <E extends Entity<S>, S extends Serializable> E createEntityByJson(@NonNull Class<E> clazz, @NonNull Map<String, Object> json) {
         DomainObject dObj = DomainObjectFactory.getDomainObject(clazz);
         Property discriminator = SubClassUtils.getDiscriminator(dObj);
         Object value = json.get(discriminator.getName());
@@ -58,7 +58,7 @@ public abstract class AbstractSubClass implements SubClassDao {
      * @return the created entity
      */
     @Override
-    public <E extends Entity<S>, S extends Serializable> E createEntityByRow(Class<E> clazz, Map<String, Object> row) {
+    public <E extends Entity<S>, S extends Serializable> E createEntityByRow(@NonNull Class<E> clazz, Map<String, @NonNull Object> row) {
         if(SubClassUtils.isParent(clazz)) {
             DomainObject dObj = DomainObjectFactory.getDomainObject(clazz);
             Property discriminator = SubClassUtils.getDiscriminator(dObj);
@@ -71,7 +71,7 @@ public abstract class AbstractSubClass implements SubClassDao {
     }
 
     protected <E extends Entity<S>, S extends Serializable>
-            void updateForChild(E childEntity) {
+            void updateForChild(@NonNull E childEntity) {
         E oldEntity = load(childEntity.getId(), EntityUtils.getSuperclass(childEntity));
         if(oldEntity == null) return;
         if(oldEntity.getClass().equals(childEntity.getClass())) {
@@ -88,7 +88,7 @@ public abstract class AbstractSubClass implements SubClassDao {
     }
 
     @Override
-    public <E extends Entity<S>, S extends Serializable> S insertOrUpdate(@NotNull E entity) {
+    public <E extends Entity<S>, S extends Serializable> S insertOrUpdate(@NonNull E entity) {
         E child = SubClassUtils.isParent(entity) ? SubClassUtils.createSubClassByParent(entity) : entity;
         try {
             insert(child);
@@ -103,11 +103,11 @@ public abstract class AbstractSubClass implements SubClassDao {
     @Override
     @Transactional
     public <E extends Entity<S>, S extends Serializable, C extends Collection<E>>
-        void insertOrUpdateForList(@NotNull C list) {
+        void insertOrUpdateForList(@NonNull C list) {
         list.forEach(this::insertOrUpdate);
     }
 
-    protected <E extends Entity<S>, S extends Serializable> void deleteChildTable(@NotNull E entity) {
+    protected <E extends Entity<S>, S extends Serializable> void deleteChildTable(@NonNull E entity) {
         if(SubClassUtils.isParent(entity)) {
             Object value = SubClassUtils.getValueOfDiscriminator(entity);
             if(value != null) { //delete the child table which has the discriminator
@@ -119,7 +119,7 @@ public abstract class AbstractSubClass implements SubClassDao {
         } else deleteForChild(entity);
     }
 
-    private <E extends Entity<S>, S extends Serializable> void deleteEachChildTables(@NotNull E entity) {
+    private <E extends Entity<S>, S extends Serializable> void deleteEachChildTables(@NonNull E entity) {
         SubClassUtils.doForEachSubClass(EntityUtils.getClass(entity), subClass->{
             E child = EntityBuilder.build(subClass);
             child.merge(entity);
@@ -127,13 +127,13 @@ public abstract class AbstractSubClass implements SubClassDao {
         });
     }
 
-    private <E extends Entity<S>, S extends Serializable> void deleteForChild(@NotNull E childEntity) {
+    private <E extends Entity<S>, S extends Serializable> void deleteForChild(@NonNull E childEntity) {
         DaoEntity child = DaoEntityBuilder.build(childEntity);
         daoExecutor.delete(child);
     }
 
     @Override
-    public <E extends Entity<S>, S extends Serializable> void delete(@NotNull S id, @NotNull Class<E> clazz) {
+    public <E extends Entity<S>, S extends Serializable> void delete(@NonNull S id, @NonNull Class<E> clazz) {
         E template = EntityBuilder.build(clazz);
         template.setId(id);
         delete(template);
@@ -142,25 +142,25 @@ public abstract class AbstractSubClass implements SubClassDao {
     @Override
     @Transactional
     public <E extends Entity<S>, S extends Serializable, C extends Collection<E>>
-            void deleteForList(@NotNull C list) {
+            void deleteForList(@NonNull C list) {
         list.forEach(this::delete);
     }
 
     protected  <E extends Entity<S>, S extends Serializable>
-            void deleteChildTableForList(@NotNull Collection<S> ids, @NotNull Class<E> clazz) {
+            void deleteChildTableForList(@NonNull Collection<S> ids, @NonNull Class<E> clazz) {
         if(SubClassUtils.isParent(clazz))
             SubClassUtils.doForEachSubClass(clazz, (subClass -> deleteForListChild(ids, subClass)));
         else deleteForListChild(ids, clazz);
     }
 
     private <E extends Entity<S>, S extends Serializable>
-            void deleteForListChild(@NotNull Collection<S> ids, @NotNull Class<E> clazz) {
+            void deleteForListChild(@NonNull Collection<S> ids, @NonNull Class<E> clazz) {
         DaoEntity daoEntity = DaoEntityBuilder.buildForList(ids, clazz);
         daoExecutor.deleteForList(daoEntity);
     }
 
     @Override
-    public <E extends Entity<S>, S extends Serializable> E load(@NotNull S id, @NotNull Class<E> clazz) {
+    public <E extends Entity<S>, S extends Serializable> E load(@NonNull S id, @NonNull Class<E> clazz) {
         E template = EntityBuilder.build(clazz);
         template.setId(id);
         SubClassUtils.setDiscriminator(template);
@@ -171,21 +171,21 @@ public abstract class AbstractSubClass implements SubClassDao {
 
     @Override
     public <E extends Entity<S>, S extends Serializable>
-            Collection<E> loadForList(@NotNull Collection<S> ids, @NotNull Class<E> clazz) {
+            Collection<E> loadForList(@NonNull Collection<S> ids, @NonNull Class<E> clazz) {
         if(ids.isEmpty()) return new ArrayList<>();
         DaoEntity daoEntity = DaoEntityBuilder.buildForList(ids, clazz);
         return daoExecutor.load(daoEntity, clazz);
     }
 
     @Override
-    public <E extends Entity<S>, S extends Serializable> Collection<E> loadAll(@NotNull E template) {
+    public <E extends Entity<S>, S extends Serializable> Collection<E> loadAll(@NonNull E template) {
         DaoEntity daoEntity = DaoEntityBuilder.build(template);
         return daoExecutor.find(daoEntity, EntityUtils.getClass(template));
     }
 
     @Override
     public <E extends Entity<S>, S extends Serializable>
-            Collection<E> loadAll(List<Map<Object, Object>> colMap, Class<E> clazz) {
+            Collection<E> loadAll(@NonNull List<Map<Object, Object>> colMap, @NonNull Class<E> clazz) {
         DomainObject dObj = DomainObjectFactory.getDomainObject(clazz);
         String tableName = dObj.getTable();
         DaoEntity daoEntity = new DaoEntity();

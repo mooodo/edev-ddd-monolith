@@ -19,7 +19,7 @@ public class Repository extends DecoratorDao implements BasicDao {
     @Autowired
     private SpringHelper springHelper;
 
-    public Repository(BasicDao dao) {
+    public Repository(@NonNull BasicDao dao) {
         super(dao);
     }
     @Override

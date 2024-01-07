@@ -31,16 +31,18 @@ public interface BasicDao {
 	 */
 	<E extends Entity<S>, S extends Serializable> S insertOrUpdate(E entity);
 	/**
-	 * delete an entity.
-	 * note: you must load the entity first or do like this: 
+	 * delete some entities by a template.
+	 * Usage: firstly create a template of the entity,
+	 * then set conditions into the template.
+	 * At last, do delete by the template, like this:
 	 * <pre>
-	 * User user = new User();
+	 * User template = new User();
 	 * user.setId("C0001");
-	 * dao.delete(user);
+	 * dao.delete(template);
 	 * </pre>
-	 * @param entity the entity
+	 * @param template the template of entity
 	 */
-	<E extends Entity<S>, S extends Serializable> void delete(E entity);
+	<E extends Entity<S>, S extends Serializable> void delete(E template);
 	/**
 	 * insert a list of entities, and if exists, then update.
 	 * @param list the list of entities
@@ -78,7 +80,7 @@ public interface BasicDao {
 	<E extends Entity<S>, S extends Serializable> Collection<E> loadForList(Collection<S> ids, Class<E> clazz);
 	/**
 	 * load all entities according to a condition, which the condition come from the template. 
-	 * for example: I want to load all of the items of an order, then the template is the orderItem 
+	 * for example: I want to load all items of an order, then the template is the orderItem
 	 * and set the orderId to the 'orderId' column in the template. 
 	 * Then it will load all the items of this order according to conditions in the template.
 	 * @param template just an empty object to know which entity, and set the condition to it.

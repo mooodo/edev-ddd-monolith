@@ -7,20 +7,20 @@ import com.edev.support.ddd.utils.EntityUtils;
 import com.edev.support.dsl.Join;
 import com.edev.support.entity.Entity;
 import com.edev.support.utils.NameUtils;
+import lombok.NonNull;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.*;
 
 public class ManyToManyForJoin<E extends Entity<S>, S extends Serializable> extends AbstractRelation<E,S> implements Relation<E,S> {
-    public ManyToManyForJoin(Join join, BasicDao dao) {super(join, dao);}
+    public ManyToManyForJoin(@NonNull Join join, @NonNull BasicDao dao) {super(join, dao);}
 
     private Entity<S> createJoinObject() {
         return (new EntityBuilder<Entity<S>, S>(join.getJoinClass())).createEntity();
     }
 
-    private Collection<Entity<S>> createJoinObjects(@NotNull E entity) {
+    private Collection<Entity<S>> createJoinObjects(@NonNull E entity) {
         S id = entity.getId();
         String name = join.getName();
         Collection<Entity<S>> collection = (Collection<Entity<S>>)entity.getValue(name);
@@ -38,14 +38,16 @@ public class ManyToManyForJoin<E extends Entity<S>, S extends Serializable> exte
 
     @Override
     @Transactional
-    public void insertValue(@NotNull E entity) {
+    public void insertValue(E entity) {
+        if(entity==null) return;
         Collection<Entity<S>> joinObjects = createJoinObjects(entity);
         joinObjects.forEach(dao::insert);
     }
 
     @Override
     @Transactional
-    public void updateValue(@NotNull E entity) {
+    public void updateValue(E entity) {
+        if(entity==null) return;
         Collection<Entity<S>> collection = createJoinObjects(entity);
 
         String joinKey = join.getJoinKey();
@@ -64,7 +66,8 @@ public class ManyToManyForJoin<E extends Entity<S>, S extends Serializable> exte
 
     @Override
     @Transactional
-    public void deleteValue(@NotNull E entity) {
+    public void deleteValue(E entity) {
+        if(entity==null) return;
         S id = entity.getId();
         String joinKey = join.getJoinKey();
         Entity<S> template = createJoinObject();
@@ -74,7 +77,8 @@ public class ManyToManyForJoin<E extends Entity<S>, S extends Serializable> exte
     }
 
     @Override
-    public void setValue(@NotNull E entity) {
+    public void setValue(E entity) {
+        if(entity==null) return;
         S id = entity.getId();
         String joinKey = join.getJoinKey();
         Entity<S> template = createJoinObject();

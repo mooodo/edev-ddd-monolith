@@ -6,8 +6,8 @@ import com.edev.support.ddd.utils.EntityBuilder;
 import com.edev.support.dsl.Join;
 import com.edev.support.entity.Entity;
 import com.edev.support.utils.BeanUtils;
+import lombok.NonNull;
 
-import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.*;
 
@@ -15,7 +15,7 @@ public abstract class AbstractRelation<E extends Entity<S>, S extends Serializab
     protected Join join;
     protected BasicDao dao;
 
-    protected AbstractRelation(@NotNull Join join, @NotNull BasicDao dao) {
+    protected AbstractRelation(@NonNull Join join, @NonNull BasicDao dao) {
         this.join = join;
         this.dao = dao;
     }
@@ -30,7 +30,7 @@ public abstract class AbstractRelation<E extends Entity<S>, S extends Serializab
             throw new DddException("The class is not an entity: ["+join.getClazz()+"]");
         return (Class<Entity<S>>) clazz;
     }
-    protected Map<S, List<Entity<S>>> sortEntitiesByJoinKey(Collection<Entity<S>> valueList) {
+    protected Map<S, List<Entity<S>>> sortEntitiesByJoinKey(@NonNull Collection<Entity<S>> valueList) {
         String joinKey = join.getJoinKey();
         Map<S, List<Entity<S>>> sortEntities = new HashMap<>();
         valueList.forEach(entity -> {

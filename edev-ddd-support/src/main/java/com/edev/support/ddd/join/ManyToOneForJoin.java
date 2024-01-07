@@ -4,12 +4,13 @@ import com.edev.support.dao.BasicDao;
 import com.edev.support.ddd.DddException;
 import com.edev.support.dsl.Join;
 import com.edev.support.entity.Entity;
+import lombok.NonNull;
 
 import java.io.Serializable;
 import java.util.*;
 
 public class ManyToOneForJoin<E extends Entity<S>, S extends Serializable> extends AbstractRelation<E,S> implements Relation<E,S> {
-    public ManyToOneForJoin(Join join, BasicDao dao) {
+    public ManyToOneForJoin(@NonNull Join join, @NonNull BasicDao dao) {
         super(join, dao);
     }
 

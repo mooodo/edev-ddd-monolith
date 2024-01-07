@@ -6,14 +6,14 @@ import com.edev.support.ddd.utils.EntityUtils;
 import com.edev.support.dsl.Join;
 import com.edev.support.entity.Entity;
 import com.edev.support.utils.NameUtils;
+import lombok.NonNull;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.*;
 
 public class OneToManyForJoin<E extends Entity<S>, S extends Serializable> extends AbstractRelation<E,S> implements Relation<E,S> {
-    public OneToManyForJoin(Join join, BasicDao dao) {
+    public OneToManyForJoin(@NonNull Join join, @NonNull BasicDao dao) {
         super(join, dao);
     }
 
@@ -30,8 +30,8 @@ public class OneToManyForJoin<E extends Entity<S>, S extends Serializable> exten
     }
     @Override
     @Transactional
-    public void insertValue(@NotNull E entity) {
-        if(!join.isAggregation()) return;
+    public void insertValue(E entity) {
+        if(entity==null||!join.isAggregation()) return;
         S id = entity.getId();
         String name = join.getName();
         Collection<Entity<S>> collection = (Collection<Entity<S>>)entity.getValue(name);
@@ -42,8 +42,8 @@ public class OneToManyForJoin<E extends Entity<S>, S extends Serializable> exten
 
     @Override
     @Transactional
-    public void updateValue(@NotNull E entity) {
-        if(!join.isAggregation()) return;
+    public void updateValue(E entity) {
+        if(entity==null||!join.isAggregation()) return;
         S id = entity.getId();
         String name = join.getName();
         Collection<Entity<S>> collection = (Collection<Entity<S>>)entity.getValue(name);
@@ -64,8 +64,8 @@ public class OneToManyForJoin<E extends Entity<S>, S extends Serializable> exten
     }
 
     @Override
-    public void deleteValue(@NotNull E entity) {
-        if(!join.isAggregation()) return;
+    public void deleteValue(E entity) {
+        if(entity==null||!join.isAggregation()) return;
         S id = entity.getId();
         String joinKey = join.getJoinKey();
         Entity<S> template = getTemplate();
@@ -74,7 +74,8 @@ public class OneToManyForJoin<E extends Entity<S>, S extends Serializable> exten
     }
 
     @Override
-    public void setValue(@NotNull E entity) {
+    public void setValue(E entity) {
+        if(entity==null) return;
         S id = entity.getId();
         String joinKey = join.getJoinKey();
         Entity<S> template = getTemplate();

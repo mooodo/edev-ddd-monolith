@@ -3,19 +3,19 @@ package com.edev.support.ddd.join;
 import com.edev.support.dao.BasicDao;
 import com.edev.support.dsl.Join;
 import com.edev.support.entity.Entity;
+import lombok.NonNull;
 
-import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.*;
 
 public class OneToOneForJoin<E extends Entity<S>, S extends Serializable> extends AbstractRelation<E,S> implements Relation<E,S> {
-    public OneToOneForJoin(Join join, BasicDao dao) {
+    public OneToOneForJoin(@NonNull Join join, @NonNull BasicDao dao) {
         super(join, dao);
     }
 
     @Override
-    public void insertValue(@NotNull E entity) {
-        if(!join.isAggregation()) return;
+    public void insertValue(E entity) {
+        if(entity==null||!join.isAggregation()) return;
         String name = join.getName();
         Entity<?> value = (Entity<?>) entity.getValue(name);
         if(value==null) return;
@@ -23,8 +23,8 @@ public class OneToOneForJoin<E extends Entity<S>, S extends Serializable> extend
     }
 
     @Override
-    public void updateValue(@NotNull E entity) {
-        if(!join.isAggregation()) return;
+    public void updateValue(E entity) {
+        if(entity==null||!join.isAggregation()) return;
         String name = join.getName();
         Entity<?> value = (Entity<?>) entity.getValue(name);
         if(value==null) deleteValue(entity);
@@ -32,14 +32,15 @@ public class OneToOneForJoin<E extends Entity<S>, S extends Serializable> extend
     }
 
     @Override
-    public void deleteValue(@NotNull E entity) {
-        if(!join.isAggregation()) return;
+    public void deleteValue(E entity) {
+        if(entity==null||!join.isAggregation()) return;
         S id = entity.getId();
         dao.delete(id, getClazz());
     }
 
     @Override
-    public void setValue(@NotNull E entity) {
+    public void setValue(E entity) {
+        if(entity==null) return;
         S id = entity.getId();
         Entity<S> value = dao.load(id, getClazz());
         if(value==null) return;

@@ -24,7 +24,7 @@ public class AutofillQueryServiceImpl extends QueryServiceImpl {
     @Autowired
     private DddFactory dddFactory;
     private final BasicDao autofillDao;
-    public AutofillQueryServiceImpl(QueryDao queryDao, BasicDao autofillDao) {
+    public AutofillQueryServiceImpl(@NonNull QueryDao queryDao, @NonNull BasicDao autofillDao) {
         super(queryDao);
         this.autofillDao = autofillDao;
     }

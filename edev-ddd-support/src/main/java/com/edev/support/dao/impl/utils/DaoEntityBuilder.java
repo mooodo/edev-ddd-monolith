@@ -12,7 +12,7 @@ import java.util.*;
 public class DaoEntityBuilder {
     public static final String KEY = "key";
     public static final String VALUE = "value";
-
+    private DaoEntityBuilder() {}
     /**
      * read and decode the data from entity and build the daoEntity
      * @param entity the entity

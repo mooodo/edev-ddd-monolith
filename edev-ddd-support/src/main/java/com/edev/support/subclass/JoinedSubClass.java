@@ -11,11 +11,11 @@ import com.edev.support.entity.Entity;
 import com.edev.support.subclass.utils.DaoEntityForSubClassUtils;
 import com.edev.support.subclass.utils.SubClassUtils;
 import com.edev.support.utils.DowncastHelper;
+import lombok.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.*;
 
@@ -24,13 +24,13 @@ public class JoinedSubClass extends AbstractSubClass implements SubClassDao {
     @Autowired
     private DowncastHelper downcastHelper;
     @Override
-    public boolean available(@NotNull DomainObject dObj) {
+    public boolean available(@NonNull DomainObject dObj) {
         return dObj.getSubClassType().equalsIgnoreCase("joined");
     }
 
     @Override
     @Transactional
-    public <E extends Entity<S>, S extends Serializable> S insert(@NotNull E entity) {
+    public <E extends Entity<S>, S extends Serializable> S insert(@NonNull E entity) {
         E childEntity = SubClassUtils.isParent(entity) ? SubClassUtils.createSubClassByParent(entity) : entity;
         DaoEntity parent = DaoEntityForSubClassUtils.buildForParent(childEntity);
         daoExecutor.insert(parent, childEntity);
@@ -41,7 +41,7 @@ public class JoinedSubClass extends AbstractSubClass implements SubClassDao {
 
     @Override
     @Transactional
-    public <E extends Entity<S>, S extends Serializable> void update(@NotNull E entity) {
+    public <E extends Entity<S>, S extends Serializable> void update(@NonNull E entity) {
         E childEntity = SubClassUtils.isParent(entity) ? SubClassUtils.createSubClassByParent(entity) : entity;
         //update child table firstly
         updateForChild(childEntity);
@@ -52,19 +52,19 @@ public class JoinedSubClass extends AbstractSubClass implements SubClassDao {
 
     @Override
     @Transactional
-    public <E extends Entity<S>, S extends Serializable> void delete(@NotNull E entity) {
+    public <E extends Entity<S>, S extends Serializable> void delete(@NonNull E template) {
         //delete the parent table
-        DaoEntity parent = SubClassUtils.isParent(entity) ? DaoEntityBuilder.build(entity) :
-                DaoEntityForSubClassUtils.buildForParent(entity);
+        DaoEntity parent = SubClassUtils.isParent(template) ? DaoEntityBuilder.build(template) :
+                DaoEntityForSubClassUtils.buildForParent(template);
         daoExecutor.delete(parent);
         //delete the child tables
-        deleteChildTable(entity);
+        deleteChildTable(template);
     }
 
     @Override
     @Transactional
     public <E extends Entity<S>, S extends Serializable>
-            void delete(@NotNull S id, @NotNull Class<E> clazz) {
+            void delete(@NonNull S id, @NonNull Class<E> clazz) {
         E entity = EntityBuilder.build(clazz);
         entity.setId(id);
         delete(entity);
@@ -73,7 +73,7 @@ public class JoinedSubClass extends AbstractSubClass implements SubClassDao {
     @Override
     @Transactional
     public <E extends Entity<S>, S extends Serializable>
-            void deleteForList(@NotNull Collection<S> ids, @NotNull Class<E> clazz) {
+            void deleteForList(@NonNull Collection<S> ids, @NonNull Class<E> clazz) {
         DaoEntity daoEntity = DaoEntityBuilder.buildForList(ids,
                 SubClassUtils.isParent(clazz) ? clazz : EntityUtils.getSuperclass(clazz)
                 );
@@ -83,7 +83,7 @@ public class JoinedSubClass extends AbstractSubClass implements SubClassDao {
     }
 
     private <E extends Entity<S>, S extends Serializable>
-            Set<Object> distinctDiscriminators(@NotNull Collection<E> parents) {
+            Set<Object> distinctDiscriminators(@NonNull Collection<E> parents) {
         Map<Object, Object> discriminatorMap = new HashMap<>();
         //distinct discriminators by keys of the map
         parents.forEach(entity->discriminatorMap.put(SubClassUtils.getValueOfDiscriminator(entity),null));
@@ -92,7 +92,7 @@ public class JoinedSubClass extends AbstractSubClass implements SubClassDao {
 
     @Override
     public <E extends Entity<S>, S extends Serializable>
-            Collection<E> loadForList(@NotNull Collection<S> ids, @NotNull Class<E> clazz) {
+            Collection<E> loadForList(@NonNull Collection<S> ids, @NonNull Class<E> clazz) {
         //load for parent table
         Collection<E> parents = super.loadForList(ids,
                 SubClassUtils.isParent(clazz) ? clazz : EntityUtils.getSuperclass(clazz));
@@ -122,7 +122,7 @@ public class JoinedSubClass extends AbstractSubClass implements SubClassDao {
     }
 
     private <E extends Entity<S>, S extends Serializable>
-            Collection<E> assembleForList(@NotNull Collection<E> parents, @NotNull Collection<E> children) {
+            Collection<E> assembleForList(@NonNull Collection<E> parents, @NonNull Collection<E> children) {
         Map<S,E> parentMap = new HashMap<>();
         parents.forEach(parent->parentMap.put(parent.getId(), parent));
         Map<S,E> childMap = new HashMap<>();
@@ -138,7 +138,7 @@ public class JoinedSubClass extends AbstractSubClass implements SubClassDao {
 
     @Override
     public <E extends Entity<S>, S extends Serializable>
-            Collection<E> loadAll(@NotNull E template) {
+            Collection<E> loadAll(@NonNull E template) {
         if(SubClassUtils.isParent(template)) {
             Object value = SubClassUtils.getValueOfDiscriminator(template);
             if(value!=null) {//the template is a parent with discriminator
@@ -153,7 +153,7 @@ public class JoinedSubClass extends AbstractSubClass implements SubClassDao {
     }
 
     private <E extends Entity<S>, S extends Serializable>
-            Collection<E> loadAllForParent(@NotNull E template) {
+            Collection<E> loadAllForParent(@NonNull E template) {
         //load data from parent table.
         Collection<E> parents = super.loadAll(template);
         //load data from child tables.
@@ -171,13 +171,13 @@ public class JoinedSubClass extends AbstractSubClass implements SubClassDao {
     }
 
     private <E extends Entity<S>, S extends Serializable>
-            Collection<E> loadAllForChild(@NotNull E template) {
+            Collection<E> loadAllForChild(@NonNull E template) {
         return super.loadAll(template);
     }
 
     @Override
     public <E extends Entity<S>, S extends Serializable>
-            Collection<E> loadAll(@NotNull List<Map<Object, Object>> colMap, @NotNull Class<E> clazz) {
+            Collection<E> loadAll(@NonNull List<Map<Object, Object>> colMap, @NonNull Class<E> clazz) {
         if(SubClassUtils.isParent(clazz)) {
             Collection<E> parents = super.loadAll(colMap, clazz);
             if(parents==null||parents.isEmpty()) return new ArrayList<>();
