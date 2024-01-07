@@ -7,9 +7,9 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,7 +17,7 @@ import java.util.List;
  * search and read file with java.io.File
  * @author fangang
  */
-@Setter @Getter
+@Getter @Setter
 public class FileResource implements Resource, ResourcePath {
 	private File file;
 	private Filter filter = null;
@@ -48,7 +48,7 @@ public class FileResource implements Resource, ResourcePath {
 		if(filter!=null&&!filter.isSatisfied(file.getName())){
 			return null;
 		}
-		return Files.newInputStream(file.toPath());
+		return new FileInputStream(file);
 	}
 	
 	/**
@@ -73,7 +73,7 @@ public class FileResource implements Resource, ResourcePath {
 		resource.setFilter(this.getFilter());
 		return new Resource[]{resource};
 	}
-	
+
 	@Override
 	public String getDescription() {
 		try {
@@ -81,16 +81,6 @@ public class FileResource implements Resource, ResourcePath {
 		} catch (IOException e) {
 			return "";
 		}
-	}
-
-	@Override
-	public Filter getFilter() {
-		return this.filter;
-	}
-	
-	@Override
-	public void setFilter(Filter filter) {
-		this.filter = filter;
 	}
 	
 	@Override
