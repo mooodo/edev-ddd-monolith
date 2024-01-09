@@ -2,7 +2,7 @@
   "id": 2,
   "name": "Mary",
   "gender": "female",
-  "birthdate": "2000-12-13",
+  "birthdate": "2000-12-13 00:00:00",
   "identification": "510212200012137812",
   "phoneNumber": "13456567878",
   "addresses": [

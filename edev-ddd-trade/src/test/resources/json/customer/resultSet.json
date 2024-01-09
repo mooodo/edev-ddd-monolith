@@ -4,7 +4,7 @@
       "id": 1,
       "name": "Jone",
       "gender": "female",
-      "birthdate": "2000-03-05",
+      "birthdate": "2000-03-05 00:00:00",
       "identification": "100101200003052314",
       "phoneNumber": "13677778888",
       "addresses": null
@@ -13,7 +13,7 @@
       "id": 2,
       "name": "Mike",
       "gender": "male",
-      "birthdate": "2000-03-05",
+      "birthdate": "2000-03-05 00:00:00",
       "identification": "100101200003052314",
       "phoneNumber": "13456567878",
       "addresses": [

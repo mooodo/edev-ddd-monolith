@@ -7,7 +7,7 @@
     "id": 10001,
     "name": "李秋水",
     "gender": "女",
-    "birthdate": "1979-10-01",
+    "birthdate": "1979-10-01 00:00:00",
     "identification": "510110197910012312",
     "phoneNumber": "13388990123",
     "addresses": [
