@@ -36,6 +36,7 @@ public class QueryServiceTest {
     @Test
     public void testQueryCustomer() {
         Map<String, Object> params = new HashMap<>();
+        params.put("id", 10001);
         params.put("page", 0);
         params.put("size", 20);
         ResultSet resultSet = customerQryService.query(params);
@@ -51,6 +52,7 @@ public class QueryServiceTest {
     @Test
     public void testQueryOrder() {
         Map<String, Object> params = new HashMap<>();
+        params.put("id", 10001);
         params.put("page", 0);
         params.put("size", 20);
         ResultSet resultSet = orderQryService.query(params);
@@ -63,6 +65,7 @@ public class QueryServiceTest {
     @Test
     public void testAutofillQueryCustomer() {
         Map<String, Object> params = new HashMap<>();
+        params.put("id", 10001);
         params.put("page", 0);
         params.put("size", 20);
         ResultSet resultSet = customerAutofillQryService.query(params);
@@ -78,6 +81,7 @@ public class QueryServiceTest {
     @Test
     public void testQueryOrderForDdd() {
         Map<String, Object> params = new HashMap<>();
+        params.put("id", 10001);
         params.put("page", 0);
         params.put("size", 20);
         ResultSet resultSet = orderQryServiceForDdd.query(params);
@@ -96,6 +100,7 @@ public class QueryServiceTest {
     @Test
     public void testAutofillQueryOrderForDdd() {
         Map<String, Object> params = new HashMap<>();
+        params.put("id", 10001);
         params.put("page", 0);
         params.put("size", 20);
         ResultSet resultSet = orderAutofillQryServiceForDdd.query(params);
@@ -114,6 +119,7 @@ public class QueryServiceTest {
     @Test
     public void testQueryDistributor() {
         Map<String, Object> params = new HashMap<>();
+        params.put("id", 20001);
         params.put("page", 0);
         params.put("size", 20);
         ResultSet resultSet = distributorQryService.query(params);
@@ -129,6 +135,7 @@ public class QueryServiceTest {
     @Test
     public void testQuerySupplier() {
         Map<String, Object> params = new HashMap<>();
+        params.put("id", 20001);
         params.put("page", 0);
         params.put("size", 20);
         ResultSet resultSet = supplierQryService.query(params);
