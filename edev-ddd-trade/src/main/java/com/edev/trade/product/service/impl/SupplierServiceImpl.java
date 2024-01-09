@@ -65,6 +65,6 @@ public class SupplierServiceImpl implements SupplierService {
 
     @Override
     public Collection<Supplier> getAll() {
-        return dao.loadAll(Supplier.build());
+        return dao.loadAll(new Supplier());
     }
 }
