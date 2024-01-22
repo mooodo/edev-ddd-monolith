@@ -32,11 +32,13 @@ public class DddFactory {
     }
 
     public <E extends Entity<S>,S extends Serializable> E createEntityByJson(String className, Map<String, Object> json) {
+        if(json==null) return null;
         Class<E> clazz = getClazz(className);
         return createEntityByJson(clazz, json);
     }
 
     public <E extends Entity<S>,S extends Serializable> E createEntityByJson(@NonNull Class<E> clazz, Map<String, Object> json) {
+        if(json==null) return null;
         if(EntityUtils.hasSubClass(clazz)) //create subclass entity
             return subClassFactory.chooseSubClass(clazz).createEntityByJson(clazz, json);
         else //create normal entity
@@ -77,7 +79,7 @@ public class DddFactory {
         return false;
     }
 
-    public <E extends Entity<S>, S extends Serializable> List<E> createEntityByJsonForList(@NonNull Type type, @NonNull Object value) {
+    public <E extends Entity<S>, S extends Serializable> List<E> createEntityByJsonForList(@NonNull Type type, Object value) {
         if (!(type instanceof ParameterizedType)) return new ArrayList<>();
         if (!(value instanceof Collection)) return new ArrayList<>();
         ParameterizedType pt = (ParameterizedType)type;

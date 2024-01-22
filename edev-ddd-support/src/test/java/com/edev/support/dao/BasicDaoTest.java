@@ -3,6 +3,7 @@ package com.edev.support.dao;
 import com.edev.support.dao.impl.BasicDaoMybatisImpl;
 import com.edev.support.utils.DateUtils;
 import com.edev.trade.TradeApplication;
+import com.edev.trade.authority.entity.Token;
 import com.edev.trade.order.entity.Order;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -77,5 +78,18 @@ public class BasicDaoTest {
         assertThat(dao.loadForList(ids, Order.class), hasItems(order0, order1));
         dao.deleteForList(ids, Order.class);
         assertTrue(dao.loadForList(ids, Order.class).isEmpty());
+    }
+    //@Test
+    public void testSaveAndDeleteWithoutId() {
+        Token token = new Token();
+        token.setId("X01");
+        token.setToken("Y0001X00");
+        dao.insert(token);
+        assertThat(dao.load("X01", Token.class), equalTo(token));
+        token.setToken("BBB000ZZZ");
+        dao.update(token);
+        assertThat(dao.load("X01", Token.class), equalTo(token));
+        dao.delete("X01", Token.class);
+        assertNull(dao.load("X01", Token.class));
     }
 }

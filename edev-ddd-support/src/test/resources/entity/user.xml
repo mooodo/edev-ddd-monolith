@@ -46,4 +46,8 @@
         <property name="roleId" column="role_id"/>
         <property name="authorityId" column="authority_id"/>
     </do>
+    <do class="com.edev.trade.authority.entity.Token" tableName="t_token">
+        <property name="id" column="identifier" isPrimaryKey="true"/>
+        <property name="token" column="token"/>
+    </do>
 </dobjs>
