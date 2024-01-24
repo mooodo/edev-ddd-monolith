@@ -1,18 +1,3 @@
-/*
-Navicat MySQL Data Transfer
-
-Source Server         : mysql
-Source Server Version : 50635
-Source Host           : kubernetes:32306
-Source Database       : edev
-
-Target Server Type    : MYSQL
-Target Server Version : 50635
-File Encoding         : 65001
-
-Date: 2024-01-03 13:34:45
-*/
-
 SET FOREIGN_KEY_CHECKS=0;
 
 -- ----------------------------
@@ -39,7 +24,7 @@ INSERT INTO `t_account` VALUES ('1000501', '10005', '100000.00', '2022-03-31 02:
 INSERT INTO `t_account` VALUES ('1000601', '10006', '100000.00', '2022-03-31 02:51:49', null);
 INSERT INTO `t_account` VALUES ('1000701', '10007', '100000.00', '2022-03-31 02:51:49', null);
 INSERT INTO `t_account` VALUES ('1000801', '10008', '100000.00', '2022-03-31 02:51:49', null);
-INSERT INTO `t_account` VALUES ('1000901', '10009', '846184.00', '2022-03-31 02:51:49', '2023-12-26 14:47:35');
+INSERT INTO `t_account` VALUES ('1000901', '10009', '846184.00', '2022-03-31 02:51:49', '2024-01-08 00:17:16');
 INSERT INTO `t_account` VALUES ('1001201', '10012', '100000.00', '2022-03-31 02:51:49', null);
 INSERT INTO `t_account` VALUES ('1001301', '10013', '100000.00', '2022-03-31 02:51:49', null);
 INSERT INTO `t_account` VALUES ('1001401', '10014', '100000.00', '2022-03-31 02:51:49', null);
@@ -156,10 +141,10 @@ CREATE TABLE `t_inventory` (
 -- ----------------------------
 -- Records of t_inventory
 -- ----------------------------
-INSERT INTO `t_inventory` VALUES ('30001', '9978', '2023-12-26 14:47:35');
+INSERT INTO `t_inventory` VALUES ('30001', '9978', '2024-01-08 00:17:16');
 INSERT INTO `t_inventory` VALUES ('30002', '10000', '2022-03-31 02:40:46');
 INSERT INTO `t_inventory` VALUES ('30003', '10000', '2022-03-31 02:40:46');
-INSERT INTO `t_inventory` VALUES ('30004', '9974', '2023-12-26 14:47:35');
+INSERT INTO `t_inventory` VALUES ('30004', '9974', '2024-01-08 00:17:16');
 INSERT INTO `t_inventory` VALUES ('30005', '10000', '2022-03-31 02:40:46');
 INSERT INTO `t_inventory` VALUES ('30006', '10000', '2022-03-31 02:40:46');
 INSERT INTO `t_inventory` VALUES ('30007', '10000', '2022-03-31 02:40:46');
@@ -179,17 +164,11 @@ CREATE TABLE `t_journal_account` (
   `operation` varchar(50) DEFAULT NULL,
   `operate_time` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=227 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=378 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of t_journal_account
 -- ----------------------------
-INSERT INTO `t_journal_account` VALUES ('217', '1', '1000.00', 'topUp', '2024-01-02 21:08:14');
-INSERT INTO `t_journal_account` VALUES ('218', '1', '1000.00', 'payoff', '2024-01-02 21:08:14');
-INSERT INTO `t_journal_account` VALUES ('220', '1', '1000.00', 'topUp', '2024-01-02 21:21:33');
-INSERT INTO `t_journal_account` VALUES ('221', '1', '1000.00', 'payoff', '2024-01-02 21:21:33');
-INSERT INTO `t_journal_account` VALUES ('223', null, '5000.00', 'test', null);
-INSERT INTO `t_journal_account` VALUES ('224', null, '3000.00', 'test', null);
 
 -- ----------------------------
 -- Table structure for t_order
@@ -460,7 +439,7 @@ CREATE TABLE `t_user_granted_authority` (
   `authority_id` int(20) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `idx_user_granted_authority` (`user_id`,`authority_id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=50 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=520 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of t_user_granted_authority
@@ -479,7 +458,7 @@ CREATE TABLE `t_user_granted_role` (
   `user_id` int(20) NOT NULL,
   `role_id` int(20) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
+) ENGINE=InnoDB AUTO_INCREMENT=76 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
 
 -- ----------------------------
 -- Records of t_user_granted_role
@@ -524,6 +503,7 @@ CREATE TABLE `t_vip` (
 -- ----------------------------
 -- Records of t_vip
 -- ----------------------------
+INSERT INTO `t_vip` VALUES ('10001', '2024-01-23 11:16:36', null, 'Y', '500', 'golden', '2000.00');
 INSERT INTO `t_vip` VALUES ('10009', '2022-08-18 14:40:15', null, 'Y', '100000', 'golden', '4000.00');
 INSERT INTO `t_vip` VALUES ('10012', '2022-08-18 14:40:15', '2022-08-18 14:42:12', 'Y', '100000', 'golden', '3000.00');
 INSERT INTO `t_vip` VALUES ('10013', '2021-03-12 00:00:00', null, 'Y', '2000', 'silver', null);
