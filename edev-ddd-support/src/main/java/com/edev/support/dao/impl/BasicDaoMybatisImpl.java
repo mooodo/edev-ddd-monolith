@@ -4,7 +4,6 @@ import com.edev.support.dao.BasicDao;
 import com.edev.support.dao.impl.utils.DaoEntity;
 import com.edev.support.dao.impl.utils.DaoEntityBuilder;
 import com.edev.support.dao.impl.utils.DaoExecutor;
-import com.edev.support.ddd.DddFactory;
 import com.edev.support.ddd.utils.EntityBuilder;
 import com.edev.support.ddd.utils.EntityUtils;
 import com.edev.support.dsl.DomainObject;
@@ -23,8 +22,6 @@ import java.util.List;
 import java.util.Map;
 
 public class BasicDaoMybatisImpl implements BasicDao {
-    @Autowired
-    private DddFactory dddFactory;
     @Autowired
     private DaoExecutor daoExecutor;
     @Override

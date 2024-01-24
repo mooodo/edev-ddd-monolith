@@ -38,4 +38,21 @@ public class DaoEntity {
 			if(property.isPrimaryKey()) this.addPkMap(map);
 		}
 	}
+
+	/**
+	 * if it is primary key, remove from colMap
+	 */
+	public void removePkFromColMap() {
+		List<Map<Object, Object>> list = new ArrayList<>();
+		for(Map<Object, Object> col : colMap) {
+			boolean isAvailable = true;
+			for (Map<Object, Object> pk : pkMap)
+				if (col.get("key") == pk.get("key")) {
+					isAvailable = false;
+					break;
+				}
+			if(isAvailable) list.add(col);
+		}
+		colMap = list;
+	}
 }

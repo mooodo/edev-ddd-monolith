@@ -12,9 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.*;
@@ -117,5 +115,26 @@ public class DaoExecutorTest {
         daoEntity.setTableName("t_journal_account");
         daoEntity.addColMap(buildColMap("id",Arrays.asList(id0,id1)));
         assertTrue("fail delete all",daoExecutor.load(daoEntity, JournalAccount.class).isEmpty());
+    }
+    @Test
+    public void testRemovePkFromColMap() {
+        DaoEntity daoEntity = new DaoEntity();
+        List<Map<Object, Object>> colMap = new ArrayList<>();
+        colMap.add(map("id", 1L));
+        colMap.add(map("name","Jack"));
+        daoEntity.setColMap(colMap);
+        List<Map<Object, Object>> pkMap = new ArrayList<>();
+        pkMap.add(map("id", 1L));
+        daoEntity.setPkMap(pkMap);
+        daoEntity.removePkFromColMap();
+        List<Map<Object, Object>> result = daoEntity.getColMap();
+        assertFalse(result.contains(map("id", 1L)));
+    }
+
+    private Map<Object, Object> map(Object key, Object value) {
+        Map<Object, Object> map = new HashMap<>();
+        map.put("KEY", key);
+        map.put("VALUE", value);
+        return map;
     }
 }

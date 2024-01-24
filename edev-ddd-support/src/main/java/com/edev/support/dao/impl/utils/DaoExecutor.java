@@ -27,6 +27,7 @@ public class DaoExecutor {
     }
 
     public void update(DaoEntity daoEntity) {
+        daoEntity.removePkFromColMap();
         dao.update(daoEntity.getTableName(), daoEntity.getColMap(), daoEntity.getPkMap());
     }
 
