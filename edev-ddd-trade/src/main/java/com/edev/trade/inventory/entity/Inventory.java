@@ -14,14 +14,11 @@ public class Inventory extends Entity<Long> {
     private Date updateTime;
     private Product product;
 
-    public static Inventory build() {
-        return new Inventory();
-    }
+    public Inventory() {}
 
-    public Inventory setValues(Long id, Long quantity, Date updateTime) {
+    public Inventory(Long id, Long quantity, Date updateTime) {
         this.id = id;
         this.quantity = quantity;
         this.updateTime = updateTime;
-        return this;
     }
 }

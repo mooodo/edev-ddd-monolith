@@ -35,8 +35,8 @@ public class DiscountMvcTest {
         ).andExpect(status().isOk()).andExpect(content().json(excepted));
 
 
-        String json1 = JsonFile.read("json/discount/discount0.json");
-        String excepted1 = JsonFile.read("json/discount/excepted0.json");
+        String json1 = JsonFile.read("json/discount/discount1.json");
+        String excepted1 = JsonFile.read("json/discount/excepted1.json");
         mvc.perform(post("/orm/discount/modify")
                 .content(json1).contentType(MediaType.APPLICATION_JSON)
         ).andExpect(status().isOk());

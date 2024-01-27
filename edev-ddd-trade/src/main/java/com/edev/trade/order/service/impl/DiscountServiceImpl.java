@@ -5,6 +5,7 @@ import com.edev.trade.order.entity.Discount;
 import com.edev.trade.order.entity.Order;
 import com.edev.trade.order.service.DiscountService;
 import com.edev.trade.order.service.impl.discount.DiscountStrategy;
+import lombok.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 
@@ -28,27 +29,27 @@ public class DiscountServiceImpl implements DiscountService {
     }
 
     @Override
-    public Long create(Discount discount) {
+    public Long create(@NonNull Discount discount) {
         return dao.insert(discount);
     }
 
     @Override
-    public void modify(Discount discount) {
+    public void modify(@NonNull Discount discount) {
         dao.update(discount);
     }
 
     @Override
-    public void delete(Discount template) {
+    public void delete(@NonNull Discount template) {
         dao.delete(template);
     }
 
     @Override
-    public Discount loadById(Long discountId) {
+    public Discount loadById(@NonNull Long discountId) {
         return dao.load(discountId, Discount.class);
     }
 
     @Override
-    public Discount load(Discount template) {
+    public Discount load(@NonNull Discount template) {
         Collection<Discount> collection = dao.loadAll(template);
         if(collection==null||collection.isEmpty())
             return null;
@@ -56,12 +57,12 @@ public class DiscountServiceImpl implements DiscountService {
     }
 
     @Override
-    public void deleteById(Long discountId) {
+    public void deleteById(@NonNull Long discountId) {
         dao.delete(discountId, Discount.class);
     }
 
     @Override
-    public void doDiscount(Order order) {
+    public void doDiscount(@NonNull Order order) {
         getStrategies().forEach((key,strategy) -> strategy.doDiscount(order));
     }
 }

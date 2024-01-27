@@ -16,17 +16,6 @@ public class Authority extends Entity<Long> {
     private List<User> users = new ArrayList<>();
     private List<Role> roles = new ArrayList<>();
 
-    public static Authority build() {
-        return new Authority();
-    }
-
-    public Authority setValues(Long id, String name, Boolean authenticated) {
-        this.setId(id);
-        this.setName(name);
-        this.setAuthenticated(authenticated);
-        return this;
-    }
-
     public boolean getAuthenticated() {
         return "T".equals(authenticated);
     }

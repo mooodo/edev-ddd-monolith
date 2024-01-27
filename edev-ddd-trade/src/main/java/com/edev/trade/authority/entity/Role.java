@@ -16,17 +16,6 @@ public class Role extends Entity<Long> {
     private List<Authority> authorities = new ArrayList<>();
     private List<User> users = new ArrayList<>();
 
-    public static Role build() {
-        return new Role();
-    }
-
-    public Role setValues(Long id, String name, String comment) {
-        this.id = id;
-        this.name = name;
-        this.comment = comment;
-        return this;
-    }
-
     public void addAuthority(Authority authority) {
         this.authorities.add(authority);
     }

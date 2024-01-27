@@ -24,24 +24,6 @@ public class Order extends Entity<Long> {
 	private Payment payment;
 	private List<OrderItem> orderItems;
 
-	public static Order build() {
-		return new Order();
-	}
-
-	public Order setValues(Long id, Long customerId, Long addressId, Double amount, Date orderTime, String flag) {
-		setId(id);
-		setCustomerId(customerId);
-		setAddressId(addressId);
-		setAmount(amount);
-		setOrderTime(orderTime);
-		setFlag(flag);
-		return this;
-	}
-
-	public Order setValues(Long id, Long customerId, Long addressId, Double amount) {
-		return setValues(id, customerId, addressId, amount, null, "CREATE");
-	}
-
 	public void setAmount(Double amount) {
 		this.amount = (amount==null) ? 0D : amount;
 	}

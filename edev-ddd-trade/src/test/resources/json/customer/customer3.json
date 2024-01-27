@@ -1,4 +1,4 @@
-{"id":2,"name":"Mike","gender":"male","identification":"100101200003052314","phoneNumber":"13456567878",
+{"id":2,"name":"Mike","gender":"male",
   "addresses":[
     {"id":30,"country":"China","province":"Chongqing","city":"Chongqing","zone":"ShaPingBaQu",
       "address":"The ChongQing University","phoneNumber":"023-62325544"},

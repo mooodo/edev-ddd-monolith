@@ -27,7 +27,6 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public void modify(Customer customer) {
-        validCustomer(customer);
         dao.update(customer);
     }
 

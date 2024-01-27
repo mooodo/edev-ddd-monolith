@@ -8,6 +8,7 @@ import com.edev.trade.order.entity.OrderItem;
 import com.edev.trade.order.entity.Payment;
 import com.edev.trade.order.service.DiscountService;
 import com.edev.trade.order.service.OrderService;
+import lombok.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Collection;
@@ -21,7 +22,7 @@ public class OrderServiceImpl implements OrderService {
     @Autowired
     private DiscountService discountService;
 
-    private void validOrder(Order order) {
+    private void validOrder(@NonNull Order order) {
         if(order.getId()==null) throw new ValidException("The id is null!");
         if(order.getCustomerId()==null) throw new ValidException("The customerId is null");
         if(order.getAddressId()==null) throw new ValidException("The addressId is null");
@@ -50,7 +51,7 @@ public class OrderServiceImpl implements OrderService {
         order.setAmount(amount);
     }
 
-    private void payoff(Order order) {
+    private void payoff(@NonNull Order order) {
         Payment payment = order.getPayment();
         if(payment==null) return;
         payment.setAmount(order.getAmount());
@@ -58,7 +59,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Long create(Order order) {
+    public Long create(@NonNull Order order) {
         validOrder(order);
         setAmount(order);
         discount(order);
@@ -69,7 +70,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public void modify(Order order) {
+    public void modify(@NonNull Order order) {
         validOrder(order);
         setAmount(order);
         discount(order);
@@ -80,17 +81,17 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public void delete(Long orderId) {
+    public void delete(@NonNull Long orderId) {
         dao.delete(orderId, Order.class);
     }
 
     @Override
-    public Order load(Long orderId) {
+    public Order load(@NonNull Long orderId) {
         return dao.load(orderId, Order.class);
     }
 
     @Override
-    public void saveAll(List<Order> orders) {
+    public void saveAll(@NonNull List<Order> orders) {
         orders.forEach(order -> {
             validOrder(order);
             setAmount(order);
@@ -102,12 +103,12 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public void deleteAll(List<Long> orderIds) {
+    public void deleteAll(@NonNull List<Long> orderIds) {
         dao.deleteForList(orderIds, Order.class);
     }
 
     @Override
-    public Collection<Order> loadAll(List<Long> orderIds) {
+    public Collection<Order> loadAll(@NonNull List<Long> orderIds) {
         return dao.loadForList(orderIds, Order.class);
     }
 }

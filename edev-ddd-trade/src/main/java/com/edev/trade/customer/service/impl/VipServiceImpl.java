@@ -31,7 +31,6 @@ public class VipServiceImpl implements VipService {
 
     @Override
     public void modify(Vip vip) {
-        validVip(vip);
         vip.setUpdateTime(DateUtils.getNow());
         dao.update(vip);
     }

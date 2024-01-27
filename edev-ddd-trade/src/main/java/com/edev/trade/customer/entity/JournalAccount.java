@@ -16,21 +16,18 @@ public class JournalAccount extends Entity<Long> {
     private String operation;
     private Date operateTime;
 
-    public static JournalAccount build() {
-        return new JournalAccount();
+    public JournalAccount() {}
+
+    public JournalAccount(Long accountId, Double amount, String operation) {
+        this(null, accountId, amount, operation, null);
     }
 
-    public JournalAccount setValues(Long accountId, Double amount, String operation) {
-        return setValues(null, accountId, amount, operation, null);
-    }
-
-    public JournalAccount setValues(Long id, Long accountId, Double amount, String operation, Date operateTime) {
+    public JournalAccount(Long id, Long accountId, Double amount, String operation, Date operateTime) {
         setId(id);
         setAccountId(accountId);
         setAmount(amount);
         setOperation(operation);
         setOperateTime(operateTime);
-        return this;
     }
 
     public void setOperateTime(Date operateTime) {

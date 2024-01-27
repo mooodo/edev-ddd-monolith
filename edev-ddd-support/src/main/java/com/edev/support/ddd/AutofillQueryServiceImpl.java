@@ -31,12 +31,12 @@ public class AutofillQueryServiceImpl extends QueryServiceImpl {
 
     @Override
     protected ResultSet afterQuery(Map<String, Object> params, @NonNull ResultSet resultSet) {
-        //if no result, do nothing.
+        //if no result, do nothing, else fill data.
         Collection<?> data = resultSet.getData();
-        if(data==null||data.isEmpty())
-            return super.afterQuery(params, resultSet);
-        Map<Class<Entity<Serializable>>, List<Entity<Serializable>>> groupMap = groutBy(data);
-        groupMap.forEach(this::fillData);
+        if(data!=null&&!data.isEmpty()) {
+            Map<Class<Entity<Serializable>>, List<Entity<Serializable>>> groupMap = groutByClass(data);
+            groupMap.forEach(this::fillData);
+        }
         return super.afterQuery(params, resultSet);
     }
 
@@ -46,7 +46,7 @@ public class AutofillQueryServiceImpl extends QueryServiceImpl {
      * @return the map that the key is the class and the value is list of the entities that they are the class
      */
     protected Map<Class<Entity<Serializable>>, List<Entity<Serializable>>>
-            groutBy(@NonNull Collection<?> collection) {
+            groutByClass(@NonNull Collection<?> collection) {
         Map<Class<Entity<Serializable>>, List<Entity<Serializable>>> map = new HashMap<>();
         collection.forEach(row -> {
             if(!dddFactory.isEntity(row.getClass()))

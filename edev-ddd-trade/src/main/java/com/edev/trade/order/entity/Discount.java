@@ -15,18 +15,4 @@ public class Discount extends Entity<Long> {
     private Date endTime;
     private Double discount;
     private String discountType;
-
-    public static Discount build() {
-        return new Discount();
-    }
-
-    public Discount setValues(Long id, String name, Date beginTime, Date endTime, Double discount, String discountType) {
-        this.id = id;
-        this.name = name;
-        this.beginTime = beginTime;
-        this.endTime = endTime;
-        this.discount = discount;
-        this.discountType = discountType;
-        return this;
-    }
 }

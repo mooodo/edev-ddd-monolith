@@ -7,6 +7,7 @@ import com.edev.trade.inventory.service.InventoryService;
 import com.edev.trade.order.entity.Order;
 import com.edev.trade.order.service.OrderService;
 import com.edev.trade.order.service.OrderAggService;
+import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,8 +24,7 @@ public class OrderAggServiceImpl implements OrderAggService {
     private InventoryService inventoryService;
     @Override
     @Transactional
-    public Long placeOrder(Order order) {
-        if (order==null) throw new NullEntityException();
+    public Long placeOrder(@NonNull Order order) {
         Long orderId = orderService.create(order);
         log.debug(String.format("create an order: [orderId: %d]", orderId));
 
@@ -49,9 +49,9 @@ public class OrderAggServiceImpl implements OrderAggService {
 
     @Override
     @Transactional
-    public void returnGoods(Long orderId) {
-        if(orderId==null) throw new ValidException("The order id is null!");
+    public void returnGoods(@NonNull Long orderId) {
         Order order = orderService.load(orderId);
+        if (order==null) throw new  ValidException("no found the order: [orderId: %d]", orderId);
         orderService.delete(orderId);
         log.debug(String.format("return the goods: [orderId: %d]", orderId));
 

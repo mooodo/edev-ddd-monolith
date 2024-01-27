@@ -20,17 +20,6 @@ public class User extends Entity<Long> {
     private List<Authority> authorities = new ArrayList<>();
     private List<Role> roles = new ArrayList<>();
 
-    public static User build() {
-        return new User();
-    }
-
-    public User setValues(Long id, String name, String password) {
-        this.id = id;
-        this.name = name;
-        this.password = password;
-        return this;
-    }
-
     public Boolean getAccountExpired() {
         return accountExpired!=0;
     }

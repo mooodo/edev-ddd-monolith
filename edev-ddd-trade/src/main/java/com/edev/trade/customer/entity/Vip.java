@@ -17,24 +17,6 @@ public class Vip extends Entity<Long> {
     protected String vipType;
     protected Customer customer;
 
-    public static Vip build() {
-        return new Vip();
-    }
-
-    public Vip setValues(Long id, Boolean available, Long coin, String vipType) {
-        return this.setValues(id, null, null, available, coin, vipType);
-    }
-
-    public Vip setValues(Long id, Date createTime, Date updateTime, Boolean available, Long coin, String vipType) {
-        this.setId(id);
-        this.setCreateTime(createTime);
-        this.setUpdateTime(updateTime);
-        this.setAvailable(available);
-        this.setCoin(coin);
-        this.setVipType(vipType);
-        return this;
-    }
-
     public Boolean getAvailable() {
         return "Y".equals(available);
     }

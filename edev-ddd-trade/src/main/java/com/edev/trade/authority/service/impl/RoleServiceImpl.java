@@ -3,6 +3,7 @@ package com.edev.trade.authority.service.impl;
 import com.edev.support.dao.BasicDao;
 import com.edev.trade.authority.entity.Role;
 import com.edev.trade.authority.service.RoleService;
+import lombok.NonNull;
 
 import java.util.Collection;
 
@@ -14,28 +15,28 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
-    public Long create(Role role) {
+    public Long create(@NonNull Role role) {
         return dao.insert(role);
     }
 
     @Override
-    public void modify(Role role) {
+    public void modify(@NonNull Role role) {
         dao.update(role);
     }
 
     @Override
-    public void remove(Long id) {
+    public void remove(@NonNull Long id) {
         dao.delete(id, Role.class);
     }
 
     @Override
-    public Role load(Long id) {
+    public Role load(@NonNull Long id) {
         return dao.load(id, Role.class);
     }
 
     @Override
-    public Role loadByName(String roleName) {
-        Role template = Role.build();
+    public Role loadByName(@NonNull String roleName) {
+        Role template = new Role();
         template.setName(roleName);
         Collection<Role> roles = dao.loadAll(template);
         if(roles==null||roles.isEmpty()) return null;
