@@ -11,8 +11,14 @@ public interface OrderAggService {
     Long placeOrder(Order order);
 
     /**
-     * return the goods for an order
+     * payoff the money for an order
+     * @param order the order which need payoff
+     */
+    void payoff(Order order);
+
+    /**
+     * cancel an order
      * @param orderId the order id
      */
-    void returnGoods(Long orderId);
+    void cancelOrder(Long orderId);
 }

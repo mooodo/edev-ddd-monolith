@@ -1,6 +1,5 @@
 package com.edev.trade.order.service.impl;
 
-import com.edev.support.ddd.NullEntityException;
 import com.edev.support.exception.ValidException;
 import com.edev.trade.customer.service.AccountService;
 import com.edev.trade.inventory.service.InventoryService;
@@ -23,17 +22,27 @@ public class OrderAggServiceImpl implements OrderAggService {
     @Autowired
     private InventoryService inventoryService;
     @Override
-    @Transactional
     public Long placeOrder(@NonNull Order order) {
         Long orderId = orderService.create(order);
         log.debug(String.format("create an order: [orderId: %d]", orderId));
 
+        return orderId;
+    }
+
+    @Override
+    @Transactional
+    public void payoff(@NonNull Order order) {
+        if(order.getPayment()==null||order.getPayment().getAccountId()==null)
+            throw new ValidException("no account for payoff: [orderId: %s]", order.getId());
         Long accountId = order.getPayment().getAccountId();
         Double balance = accountService.payoff(accountId, order.getAmount());
         log.debug(String.format("pay off the order: [balance of the account: %f]", balance));
 
         stockOut(order);
-        return orderId;
+
+        order.setStatus("PAYOFF");
+        order.getPayment().setStatus("PAYOFF");
+        orderService.modify(order);
     }
 
     private void stockOut(Order order) {
@@ -49,15 +58,15 @@ public class OrderAggServiceImpl implements OrderAggService {
 
     @Override
     @Transactional
-    public void returnGoods(@NonNull Long orderId) {
+    public void cancelOrder(@NonNull Long orderId) {
         Order order = orderService.load(orderId);
         if (order==null) throw new  ValidException("no found the order: [orderId: %d]", orderId);
         orderService.delete(orderId);
-        log.debug(String.format("return the goods: [orderId: %d]", orderId));
+        log.debug(String.format("cancel the order: [orderId: %d]", orderId));
 
         Long accountId = order.getPayment().getAccountId();
         Double balance = accountService.refund(accountId, order.getAmount());
-        log.debug(String.format("refund for return the goods [balance of the account: %f]", balance));
+        log.debug(String.format("refund for cancel the order [balance of the account: %f]", balance));
 
         stockIn(order);
     }

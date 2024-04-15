@@ -43,7 +43,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     private void sumOfAmount(Order order) {
-        if(order==null||order.getOrderItems()==null) return;
+        if(order==null||order.getOrderItems()==null||order.getOrderItems().isEmpty()) return;
         Double amount = 0D;
         for(OrderItem orderItem : order.getOrderItems()) {
             amount += orderItem.getAmount();
@@ -55,7 +55,6 @@ public class OrderServiceImpl implements OrderService {
         Payment payment = order.getPayment();
         if(payment==null) return;
         payment.setAmount(order.getAmount());
-        payment.setStatus("payoff");
     }
 
     @Override
