@@ -4,7 +4,7 @@
     "customerId": 10001,
     "addressId": 1000100,
     "amount": 5000.0,
-    "flag": "CREATE",
+    "status": "CREATE",
     "customer": {
       "id": 10001,
       "name": "李秋水",
@@ -31,7 +31,7 @@
     "customerId": 10001,
     "addressId": 1000100,
     "amount": 5916.0,
-    "flag": "CREATE",
+    "status": "CREATE",
     "customer": {
       "id": 10001,
       "name": "李秋水",

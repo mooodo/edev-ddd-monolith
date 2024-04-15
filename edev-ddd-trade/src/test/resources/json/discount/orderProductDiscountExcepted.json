@@ -4,7 +4,7 @@
   "addressId": 1000100,
   "amount": 16836.64,
   "modifyTime": null,
-  "flag": "CREATE",
+  "status": "CREATE",
   "customer": {
     "id": 10001,
     "name": "李秋水",

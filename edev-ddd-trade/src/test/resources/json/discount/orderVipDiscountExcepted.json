@@ -4,7 +4,7 @@
   "addressId": 1000900,
   "amount": 4437.0,
   "modifyTime": null,
-  "flag": "CREATE",
+  "status": "CREATE",
   "customer": {
     "id": 10009,
     "name": "张一德",
@@ -17,7 +17,7 @@
     "id": 4,
     "accountId": 1000901,
     "amount": 4437.0,
-    "status": "payoff"
+    "status": "READY"
   },
   "orderItems": [
     {

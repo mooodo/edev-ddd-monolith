@@ -3,7 +3,7 @@
   "customerId": 10001,
   "addressId": 1000100,
   "amount": 5916.0,
-  "flag": "CREATE",
+  "status": "CREATE",
   "customer": {
     "id": 10001,
     "name": "李秋水",
@@ -26,7 +26,7 @@
     "id": 1,
     "accountId": 1000901,
     "amount": 5916.0,
-    "status": "payoff"
+    "status": "READY"
   },
   "orderItems": [
     {

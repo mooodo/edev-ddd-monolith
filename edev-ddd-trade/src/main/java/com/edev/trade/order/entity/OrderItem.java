@@ -14,8 +14,4 @@ public class OrderItem extends Entity<Long> {
 	private Double price;
 	private Double amount;
 	private Product product;
-
-	public void setAmount(Double amount) {
-		this.amount = (amount==null) ? 0D : amount;
-	}
 }

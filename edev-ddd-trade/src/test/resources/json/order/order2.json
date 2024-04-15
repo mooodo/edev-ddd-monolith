@@ -1,5 +1,5 @@
 {
-  "id":1,"customerId":10001,"addressId":1000100,"flag":"CREATE",
+  "id":1,"customerId":10001,"addressId":1000100,
   "payment":{"id":1,"accountId":1000901},
   "orderItems":[
     {"id":10,"productId":30001,"quantity":1,"price":4000},

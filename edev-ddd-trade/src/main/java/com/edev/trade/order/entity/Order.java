@@ -18,22 +18,18 @@ public class Order extends Entity<Long> {
 	private Double amount;
 	private Date orderTime;
 	private Date modifyTime;
-	private String flag;
+	private String status;
 	private Customer customer;
 	private Address address;
 	private Payment payment;
 	private List<OrderItem> orderItems;
 
-	public void setAmount(Double amount) {
-		this.amount = (amount==null) ? 0D : amount;
-	}
-
 	public void setOrderTime(Date orderTime) {
 		this.orderTime = (orderTime==null) ? DateUtils.getNow() : orderTime;
 	}
 
-	public void setFlag(String flag) {
-		this.flag = (flag==null) ? "CREATE" : flag;
+	public void setStatus(String status) {
+		this.status = (status==null) ? "CREATE" : status;
 	}
 
 	public void addOrderItem(OrderItem orderItem) {

@@ -11,4 +11,7 @@ public class Payment extends Entity<Long> {
     private Long accountId;
     private Double amount;
     private String status;
+    public void setStatus(String status) {
+        this.status = (status==null) ? "READY" : status;
+    }
 }

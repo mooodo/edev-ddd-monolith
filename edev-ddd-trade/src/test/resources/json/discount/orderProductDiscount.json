@@ -1,5 +1,5 @@
 {
-  "id":3,"customerId":10001,"addressId":1000100,"flag":"CREATE",
+  "id":3,"customerId":10001,"addressId":1000100,
   "orderItems":[
     {"id":31,"productId":30005,"quantity":1,"price":8288},
     {"id":32,"productId":30007,"quantity":2,"price":5799}
