@@ -7,6 +7,8 @@ import lombok.Data;
 
 import java.io.Serializable;
 import java.lang.reflect.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 public abstract class Entity<T extends Serializable> implements Serializable, Cloneable {
@@ -20,6 +22,7 @@ public abstract class Entity<T extends Serializable> implements Serializable, Cl
      */
     protected <R> Field[] getFields(Class<R> clazz) {
         Field[] fields = clazz.getDeclaredFields();
+        fields = cleanFields(fields);
         Class<?> superClass = clazz.getSuperclass();
         if(superClass!=null&&Entity.class.isAssignableFrom(superClass)&&!superClass.equals(Entity.class)) {
             Field[] superFields = getFields(superClass);
@@ -28,11 +31,26 @@ public abstract class Entity<T extends Serializable> implements Serializable, Cl
         return fields;
     }
 
+    /**
+     * get all fields, include the entity and its parents private, protected and public fields
+     * @return list all its fields
+     */
+    public Field[] getFields() {
+        return getFields(this.getClass());
+    }
+
     private Field[] mergeFields(Field[] fields0, Field[] fields1) {
         Field[] fields = new Field[fields0.length + fields1.length];
         System.arraycopy(fields0, 0, fields, 0, fields0.length);
         System.arraycopy(fields1, 0, fields, fields0.length, fields1.length);
         return fields;
+    }
+
+    private Field[] cleanFields(Field[] fields) {
+        List<Field> fieldList = new ArrayList<>();
+        for(Field field : fields)
+            if(!field.getName().contains("$")) fieldList.add(field);
+        return fieldList.toArray(new Field[0]);
     }
 
     /**
@@ -186,7 +204,10 @@ public abstract class Entity<T extends Serializable> implements Serializable, Cl
         } catch (InvocationTargetException e) {
             throw new OrmException("error when invoke the method[entity:%s, method:%s]", e, this.getClass().getName(), methodName);
         } catch (IllegalAccessException e) {
-            throw new OrmException("Illegal access the method[entity:%s, method:%s]", e, this.getClass().getName(), methodName);
+            if(type.equals(boolean.class) && value==null)
+                throw new OrmException("Please set the type of the parameter with Boolean, instance of boolean: [entity:%s, method:%s]", e, this.getClass().getName(), methodName);
+            else
+                throw new OrmException("Illegal access the method[entity:%s, method:%s]", e, this.getClass().getName(), methodName);
         }
     }
 

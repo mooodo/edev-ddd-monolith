@@ -22,7 +22,7 @@ public class Vip extends Entity<Long> {
     }
 
     public void setAvailable(Boolean available) {
-        this.available = available ? "Y" : "N";
+        this.available = (available!=null&&available) ? "Y" : "N";
     }
 
     public Double discount() {

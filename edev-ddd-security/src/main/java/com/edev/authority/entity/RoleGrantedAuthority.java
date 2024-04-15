@@ -12,11 +12,11 @@ public class RoleGrantedAuthority extends Entity<Long> {
     private Long roleId;
     private Long authorityId;
 
-    public boolean isAvailable() {
+    public Boolean getAvailable() {
         return "T".equals(available);
     }
 
-    public void setAvailable(boolean available) {
-        this.available = available?"T":"F";
+    public void setAvailable(Boolean available) {
+        this.available = (available!=null&&available) ? "T" : "F";
     }
 }

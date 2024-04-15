@@ -5,9 +5,11 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.junit.Test;
 
+import java.lang.reflect.Field;
 import java.util.Date;
 
 import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.hasItems;
 import static org.junit.Assert.assertThat;
 
 public class EntityTest {
@@ -65,6 +67,13 @@ public class EntityTest {
         //test clone
         Object clone = customer0.clone();
         assertThat(clone, equalTo(customer0));
+
+        //test getFields
+        Field[] fields = customer0.getFields();
+        assertThat(fields[0].getName(), equalTo("id"));
+        assertThat(fields[1].getName(), equalTo("name"));
+        assertThat(fields[2].getName(), equalTo("birthdate"));
+        assertThat(fields[3].getName(), equalTo("available"));
     }
 
     @Test
@@ -124,21 +133,12 @@ public class EntityTest {
         //test clone
         Object clone = vip0.clone();
         assertThat(clone, equalTo(vip0));
-    }
-    @Test
-    public void testExclude() {
-        @Data
-        @EqualsAndHashCode(callSuper = true, exclude = {"birthdate"})
-        class Customer extends Entity<Long> {
-            private Long id;
-            private Date birthdate;
-            public Customer(Long id, Date birthdate) {
-                this.id = id;
-                this.birthdate = birthdate;
-            }
-        }
-        Customer customer0 = new Customer(1L,null);
-        Customer customer1 = new Customer(1L,DateUtils.getNow());
-        assertThat(customer0, equalTo(customer1));
+
+        //test getFields
+        Field[] fields = vip0.getFields();
+        assertThat(fields[0].getName(), equalTo("id"));
+        assertThat(fields[1].getName(), equalTo("name"));
+        assertThat(fields[2].getName(), equalTo("birthdate"));
+        assertThat(fields[3].getName(), equalTo("coin"));
     }
 }

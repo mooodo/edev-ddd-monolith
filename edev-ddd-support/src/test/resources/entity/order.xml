@@ -7,7 +7,7 @@
 		<property name="amount" column="amount"/>
 		<property name="orderTime" column="order_time"/>
 		<property name="modifyTime" column="modify_time"/>
-		<property name="flag" column="flag"/>
+		<property name="status" column="status"/>
 		<join name="customer" joinKey="customerId" joinType="manyToOne"
 			  class="com.edev.trade.order.entity.Customer"/>
 		<join name="address" joinKey="addressId" joinType="manyToOne"

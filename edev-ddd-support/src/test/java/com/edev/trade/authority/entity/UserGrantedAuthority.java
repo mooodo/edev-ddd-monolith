@@ -11,4 +11,11 @@ public class UserGrantedAuthority extends Entity<Long> {
     private String available;
     private Long userId;
     private Long authorityId;
+    public Boolean getAvailable() {
+        return "T".equals(available);
+    }
+
+    public void setAvailable(Boolean available) {
+        this.available = (available!=null&&available)?"T":"F";
+    }
 }

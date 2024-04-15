@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.Serializable;
+import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.*;
@@ -47,10 +48,11 @@ public class DddFactory {
 
     public <E extends Entity<S>,S extends Serializable> E createSimpleEntityByJson(@NonNull Class<E> clazz, @NonNull Map<String, Object> json) {
         E entity = EntityBuilder.build(clazz);
-        for(Map.Entry<String, Object> entry: json.entrySet()) {
-            String fieldName = entry.getKey();
+        Field[] fields = entity.getFields();
+        for(Field field : fields) {
+            String fieldName = field.getName();
             Type type = entity.getTypeByMethod(fieldName);
-            Object value = entry.getValue();
+            Object value = json.get(fieldName);
             if(type==null) continue;
             if((type instanceof Class)&&isEntity((Class<?>) type))
                 value = createEntityByJson((Class<E>) type, (Map<String, Object>) value);

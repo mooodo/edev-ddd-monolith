@@ -46,7 +46,7 @@ public class Vip extends Entity<Long> {
     }
 
     public void setAvailable(Boolean available) {
-        this.available = available ? "1" : "0";
+        this.available = (available!=null && available) ? "1" : "0";
     }
 
 }

@@ -18,7 +18,7 @@ public class Order extends Entity<Long> {
 	private Double amount;
 	private Date orderTime;
 	private Date modifyTime;
-	private String flag;
+	private String status;
 	private Customer customer;
 	private Address address;
 	private Payment payment;
@@ -28,13 +28,13 @@ public class Order extends Entity<Long> {
 		return new Order();
 	}
 
-	public Order setValues(Long id, Long customerId, Long addressId, Double amount, Date orderTime, String flag) {
+	public Order setValues(Long id, Long customerId, Long addressId, Double amount, Date orderTime, String status) {
 		setId(id);
 		setCustomerId(customerId);
 		setAddressId(addressId);
 		setAmount(amount);
 		setOrderTime(orderTime);
-		setFlag(flag);
+		setStatus(status);
 		return this;
 	}
 
@@ -42,16 +42,12 @@ public class Order extends Entity<Long> {
 		return setValues(id, customerId, addressId, amount, null, "CREATE");
 	}
 
-	public void setAmount(Double amount) {
-		this.amount = (amount==null) ? 0D : amount;
-	}
-
 	public void setOrderTime(Date orderTime) {
 		this.orderTime = (orderTime==null) ? DateUtils.getNow() : orderTime;
 	}
 
-	public void setFlag(String flag) {
-		this.flag = (flag==null) ? "create" : flag;
+	public void setStatus(String status) {
+		this.status = (status==null) ? "CREATE" : status;
 	}
 
 	public void addOrderItem(OrderItem orderItem) {

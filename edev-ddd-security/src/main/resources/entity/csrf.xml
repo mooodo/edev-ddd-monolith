@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dobjs>
+    <do class="com.edev.security.csrf.Token" tableName="t_token">
+        <property name="identifier" column="identifier" isPrimaryKey="true"/>
+        <property name="token" column="token"/>
+    </do>
+</dobjs>

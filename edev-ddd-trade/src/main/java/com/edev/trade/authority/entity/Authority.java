@@ -16,11 +16,11 @@ public class Authority extends Entity<Long> {
     private List<User> users = new ArrayList<>();
     private List<Role> roles = new ArrayList<>();
 
-    public boolean getAuthenticated() {
+    public Boolean getAuthenticated() {
         return "T".equals(authenticated);
     }
 
-    public void setAuthenticated(boolean authenticated) {
-        this.authenticated = authenticated?"T":"F";
+    public void setAuthenticated(Boolean authenticated) {
+        this.authenticated = (authenticated!=null&&authenticated)?"T":"F";
     }
 }
