@@ -4,6 +4,7 @@ import com.edev.support.exception.ValidException;
 import com.edev.trade.customer.service.AccountService;
 import com.edev.trade.inventory.service.InventoryService;
 import com.edev.trade.order.entity.Order;
+import com.edev.trade.order.entity.Payment;
 import com.edev.trade.order.service.OrderService;
 import com.edev.trade.order.service.OrderAggService;
 import lombok.NonNull;
@@ -34,8 +35,8 @@ public class OrderAggServiceImpl implements OrderAggService {
     public void payoff(@NonNull Order order) {
         if(order.getPayment()==null||order.getPayment().getAccountId()==null)
             throw new ValidException("no account for payoff: [orderId: %s]", order.getId());
-        Long accountId = order.getPayment().getAccountId();
-        Double balance = accountService.payoff(accountId, order.getAmount());
+        Payment payment = order.getPayment();
+        Double balance = accountService.payoff(payment.getAccountId(), payment.getAmount());
         log.debug(String.format("pay off the order: [balance of the account: %f]", balance));
 
         stockOut(order);
