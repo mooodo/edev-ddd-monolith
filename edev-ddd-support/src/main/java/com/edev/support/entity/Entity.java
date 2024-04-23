@@ -35,7 +35,7 @@ public abstract class Entity<T extends Serializable> implements Serializable, Cl
      * get all fields, include the entity and its parents private, protected and public fields
      * @return list all its fields
      */
-    public Field[] getFields() {
+    public Field[] findAllFields() {
         return getFields(this.getClass());
     }
 

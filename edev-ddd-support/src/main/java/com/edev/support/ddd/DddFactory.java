@@ -48,7 +48,7 @@ public class DddFactory {
 
     public <E extends Entity<S>,S extends Serializable> E createSimpleEntityByJson(@NonNull Class<E> clazz, @NonNull Map<String, Object> json) {
         E entity = EntityBuilder.build(clazz);
-        Field[] fields = entity.getFields();
+        Field[] fields = entity.findAllFields();
         for(Field field : fields) {
             String fieldName = field.getName();
             Type type = entity.getTypeByMethod(fieldName);

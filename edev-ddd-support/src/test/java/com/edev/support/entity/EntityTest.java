@@ -69,7 +69,7 @@ public class EntityTest {
         assertThat(clone, equalTo(customer0));
 
         //test getFields
-        Field[] fields = customer0.getFields();
+        Field[] fields = customer0.findAllFields();
         assertThat(fields[0].getName(), equalTo("id"));
         assertThat(fields[1].getName(), equalTo("name"));
         assertThat(fields[2].getName(), equalTo("birthdate"));
@@ -135,7 +135,7 @@ public class EntityTest {
         assertThat(clone, equalTo(vip0));
 
         //test getFields
-        Field[] fields = vip0.getFields();
+        Field[] fields = vip0.findAllFields();
         assertThat(fields[0].getName(), equalTo("id"));
         assertThat(fields[1].getName(), equalTo("name"));
         assertThat(fields[2].getName(), equalTo("birthdate"));
