@@ -44,8 +44,17 @@ public class SupplierMvcTest {
                 .param("id",id)
         ).andExpect(status().isOk()).andExpect(content().json(excepted1));
 
+        String json2 = JsonFile.read("json/supplier/supplier2.json");
+        String excepted2 = JsonFile.read("json/supplier/excepted2.json");
+        mvc.perform(post("/orm/supplier/modify")
+                .content(json2).contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(status().isOk());
+        mvc.perform(get("/orm/supplier/loadById")
+                .param("id",id)
+        ).andExpect(status().isOk()).andExpect(content().json(excepted2));
+
         mvc.perform(post("/orm/supplier/remove")
-                .content(json1).contentType(MediaType.APPLICATION_JSON)
+                .content(json2).contentType(MediaType.APPLICATION_JSON)
         ).andExpect(status().isOk());
         mvc.perform(get("/orm/supplier/loadById")
                 .param("id",id)

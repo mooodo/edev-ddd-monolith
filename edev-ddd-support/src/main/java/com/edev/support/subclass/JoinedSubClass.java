@@ -117,6 +117,7 @@ public class JoinedSubClass extends AbstractSubClass implements SubClassDao {
 
     private <E extends Entity<S>, S extends Serializable>
             E assemble(E parent, E child) {
+        if(child==null) return parent;
         child.merge(parent);
         return child;
     }
@@ -130,7 +131,6 @@ public class JoinedSubClass extends AbstractSubClass implements SubClassDao {
         Collection<E> entities = new ArrayList<>();
         parentMap.forEach((id,parent) -> {
             E child = childMap.get(id);
-            if(child==null) return;
             entities.add(assemble(parent, child));
         });
         return entities;
@@ -164,7 +164,6 @@ public class JoinedSubClass extends AbstractSubClass implements SubClassDao {
             E childTemplate = (new EntityBuilder<E,S>(subClass.getClazz())).createEntity();
             childTemplate.merge(template);
             Collection<E> children = super.loadAll(childTemplate);
-            if(children==null||children.isEmpty()) return;
             entities.addAll(assembleForList(parents, children));
         });
         return entities;

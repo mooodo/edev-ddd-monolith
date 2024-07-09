@@ -3,6 +3,7 @@ package com.edev.support.subclass;
 import com.edev.support.entity.Entity;
 import com.edev.trade.TradeApplication;
 import com.edev.trade.product.entity.Distributor;
+import com.edev.trade.product.entity.SelfSupport;
 import com.edev.trade.product.entity.Supplier;
 import com.edev.trade.product.entity.Vendor;
 import org.junit.Test;
@@ -189,5 +190,46 @@ public class JoinedSubClassTest {
         ids.add(id2);
         dao.deleteForList(ids, Supplier.class);
         assertTrue(dao.loadForList(ids, Supplier.class).isEmpty());
+    }
+    @Test
+    public void testSaveAndDeleteWithoutChild() {
+        Long id = 1L;
+        Supplier supplier = Supplier.build()
+                .setValues(id, "JD", "selfSupport");
+        dao.delete(id, Supplier.class);
+        dao.insert(supplier);
+        assertThat(dao.load(id, Supplier.class), equalTo(SelfSupport.build()
+                .setValues(id,"JD")));
+
+        supplier.setName("Microsoft");
+        dao.update(supplier);
+        assertThat(dao.load(id, Supplier.class), equalTo(SelfSupport.build()
+                .setValues(id,"Microsoft")));
+
+        supplier.setSupplierType("vendor");
+        dao.update(supplier);
+        assertThat(dao.load(id, Supplier.class), equalTo(Vendor.build()
+                .setValues(id,"Microsoft",null,null)));
+
+        dao.delete(id, Supplier.class);
+        assertNull(dao.load(id, Supplier.class));
+    }
+    @Test
+    public void testSaveAndDeleteWithoutChild0() {
+        Long id = 1L;
+        SelfSupport selfSupport = SelfSupport.build()
+                .setValues(id, "JD");
+        dao.delete(id, Supplier.class);
+        dao.insert(selfSupport);
+        assertThat(dao.load(id, Supplier.class), equalTo(SelfSupport.build()
+                .setValues(id,"JD")));
+
+        Vendor vendor = Vendor.build().setValues(id,"IBM Special Store(Beijing)",20001L,"Beijing");
+        dao.update(vendor);
+        assertThat(dao.load(id, Vendor.class), equalTo(Vendor.build()
+                .setValues(id,"IBM Special Store(Beijing)",20001L,"Beijing")));
+
+        dao.delete(id, Vendor.class);
+        assertNull(dao.load(id, Vendor.class));
     }
 }

@@ -19,6 +19,7 @@
     <property name="supplierType" column="supplier_type" isDiscriminator="true"/>
     <subclass class="com.edev.trade.product.entity.Distributor" value="distributor"/>
     <subclass class="com.edev.trade.product.entity.Vendor" value="vendor"/>
+    <subclass class="com.edev.trade.product.entity.SelfSupport" value="selfSupport"/>
   </do>
   <do class="com.edev.trade.product.entity.Distributor" tableName="t_distributor">
     <property name="id" column="id" isPrimaryKey="true"/>
@@ -35,4 +36,5 @@
     <property name="position" column="position"/>
     <property name="distributorId" column="distributor_id"/>
   </do>
+  <do class="com.edev.trade.product.entity.SelfSupport"/>
 </dobjs>
