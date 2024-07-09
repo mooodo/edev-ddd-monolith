@@ -52,7 +52,8 @@ public class UserMvcTest {
         String template = JsonFile.read("json/user/template.json");
         mvc.perform(post("/orm/user/delete")
                 .content(template).contentType(MediaType.APPLICATION_JSON)
-        ).andExpect(status().isOk());mvc.perform(get("/orm/user/load")
+        ).andExpect(status().isOk());
+        mvc.perform(get("/orm/user/load")
                 .param("userId", id)
         ).andExpect(status().isOk()).andExpect(content().string(""));
     }

@@ -35,15 +35,15 @@ public class OrderAggServiceImpl implements OrderAggService {
     public void payoff(@NonNull Order order) {
         if(order.getPayment()==null||order.getPayment().getAccountId()==null)
             throw new ValidException("no account for payoff: [orderId: %s]", order.getId());
+        order.setStatus("PAYOFF");
+        order.getPayment().setStatus("PAYOFF");
+        orderService.modify(order);
+
         Payment payment = order.getPayment();
         Double balance = accountService.payoff(payment.getAccountId(), payment.getAmount());
         log.debug(String.format("pay off the order: [balance of the account: %f]", balance));
 
         stockOut(order);
-
-        order.setStatus("PAYOFF");
-        order.getPayment().setStatus("PAYOFF");
-        orderService.modify(order);
     }
 
     private void stockOut(Order order) {
