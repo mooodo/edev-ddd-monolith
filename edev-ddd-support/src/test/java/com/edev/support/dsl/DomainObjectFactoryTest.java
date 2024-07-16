@@ -12,13 +12,6 @@ import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 public class DomainObjectFactoryTest {
-    private DomainObjectFactory factory;
-
-    @Before
-    public void setUp() {
-        factory = new DomainObjectFactory();
-    }
-
     /**
      * 业务需求：
      * 1.将领域模型中领域对象及其相互关系的设计，以DSL的形式在软件系统中准确描述
@@ -31,7 +24,7 @@ public class DomainObjectFactoryTest {
      */
     @Test
     public void testLoadWithJoin () {
-        factory.initFactory("classpath:entity/customer.xml");
+        new DomainObjectFactory("classpath:entity/customer.xml");
         assertTrue(DomainObjectFactory.isExists("com.edev.trade.customer.entity.Customer"));
         DomainObject dObj = DomainObjectFactory.getDomainObject("com.edev.trade.customer.entity.Customer");
         assertThat(dObj.getClazz(), equalTo("com.edev.trade.customer.entity.Customer"));
@@ -61,7 +54,7 @@ public class DomainObjectFactoryTest {
      */
     @Test
     public void testLoadSimpleSubclass() {
-        factory.initFactory("classpath:entity/customer.xml");
+        new DomainObjectFactory("classpath:entity/customer.xml");
         DomainObject dObj = DomainObjectFactory.getDomainObject("com.edev.trade.customer.entity.Vip");
         assertThat(dObj.getSubClassType(), equalTo("simple"));
         assertThat(dObj.getTable(), equalTo("t_vip"));
@@ -88,7 +81,7 @@ public class DomainObjectFactoryTest {
      */
     @Test
     public void testLoadUnionSubclass() {
-        factory.initFactory("classpath:entity/order.xml");
+        new DomainObjectFactory("classpath:entity/order.xml");
         DomainObject dObj = DomainObjectFactory.getDomainObject("com.edev.trade.order.entity.Discount");
         assertThat(dObj.getClazz(), equalTo("com.edev.trade.order.entity.Discount"));
         assertThat(dObj.getTable(), equalTo(""));
@@ -115,7 +108,7 @@ public class DomainObjectFactoryTest {
      */
     @Test
     public void testLoadJoinedSubClass() {
-        factory.initFactory("classpath:entity/product.xml");
+        new DomainObjectFactory("classpath:entity/product.xml");
         DomainObject dObj = DomainObjectFactory.getDomainObject("com.edev.trade.product.entity.Supplier");
         assertThat(dObj.getClazz(), equalTo("com.edev.trade.product.entity.Supplier"));
         assertThat(dObj.getTable(), equalTo("t_supplier"));
@@ -141,7 +134,7 @@ public class DomainObjectFactoryTest {
      */
     @Test
     public void testJoinOneToOne() {
-        factory.initFactory("classpath:entity/customer.xml");
+        new DomainObjectFactory("classpath:entity/customer.xml");
         DomainObject dObj = DomainObjectFactory.getDomainObject("com.edev.trade.customer.entity.Vip");
         assertThat(dObj.getJoins(), hasItems(
                 new Join("customer","","oneToOne",false,
@@ -157,7 +150,7 @@ public class DomainObjectFactoryTest {
      */
     @Test
     public void testJoinManyToOne() {
-        factory.initFactory("classpath:entity/order.xml");
+        new DomainObjectFactory("classpath:entity/order.xml");
         DomainObject dObj = DomainObjectFactory.getDomainObject("com.edev.trade.order.entity.Order");
         assertThat(dObj.getProperties(),hasItems(
                 new Property("customerId","customer_id",false,false)
@@ -177,7 +170,7 @@ public class DomainObjectFactoryTest {
      */
     @Test
     public void testJoinOneToMany() {
-        factory.initFactory("classpath:entity/order.xml");
+        new DomainObjectFactory("classpath:entity/order.xml");
         DomainObject order = DomainObjectFactory.getDomainObject("com.edev.trade.order.entity.Order");
         assertThat(order.getJoins(), hasItems(
                 new Join("orderItems","orderId","oneToMany",true,
@@ -201,7 +194,7 @@ public class DomainObjectFactoryTest {
      */
     @Test
     public void testJoinManyToMany() {
-        factory.initFactory("classpath:entity/user.xml");
+        new DomainObjectFactory("classpath:entity/user.xml");
         DomainObject role = DomainObjectFactory.getDomainObject("com.edev.trade.authority.entity.Role");
         assertThat(role.getJoins(),hasItems(
                 new Join("authorities","roleId","manyToMany","authorityId",

@@ -2,26 +2,31 @@ package com.edev.support.dsl;
 
 import com.edev.support.utils.BeanUtils;
 import com.edev.support.xml.XmlBuildFactoryTemplate;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Component
 public class DomainObjectFactory extends XmlBuildFactoryTemplate {
     private static final Map<String, DomainObject> map = new HashMap<>();
-    @Value("ddd.domainObjectFile")
     private String paths = "classpath:entity/*.xml";
     public DomainObjectFactory() {
-        if(map.isEmpty()) initFactory(this.paths);
+        if(map.isEmpty()) {
+            initFactory(this.paths);
+            doInheritForAllSubclass();
+        }
     }
     public DomainObjectFactory(String paths) {
         this.paths = paths;
         initFactory(this.paths);
+        doInheritForAllSubclass();
     }
     @Override
     protected void loadBean(Element element) {
@@ -92,15 +97,55 @@ public class DomainObjectFactory extends XmlBuildFactoryTemplate {
         domainObject.addSubClass(subClass);
     }
 
+    private void doInheritForAllSubclass() {
+        map.values().forEach(dObj -> {
+            if(dObj.getSubClasses()!=null && !dObj.getSubClasses().isEmpty())
+                dObj.getSubClasses().forEach(subClass ->
+                        inheritFromParent(dObj.getClazz(), subClass.getClazz()));
+        });
+    }
+
+    private void inheritFromParent(String parent, String child) {
+        try {
+            DomainObject parentDObj = getDomainObject(parent, false);
+            DomainObject childDObj = getDomainObject(child, false);
+
+//            List<Property> properties = new ArrayList<>();
+//            properties.addAll(parentDObj.getProperties());
+//            properties.addAll(childDObj.getProperties());
+//            childDObj.setProperties(properties.stream().distinct().collect(Collectors.toList()));
+
+            List<Join> joins = new ArrayList<>();
+            joins.addAll(parentDObj.getJoins());
+            joins.addAll(childDObj.getJoins());
+            childDObj.setJoins(joins.stream().distinct().collect(Collectors.toList()));
+
+            List<Ref> refs = new ArrayList<>();
+            refs.addAll(parentDObj.getRefs());
+            refs.addAll(childDObj.getRefs());
+            childDObj.setRefs(refs.stream().distinct().collect(Collectors.toList()));
+        } catch (NoSuchDObjException e) {
+            return;
+        }
+    }
+
     public static DomainObject getDomainObject(String className) {
+        return getDomainObject(className, true);
+    }
+
+    public static DomainObject getDomainObject(String className, boolean includeParent) {
         Class<?> clazz = BeanUtils.getClazz(className);
-        return getDomainObject(clazz);
+        return getDomainObject(clazz, includeParent);
     }
 
     public static DomainObject getDomainObject(Class<?> clazz) {
+        return getDomainObject(clazz, true);
+    }
+
+    public static DomainObject getDomainObject(Class<?> clazz, boolean includeParent) {
         DomainObject dObj = map.get(clazz.getName());
-        if(dObj==null) dObj = map.get(clazz.getSuperclass().getName());
-        if(dObj==null) throw new NoSuchDObjException(clazz.getName());
+        if(includeParent && dObj == null) dObj = map.get(clazz.getSuperclass().getName());
+        if(dObj == null) throw new NoSuchDObjException(clazz.getName());
         return dObj;
     }
 
