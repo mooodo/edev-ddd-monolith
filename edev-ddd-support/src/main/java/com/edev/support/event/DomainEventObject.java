@@ -56,8 +56,13 @@ public class DomainEventObject {
     }
 
     public <E extends Entity<S>, S extends Serializable> E convertToEntity(Class<E> clazz) {
-        if(!(data instanceof Map)) throw new DddException("The data isn't a map!");
-        JSONObject jsonObject = new JSONObject((Map<String, Object>) data);
-        return jsonObject.toJavaObject(clazz);
+        if(data instanceof Map)
+            return (new JSONObject((Map<String, Object>) data)).toJavaObject(clazz);
+        throw new DddException("The data isn't a map!");
+    }
+
+    public Map<String, Object> convertToMap() {
+        if(data instanceof Map) return (Map<String, Object>) data;
+        throw new DddException("The data isn't a map!");
     }
 }
