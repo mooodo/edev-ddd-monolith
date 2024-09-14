@@ -24,7 +24,7 @@ INSERT INTO `t_account` VALUES ('1000501', '10005', '100000.00', '2022-03-31 02:
 INSERT INTO `t_account` VALUES ('1000601', '10006', '100000.00', '2022-03-31 02:51:49', null);
 INSERT INTO `t_account` VALUES ('1000701', '10007', '100000.00', '2022-03-31 02:51:49', null);
 INSERT INTO `t_account` VALUES ('1000801', '10008', '100000.00', '2022-03-31 02:51:49', null);
-INSERT INTO `t_account` VALUES ('1000901', '10009', '846184.00', '2022-03-31 02:51:49', '2024-01-08 00:17:16');
+INSERT INTO `t_account` VALUES ('1000901', '10009', '846184.00', '2022-03-31 02:51:49', '2024-04-23 11:51:43');
 INSERT INTO `t_account` VALUES ('1001201', '10012', '100000.00', '2022-03-31 02:51:49', null);
 INSERT INTO `t_account` VALUES ('1001301', '10013', '100000.00', '2022-03-31 02:51:49', null);
 INSERT INTO `t_account` VALUES ('1001401', '10014', '100000.00', '2022-03-31 02:51:49', null);
@@ -164,11 +164,40 @@ CREATE TABLE `t_journal_account` (
   `operation` varchar(50) DEFAULT NULL,
   `operate_time` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=378 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=469 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of t_journal_account
 -- ----------------------------
+INSERT INTO `t_journal_account` VALUES ('384', '1', '1000.00', 'topUp', '2024-01-24 15:46:59');
+INSERT INTO `t_journal_account` VALUES ('385', '1', '1000.00', 'payoff', '2024-01-24 15:46:59');
+INSERT INTO `t_journal_account` VALUES ('387', '1', '1000.00', 'topUp', '2024-01-24 17:35:36');
+INSERT INTO `t_journal_account` VALUES ('388', '1', '1000.00', 'payoff', '2024-01-24 17:35:36');
+INSERT INTO `t_journal_account` VALUES ('392', '1', '1000.00', 'topUp', '2024-01-25 23:59:33');
+INSERT INTO `t_journal_account` VALUES ('393', '1', '1000.00', 'payoff', '2024-01-25 23:59:33');
+INSERT INTO `t_journal_account` VALUES ('395', '1', '1000.00', 'topUp', '2024-01-26 00:23:35');
+INSERT INTO `t_journal_account` VALUES ('396', '1', '1000.00', 'payoff', '2024-01-26 00:23:36');
+INSERT INTO `t_journal_account` VALUES ('398', '1', '1000.00', 'topUp', '2024-01-26 00:25:19');
+INSERT INTO `t_journal_account` VALUES ('399', '1', '1000.00', 'payoff', '2024-01-26 00:25:19');
+INSERT INTO `t_journal_account` VALUES ('404', '1', '1000.00', 'topUp', '2024-01-27 18:23:27');
+INSERT INTO `t_journal_account` VALUES ('405', '1', '1000.00', 'payoff', '2024-01-27 18:23:27');
+INSERT INTO `t_journal_account` VALUES ('422', '1', '1000.00', 'topUp', '2024-04-14 21:33:25');
+INSERT INTO `t_journal_account` VALUES ('423', '1', '1000.00', 'payoff', '2024-04-14 21:33:25');
+INSERT INTO `t_journal_account` VALUES ('425', '1', '1000.00', 'topUp', '2024-04-14 21:59:40');
+INSERT INTO `t_journal_account` VALUES ('426', '1', '1000.00', 'payoff', '2024-04-14 21:59:40');
+INSERT INTO `t_journal_account` VALUES ('430', '1', '1000.00', 'topUp', '2024-04-14 22:44:11');
+INSERT INTO `t_journal_account` VALUES ('431', '1', '1000.00', 'payoff', '2024-04-14 22:44:11');
+INSERT INTO `t_journal_account` VALUES ('437', '1', '1000.00', 'topUp', '2024-04-23 09:58:39');
+INSERT INTO `t_journal_account` VALUES ('438', '1', '1000.00', 'payoff', '2024-04-23 09:58:40');
+INSERT INTO `t_journal_account` VALUES ('440', '1', '1000.00', 'topUp', '2024-04-23 10:03:52');
+INSERT INTO `t_journal_account` VALUES ('441', '1', '1000.00', 'payoff', '2024-04-23 10:03:52');
+INSERT INTO `t_journal_account` VALUES ('443', '1', '1000.00', 'topUp', '2024-04-23 10:22:04');
+INSERT INTO `t_journal_account` VALUES ('444', '1', '1000.00', 'payoff', '2024-04-23 10:22:21');
+INSERT INTO `t_journal_account` VALUES ('445', '1', '1000.00', 'refund', '2024-04-23 10:22:34');
+INSERT INTO `t_journal_account` VALUES ('446', '1000901', '5916.00', 'payoff', '2024-04-23 11:50:11');
+INSERT INTO `t_journal_account` VALUES ('447', '1000901', '5916.00', 'refund', '2024-04-23 11:51:43');
+INSERT INTO `t_journal_account` VALUES ('462', '1', '1000.00', 'topUp', '2024-07-16 23:30:39');
+INSERT INTO `t_journal_account` VALUES ('463', '1', '1000.00', 'payoff', '2024-07-16 23:30:39');
 
 -- ----------------------------
 -- Table structure for t_order
@@ -181,7 +210,7 @@ CREATE TABLE `t_order` (
   `amount` decimal(20,2) DEFAULT NULL,
   `order_time` datetime DEFAULT NULL,
   `modify_time` datetime DEFAULT NULL,
-  `flag` varchar(20) DEFAULT NULL,
+  `status` varchar(20) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -209,6 +238,23 @@ INSERT INTO `t_order` VALUES ('10018', '10014', '1001400', '2599.00', '2013-01-1
 INSERT INTO `t_order` VALUES ('10019', '10015', '1001500', '4999.00', '2013-02-28 23:59:59', null, 'CREATE');
 INSERT INTO `t_order` VALUES ('10020', '10012', '1001201', '2380.00', '2014-06-30 20:00:00', null, 'CREATE');
 INSERT INTO `t_order` VALUES ('10021', '10012', '1001201', '28.90', '2014-06-30 21:00:00', null, 'CREATE');
+
+-- ----------------------------
+-- Table structure for t_order_discount
+-- ----------------------------
+DROP TABLE IF EXISTS `t_order_discount`;
+CREATE TABLE `t_order_discount` (
+  `id` int(20) NOT NULL AUTO_INCREMENT,
+  `order_id` int(20) NOT NULL,
+  `discount_id` int(20) NOT NULL,
+  `discount_type` varchar(20) COLLATE utf8_bin DEFAULT NULL,
+  `discount` decimal(5,4) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+-- ----------------------------
+-- Records of t_order_discount
+-- ----------------------------
 
 -- ----------------------------
 -- Table structure for t_order_item
@@ -439,7 +485,7 @@ CREATE TABLE `t_user_granted_authority` (
   `authority_id` int(20) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `idx_user_granted_authority` (`user_id`,`authority_id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=520 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=86 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of t_user_granted_authority
@@ -458,7 +504,7 @@ CREATE TABLE `t_user_granted_role` (
   `user_id` int(20) NOT NULL,
   `role_id` int(20) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=76 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
 
 -- ----------------------------
 -- Records of t_user_granted_role
@@ -503,7 +549,6 @@ CREATE TABLE `t_vip` (
 -- ----------------------------
 -- Records of t_vip
 -- ----------------------------
-INSERT INTO `t_vip` VALUES ('10001', '2024-01-23 11:16:36', null, 'Y', '500', 'golden', '2000.00');
 INSERT INTO `t_vip` VALUES ('10009', '2022-08-18 14:40:15', null, 'Y', '100000', 'golden', '4000.00');
 INSERT INTO `t_vip` VALUES ('10012', '2022-08-18 14:40:15', '2022-08-18 14:42:12', 'Y', '100000', 'golden', '3000.00');
 INSERT INTO `t_vip` VALUES ('10013', '2021-03-12 00:00:00', null, 'Y', '2000', 'silver', null);
