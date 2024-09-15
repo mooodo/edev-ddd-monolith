@@ -69,7 +69,7 @@ public class QueryServiceImpl implements QueryService {
 		Object size = params.get("size");
 		Object count = params.get("count");
 		
-		long cnt = (count==null) ? queryDao.count(params) : Long.getLong(count.toString());
+		long cnt = (count==null) ? queryDao.count(params) : Long.parseLong(count.toString());
 		resultSet.setCount(cnt);
 		
 		if( size==null ) return;

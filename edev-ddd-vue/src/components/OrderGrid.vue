@@ -11,7 +11,7 @@
         <GridColumn field="id" title="订单编号" :sortable="true" width="100px"></GridColumn>
         <GridColumn field="customer.name" title="用户" :sortable="true" width="100px">
           <template slot="body" slot-scope="scope">
-            <u style="cursor: pointer" @click="edit(scope.row)">{{scope.row.customer.name}}</u>
+            <u style="cursor: pointer" @click="edit(scope.row)" v-if="scope.row.customer">{{scope.row.customer.name}}</u>
           </template>
         </GridColumn>
         <GridColumn field="amount" title="金额" align="right" :sortable="true" width="100px">
@@ -23,7 +23,7 @@
         <GridColumn field="flag" title="状态" align="center" width="100px"></GridColumn>
         <GridColumn field="address.address" title="配送地址" width="300px">
           <template slot="body" slot-scope="scope">
-            {{scope.row.address.address}}
+            {{scope.row.address ? scope.row.address.address : ''}}
           </template>
         </GridColumn>
         <template slot="detail" slot-scope="scope">
