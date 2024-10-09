@@ -13,7 +13,6 @@ import java.util.*;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.hasItems;
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
 
 @RunWith(SpringRunner.class)
@@ -135,5 +134,17 @@ public class DowncastHelperTest {
 
         Object value = helper.downcast(type, list);
         assertThat((List<Map<String, Object>>)value, hasItems(map0, map1));
+    }
+    @Test
+    public void testCollectionOfLong() throws NoSuchFieldException {
+        class Test {
+            public Collection<Long> ids;
+        }
+        Test test = new Test();
+        Field field = test.getClass().getField("ids");
+        Type type = field.getGenericType();
+        List<String> list = Arrays.asList("1","2","3");
+        Object value = helper.downcast(type, list);
+        assertThat((List<Long>)value, hasItems(1L,2L,3L));
     }
 }

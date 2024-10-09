@@ -147,6 +147,7 @@ public class CacheEntityDao extends DecoratorDao implements BasicDao {
 		E entity = cache.get(id, clazz);
 		if(entity!=null) return entity;
 		entity = super.load(id, clazz);
+		if(entity==null) return null;
 		cache.set(entity);
 		return entity;
 	}
@@ -158,11 +159,11 @@ public class CacheEntityDao extends DecoratorDao implements BasicDao {
 		Collection<E> entities = cache.getForList(ids, clazz);
 		entities.removeIf(Objects::isNull);
 		Collection<S> otherIds = getIdsNotInCache(ids, entities);
-		if(otherIds.isEmpty()) return entities; //get all of entities.
+		if(otherIds.isEmpty()) return entities; //get all the entities.
 		
 		Collection<E> collection = super.loadForList(otherIds, clazz);
-		cache.setForList(collection);
-		if(otherIds.size()==ids.size()) return collection; //all of the entities query for database.
+		if(collection!=null && !collection.isEmpty()) cache.setForList(collection);
+		if(otherIds.size()==ids.size()) return collection; //all the entities query for database.
 		return fillOtherEntitiesIn(entities, collection); //fill the entity query for db in the list of entities get in cache.
 	}
 	

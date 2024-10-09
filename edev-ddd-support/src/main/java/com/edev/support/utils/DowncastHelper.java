@@ -50,7 +50,7 @@ public class DowncastHelper {
     private Object downcastWithParameterizedType(Type type, Object value) {
         ParameterizedType pt = (ParameterizedType) type;
         Class<?> clazz = (Class<?>) pt.getRawType();
-        if(List.class.isAssignableFrom(clazz)||Set.class.isAssignableFrom(clazz))
+        if(Collection.class.isAssignableFrom(clazz) && !Map.class.isAssignableFrom(clazz))
             return downcastWithSetOrList(pt, value);
         return value;
     }
@@ -63,8 +63,8 @@ public class DowncastHelper {
      */
     private Object downcastWithSetOrList(ParameterizedType pt, Object value) {
         Class<?> clazz = (Class<?>)pt.getRawType();
-        List<?> list = (value instanceof String) ?
-                Arrays.asList(((String)value).split(",")) : (List<?>)value;
+        Collection<?> list = (value instanceof String) ?
+                Arrays.asList(((String)value).split(",")) : (Collection<?>) value;
         Type ata = pt.getActualTypeArguments()[0];
         if(ata instanceof Class)
             return convert(list, clazz, row->downcastWithSimpleClass(ata, row));
@@ -80,9 +80,13 @@ public class DowncastHelper {
      * @param doConvert the function how to convert each of members
      * @return Collection<T>
      */
-    private <T> Collection<T> convert(List<?> list, Class<?> clazz,
+    private <T> Collection<T> convert(Collection<?> list, Class<?> clazz,
                                             DoConvert<T> doConvert) {
-        Collection<T> c = (clazz.equals(List.class)) ? new ArrayList<>() : new HashSet<>();
+        Collection<T> c;
+        if(clazz.equals(Collection.class))
+            c = (list instanceof List) ? new ArrayList<>() : new HashSet<>();
+        else
+            c = (clazz.equals(List.class)) ? new ArrayList<>() : new HashSet<>();
         for(Object obj : list) c.add(doConvert.apply(obj));
         return c;
     }
