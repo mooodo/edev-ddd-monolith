@@ -1,9 +1,7 @@
 package com.edev.security.web;
 
 import com.edev.security.entity.Credentials;
-import com.edev.security.jwt.JwtHelper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -22,18 +20,14 @@ import java.util.Map;
 public class AuthController {
     @Autowired
     private AuthenticationManager authenticationManager;
-    @Autowired
-    private JwtHelper jwtHelper;
     @GetMapping(value = "/login", produces = "application/json")
-    public ResponseEntity<?> login(@RequestBody Credentials userAndPassword) {
+    public void login(@RequestBody Credentials userAndPassword) {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         userAndPassword.getUsername(),
                         userAndPassword.getPassword()
                 )
         );
-        String jwt = jwtHelper.generateToken(userAndPassword.getUsername());
-        return ResponseEntity.ok(jwt);
     }
 
     @RequestMapping(value = "/userinfo", produces = "application/json")
