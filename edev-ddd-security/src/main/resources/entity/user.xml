@@ -2,7 +2,7 @@
 <dobjs>
     <do class="com.edev.authority.entity.User" tableName="t_user">
         <property name="id" column="id" isPrimaryKey="true"/>
-        <property name="name" column="name"/>
+        <property name="username" column="username"/>
         <property name="password" column="password"/>
         <property name="accountExpired" column="account_expired"/>
         <property name="accountLocked" column="account_locked"/>
@@ -18,7 +18,7 @@
     <do class="com.edev.authority.entity.Role" tableName="t_role">
         <property name="id" column="id" isPrimaryKey="true"/>
         <property name="name" column="name"/>
-        <property name="comment" column="comment"/>
+        <property name="description" column="description"/>
         <join name="authorities" joinKey="roleId" joinType="manyToMany" joinClassKey="authorityId"
               joinClass="com.edev.authority.entity.RoleGrantedAuthority"
               class="com.edev.authority.entity.Authority"/>
@@ -35,7 +35,7 @@
     <do class="com.edev.authority.entity.Authority" tableName="t_authority">
         <property name="id" column="id" isPrimaryKey="true"/>
         <property name="name" column="name"/>
-        <property name="authenticated" column="authenticated"/>
+        <property name="description" column="description"/>
         <!---->
         <join name="users" joinKey="authorityId" joinType="manyToMany" joinClassKey="userId"
               joinClass="com.edev.authority.entity.UserGrantedAuthority"

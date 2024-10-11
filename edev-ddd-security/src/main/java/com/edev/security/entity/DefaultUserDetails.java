@@ -9,22 +9,20 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
-import java.util.stream.Stream;
 
 public class DefaultUserDetails implements UserDetails {
     private final User user;
     private final Collection<GrantedAuthority> grantedAuthorities;
-
     public DefaultUserDetails(User user) {
         this.user = user;
-        this.grantedAuthorities = new HashSet<>();
-        List<Authority> authorities = new ArrayList<>();
-        this.user.getRoles().forEach(role -> authorities.addAll(role.getAuthorities()));
-        authorities.addAll(this.user.getAuthorities());
-        authorities.stream().distinct().forEach(authority -> {
-            GrantedAuthority grantedAuthority = new DefaultGrantedAuthority(authority);
-            grantedAuthorities.add(grantedAuthority);
-        });
+        // add all the authorities of user and role together.
+        List<Authority> authorities = new ArrayList<>(user.getAuthorities());
+        user.getRoles().forEach(role -> authorities.addAll(role.getAuthorities()));
+
+        // convert authority to GrantedAuthority
+        Collection<GrantedAuthority> grantedAuthorities = new HashSet<>();
+        authorities.forEach(authority -> grantedAuthorities.add((GrantedAuthority) authority::getName));
+        this.grantedAuthorities = grantedAuthorities;
     }
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -38,26 +36,26 @@ public class DefaultUserDetails implements UserDetails {
 
     @Override
     public String getUsername() {
-        return user.getName();
+        return user.getUsername();
     }
 
     @Override
     public boolean isAccountNonExpired() {
-        return !user.isAccountExpired();
+        return !user.getAccountExpired();
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return !user.isAccountLocked();
+        return !user.getAccountLocked();
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return !user.isCredentialsExpired();
+        return !user.getCredentialsExpired();
     }
 
     @Override
     public boolean isEnabled() {
-        return !user.isDisabled();
+        return !user.getDisabled();
     }
 }

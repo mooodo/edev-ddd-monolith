@@ -5,62 +5,51 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Collection;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
 public class User extends Entity<Long> {
     private Long id;
-    private String name;
+    private String username;
     private String password;
     private int accountExpired;
     private int accountLocked;
     private int credentialsExpired;
     private int disabled;
-    private List<Authority> authorities = new ArrayList<>();
-    private List<Role> roles = new ArrayList<>();
+    private Collection<Authority> authorities = new ArrayList<>();
+    private Collection<Role> roles = new ArrayList<>();
 
-    public static User build() {
-        return new User();
-    }
-
-    public User setValues(Long id, String name, String password) {
-        this.id = id;
-        this.name = name;
-        this.password = password;
-        return this;
-    }
-
-    public Boolean isAccountExpired() {
+    public Boolean getAccountExpired() {
         return accountExpired!=0;
     }
 
     public void setAccountExpired(Boolean accountExpired) {
-        this.accountExpired = (accountExpired ? 1 : 0);
+        this.accountExpired = (accountExpired!=null&&accountExpired ? 1 : 0);
     }
 
-    public Boolean isAccountLocked() {
+    public Boolean getAccountLocked() {
         return accountLocked!=0;
     }
 
     public void setAccountLocked(Boolean accountLocked) {
-        this.accountLocked = (accountLocked ? 1 : 0);
+        this.accountLocked = (accountLocked!=null&&accountLocked ? 1 : 0);
     }
 
-    public Boolean isCredentialsExpired() {
+    public Boolean getCredentialsExpired() {
         return credentialsExpired!=0;
     }
 
     public void setCredentialsExpired(Boolean credentialsExpired) {
-        this.credentialsExpired = (credentialsExpired ? 1 : 0);
+        this.credentialsExpired = (credentialsExpired!=null&&credentialsExpired ? 1 : 0);
     }
 
-    public Boolean isDisabled() {
+    public Boolean getDisabled() {
         return disabled!=0;
     }
 
     public void setDisabled(Boolean disabled) {
-        this.disabled = (disabled ? 1 : 0);
+        this.disabled = (disabled!=null&&disabled ? 1 : 0);
     }
 
     public void addAuthority(Authority authority) {
