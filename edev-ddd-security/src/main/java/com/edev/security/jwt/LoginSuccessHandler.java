@@ -15,13 +15,13 @@ import java.nio.charset.StandardCharsets;
 @Component
 public class LoginSuccessHandler implements AuthenticationSuccessHandler {
     @Autowired
-    private JwtHelper jwtHelper;
+    private JwtTokenProvider jwtTokenProvider;
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
         response.setContentType("application/json;charset=UTF-8");
         ServletOutputStream outputStream = response.getOutputStream();
-        String jwt = jwtHelper.generateToken(authentication.getName());
-        response.setHeader(jwtHelper.getHeader(), jwt);
+        String jwt = jwtTokenProvider.generateToken(authentication.getName());
+        response.setHeader(jwtTokenProvider.getHeader(), jwt);
 
         outputStream.write("login success".getBytes(StandardCharsets.UTF_8));
         outputStream.flush();

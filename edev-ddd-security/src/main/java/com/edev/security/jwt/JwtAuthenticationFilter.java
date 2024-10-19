@@ -19,7 +19,7 @@ import java.io.IOException;
 
 public class JwtAuthenticationFilter extends BasicAuthenticationFilter {
     @Autowired
-    private JwtHelper jwtHelper;
+    private JwtTokenProvider jwtTokenProvider;
     @Autowired
     private UserDetailsService userDetailsService;
     public JwtAuthenticationFilter(AuthenticationManager authenticationManager) {
@@ -28,15 +28,15 @@ public class JwtAuthenticationFilter extends BasicAuthenticationFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
-        String jwt = request.getHeader(jwtHelper.getHeader());
+        String jwt = request.getHeader(jwtTokenProvider.getHeader());
         if(jwt==null||jwt.isEmpty()) {
             chain.doFilter(request, response);
             return;
         }
 
-        Claims claims = jwtHelper.getClaimsByToken(jwt);
+        Claims claims = jwtTokenProvider.getClaimsByToken(jwt);
         if(claims==null) throw new JwtException("Token exception");
-        if(jwtHelper.isTokenExpired(claims)) throw new JwtException("Token expire");
+        if(jwtTokenProvider.isTokenExpired(claims)) throw new JwtException("Token expire");
         String username = claims.getSubject();
         UserDetails userDetails = userDetailsService.loadUserByUsername(username);
         if(userDetails==null) throw new BadCredentialsException("The user not exists!");

@@ -14,7 +14,7 @@ import java.util.Date;
 @Data
 @Component
 @ConfigurationProperties(prefix = "coke.jwt")
-public class JwtHelper {
+public class JwtTokenProvider {
     private long expire;
     private String secret;
     private String header;
