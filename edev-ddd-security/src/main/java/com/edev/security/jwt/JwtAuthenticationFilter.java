@@ -4,7 +4,6 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -35,12 +34,9 @@ public class JwtAuthenticationFilter extends BasicAuthenticationFilter {
         }
 
         Claims claims = jwtTokenProvider.getClaimsByToken(jwt);
-        if(claims==null) throw new JwtException("Token exception");
         if(jwtTokenProvider.isTokenExpired(claims)) throw new JwtException("Token expire");
         String username = claims.getSubject();
         UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-        if(userDetails==null) throw new BadCredentialsException("The user not exists!");
-
         UsernamePasswordAuthenticationToken authenticationToken =
                 new UsernamePasswordAuthenticationToken(username, null, userDetails.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(authenticationToken);

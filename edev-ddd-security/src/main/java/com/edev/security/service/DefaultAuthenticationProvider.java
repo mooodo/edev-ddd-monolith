@@ -22,7 +22,6 @@ public class DefaultAuthenticationProvider implements AuthenticationProvider, Au
         String username = authentication.getName();
         String password = authentication.getCredentials().toString();
         UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-        if(userDetails==null) throw new BadCredentialsException("The user not exists!");
         if(securityHelper.passwordIsMatch(password, userDetails.getPassword()))
             return new UsernamePasswordAuthenticationToken(username, password,
                     userDetails.getAuthorities());
