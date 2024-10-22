@@ -54,6 +54,7 @@ public class OrderServiceImpl implements OrderService {
     private void payoff(@NonNull Order order) {
         Payment payment = order.getPayment();
         if(payment==null) return;
+        payment.setId(order.getId());
         payment.setAmount(order.getAmount());
     }
 
