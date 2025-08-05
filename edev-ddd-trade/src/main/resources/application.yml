@@ -19,8 +19,8 @@ spring:
   profiles: dev
   datasource:
     url: jdbc:mysql://master:32306/edev?useUnicode=true&characterEncoding=UTF-8&serverTimezone=GMT%2B8
-    username: edev
-    password: edev1234
+    username: root
+    password: root1234
     type: com.alibaba.druid.pool.DruidDataSource
   redis:
     database: 0
